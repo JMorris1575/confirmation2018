@@ -11,7 +11,7 @@ header {
 .activity_text {
     font-family: 'Arial', sans;
     font-size: 1.2em;
-    color: #55aaaa;
+    color: #2eb873;
 }
 
 .center-text {
@@ -26,6 +26,23 @@ header {
     font-family: 'Arial', sans;
     font-weight: bold;
     font-size: 1.5em;
+}
+
+.info_box {
+    font-family: 'Arial', sans;
+    font-size: 1.2em;
+    color: #d40000;
+    padding: 10px 50px 10px 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+}
+
+.info_text {
+    margin-bottom: 0;
 }
 
 .link {

@@ -425,3 +425,58 @@ include it in git. I will check with TeamViewer...
 Yep, that was it! The rectory computer had a migrations folder in the activity app's directory but it's ``__init__.py``
 file was not marked to be included in git. Funny I would miss that but include ``conf-secrets.json``.
 
+Moving Back to the Rectory Computer
+-----------------------------------
+
+I could not do a ``git pull`` command because it refused to merge unrelated projects or some such thing. So I took the
+whole Confirmation2018 folder and renamed it Confirmation2018Bak then cloned confirmation2018 from git hub. After I used
+TeamViewer to copy ``conf-secrets.json`` and assured myself that the right database existed on this computer I attempted
+a ``migrate`` but it could not find Django -- I wasn't in the conf virtual environment. In PyCharm's Settings module I
+set the right environment and upgraded all the things needing upgrading (I had to close PyCharm again to upgrade
+Sphinx).
+
+When I tried the ``migrate`` command I got::
+
+    django.db.utils.OperationalError: FATAL:  role "Jim" is not permitted to log in
+
+so I tried to create a superuser by that name but got the same error message.
+
+Back in PgAdmin4 (version 2.0 -- the version that I often have to start twice) I discovered that Jim did not have any
+access rights. I had to click on Jim in Login/Group Roles then click what seems to be an edit button at the top of
+the properties page. Then, on the Priveledges page, gave myself the proper access rights.
+
+Finally, the ``migrate`` command worked.
+
+Using TeamViewer I did a ``dumpdata > all-2018-01-12.json`` and copied it over to this computer. Upon doing
+``loaddate all-2018-01-12.json`` it didn't work, as dumpdata of the whole thing usually hasn't worked. This is what did
+work::
+
+    On the home computer:
+    python manage.py dumpdata auth.user activity > user-activity-2018-01-12.json
+
+    On the rectory computer:
+    python manage.py loaddata user-activity-2018-01-12.json
+
+Doing ``runserver`` and checking out the local website everything seemed to be as I left it last night on the home
+computer.
+
+Cosmetic Fixes
+--------------
+
+I have noticed, at least on some computers, that the Holy Spirit image I'm using for a logo sometimes flashes full-size
+before the website settles down. I think this may be caused because the image being used is quite large and is being
+reduced to a much smaller size (width = two columns, or 1/6, of a 960 pixel container? = 160 pixels. Using Gimp to
+create a HolySpiritLogo.png with width=160 pixels might help. It didn't seem to hurt, but I wasn't experiencing that
+problem on this machine. Time will tell.
+
+I would also like the website to have a "favicon" so I created a 32 x 32 pixel one in Gimp. Checking
+*The HTML PocketGuide* I learned that it could be included either by having it at the root of my website (Boo!) or
+using the following link in the header::
+
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+
+After putting that into my ``base.html`` file the website now has a favicon!
+
+Finally, I didn't like the color of the text on the welcome page so I changed it to #2eb873 by setting that in the
+activity_text selector in custom.css. I'm not sure I like that one either but it's a start.
+
