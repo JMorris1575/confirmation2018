@@ -1,3 +1,26 @@
-<h1>This will be my welcome page.</h1>
+{% extends 'activity/base_activity.html' %}
 
-<a href="{% url 'logout' %}" type="button">Logout</a>
+{% block title %}
+    {{ block.super }}Welcome
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="offset-by-two eight columns activity_text shadowed">
+            <p>Welcome to the St. Basil Parish Confirmation Website! We hope the activities here will be helpful,
+            informative, and not incredibly boring. Let us know how we do on all three counts.</p>
+        </div>
+        <div class="offset-by-two eight columns activity_text row shadowed">
+            <p class="heading">
+                ACTIVITIES AVAILABLE
+            </p>
+            {% for activity in activities %}
+                <p>
+                    {{ activity }}
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

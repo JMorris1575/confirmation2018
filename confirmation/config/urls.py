@@ -18,8 +18,11 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='user/login')), #pattern_name='user:login', permanent=False), name='base_url'),
+    path('', RedirectView.as_view(url='user/login/')),
     path('user/', include('user.urls'), name='dj-auth'),
     path('activity/', include('activity.urls')),
     path('admin/', admin.site.urls),
 ]
+
+admin.site.site_header = 'St. Basil Confirmation 2018 Admin'
+admin.site.site_title = 'Confirmation2018 Site Admin'

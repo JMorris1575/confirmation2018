@@ -1,0 +1,61 @@
+header,
+footer {
+    color: #ffdd55;
+    background-color: #d40000;
+}
+
+header {
+        font-family: 'Gloria Hallelujah', cursive;
+}
+
+.activity_text {
+    font-family: 'Arial', sans;
+    font-size: 1.2em;
+    color: #55aaaa;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.formatted {
+    white-space: pre-wrap;
+}
+
+.heading {
+    font-family: 'Arial', sans;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.link {
+    font-family: 'Arial', sans;
+    color: #ffdd55;
+    margin-right: 10px;
+}
+
+.link-list {
+    list-style-type: none;
+    color: #2eb873;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.shadowed {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px rgba(0,0,0,0.8);
+    padding: 10px;
+}
+
+
+.welcome {
+    font-family: 'Arial', sans;
+    color: #ffdd55;
+    font-weight: bold;
+    margin-right: 10px;
+}

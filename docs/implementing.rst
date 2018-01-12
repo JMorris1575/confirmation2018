@@ -18,16 +18,16 @@ Plan for the Candidate Portion
 
 Here are my initial plans for how to the Candidate portion of the Website working:
 
-* Get logging in and logging out to work
-* Create the activity app
-* Create the Welcome Page
-* Create the Activity Model
+* :ref:`Get logging in and logging out to work<authentication>`
+    * Create the activity app (Done during first attempt at working on login.)
+    * Create the Welcome Page (Done during first attempt at working on login.)
+* :ref:`Create the Activity Model<activity_model>`
 * Use admin to add some fake activities
 * Get the Welcome page to display the activities
 * Create the Page Model
 * Use admin to add some fake pages of various types
 * Create a Table of Contents or Activity Summary Page (Called the :ref:`Cover<cover_page>` page before.)
-* Create individual page types
+* Create individual page types in html
     * Essay
     * Multiple Choice
     * True/False
@@ -37,10 +37,10 @@ Implementing the Candidate Portion
 ----------------------------------
 
 Logging In
-++++++++++
+**********
 
 Getting to the login page
-*************************
++++++++++++++++++++++++++
 
 It seems I can largely copy what I did for the Christmas website except updating the approach to urls moving from
 url patterns to url paths. The ``urls.py`` file in the ``config`` directory looks like this::
@@ -136,7 +136,7 @@ user\urls.py::
     ]
 
 Logging In
-**********
+++++++++++
 
 I should be able to copy my former login.html page, from StBasilConfirmation, pretty much. First I will do it without
 any css formatting.
@@ -166,7 +166,7 @@ any css formatting.
     No, goes back to login page but it doesn't allow me to log in,
 
 Logging Out
-***********
++++++++++++
 
 I will have to temporarily add a "Logout" button to welcome.html to test this since I have not yet created the
 header.html page.
@@ -222,10 +222,27 @@ discovered two things:
 # it still refers to ``confdatabase`` rather than to ``conf18``
 # IT WAS SAVED ON GITHUB!!!!!
 
-Great! Now I have to change it all
+Great! Now I have to change it all.
 
-so now I should be ready to
-work on the website on my Home Computer.
+.. index:: conf-secrets.json
+
+First I did a ``git rm --cached conf-secrets.json`` to remove the file from the git repository without deleting it from
+my computer. Unfortunately, when I deleted and recreated the github repository and did a push to it, the previous
+commits, which included conf-secrets.json, all showed up.
+
+To fix the problem I had to delete the repository on github and then recreate it, delete the .git folder in
+the local confirmation2018 project folder, wait for the ``Invalid VCS root mapping`` event to pop up in PyCharm. Follow
+the Configure link to delete the git root reference (or whatever it was) then go back and re-enable version control
+integration. Finally I had to add the CORRECT files to git. Just to be safe I added
+``confirmation/config/settings/conf-secrets.json`` to the .gitignore file.
+
+While I'm thinking about it I will also get into team viewer to remove the file from git on my rectory computer. I don't
+know what will happen when I try to do a git pull. Perhaps I should delete the whole project on the Rectory computer and
+clone it again from github.
+
+But now I should be ready to work on the website on my Home Computer.
+
+.. _authentication:
 
 Starting Over with Authentication
 ---------------------------------
@@ -234,4 +251,177 @@ Trying to use the methods that previously worked under Django 1.11 (and earlier)
 start all over again. I could either try to follow the methods outlined in the Django documentation or try to use one of
 the tutorial websites I saved the other night. Since I'm using Django 2.0, which is brand new, I suspect it may be
 wiser to use the Django documentation.
+
+Version 2.0 has removed a number of things that were present before -- at least one of which I was using: ``app_name``
+being part of ``include()`` has been deprecated and removed. That may explain some of the problems I've been having. I
+will see what happens when I try to use the authentication system as I THINK it was explained in the documents.
+
+Redirection
+***********
+
+First I will check to see whether just entering the root url (locally:  ``localhost:8000`` will redirect me to
+``localhost:8000/user/login/``.
+
+This path did it::
+
+    path('', RedirectView.as_view(url='user/login/')),
+
+Now I will check to see whether, when I enter ``localhost:8000/user/`` or ``localhost:8000/user`` it also redirects me
+to ``localhost:8000/user/login/``.
+
+This path, in ``user/urls.py`` did it::
+
+    path('', RedirectView.as_view(url='/user/login/')),
+
+Logging In
+**********
+
+Now I will change the 'login' path to call the LoginView class as follows::
+
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+
+At first it gave me a crazy ``AttributeError: 'SessionStore' object has no attribute '_session_cache'``. It was also,
+however, warning me that I had 14 unapplied migrations which I didn't notice. With a lucky guess I did a
+``python manage.py migrate`` and logging in seemed to be working until I tried to add the LoginRequiredMixin to
+``activity/views.WelcomeView`` as follows::
+
+    from django.shortcuts import render
+    from django.views import View
+    from django.contrib.auth.mixins import LoginRequiredMixin
+
+    # Create your views here.
+
+    class WelcomeView(LoginRequiredMixin, View):
+        template_name = 'activity/welcome.html'
+
+        def get(self, request):
+            return render(request, self.template_name)
+
+        def post(self, request):
+            print('request.user = ', request.user)
+            return render(request, self.template_name)
+
+The extra print statement helped me discover that the user was still AnonymousUser so I tried to enter the admin app but
+could not do so. Remembering that I had changed ``conf-secrets.json`` to indicate the correct database ``conf18`` I
+remembered that I hadn't set a superuser so I did a ``python manage.py createsuperuser`` with my usual input and then
+I could get into the admin app and logging in worked and reported that ``Jim`` was the ``request.user``.
+
+Logging Out
+***********
+
+With this in the user/urls.py file::
+
+    path('logout/', auth_views.logout, {'template_name': 'registration/login.html'}, name='logout'),
+
+clicking on the Logout link that is currently on my stubbed-in Welcome page sent me back to ``/user/login`` with
+``?next=/activity/welcome/`` but would not allow me to log in. I changed it to::
+
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
+and it still didn't work.
+
+.. index:: Problem Solutions; logging in
+
+Logging In Revisited
+********************
+
+It seems I'm only really logging in when I do it through the admin app. Any time I've logged out and get to my own
+login page, it doesn't really log me in. To experiment I will remove the LoginRequiredMixin from the WelcomeView.
+
+Sure enough, it's still listing me as AnonymousUser. Maybe there's something I need to do in my own login view? Check
+the documentation again...
+
+Ah! I finally discovered the problem at
+https://docs.djangoproject.com/en/2.0/topics/auth/default/#django.contrib.auth.views.LoginView In my ``login.html`` file
+I had this line::
+
+    <form method="post" action="{% url 'welcome' %}">
+
+instead of::
+
+    <form method="post" action="{% url 'login' %}">
+
+so the user was never going back to the post method of LoginView to actually get logged in. Now I can try using
+``loginrequired()`` around the view calls in the urls.py files and it worked fine!
+
+Logging Out Revisited
+*********************
+
+I'd like the Logout page to include an easy way to log back in. First I will create a registration/logout.html file
+that has a Log Back In link.
+
+It worked after I changed ``users/urls.py`` to include the following::
+
+    path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
+
+I thought I would not have had to do that if I had called my file logged_out.html but, when I tried that, it still
+brought me to the admin app's login page instead of my own. Perhaps there is a conflict between namespaces or something
+but I will just leave it alone for now.
+
+Using skeleton.css
+------------------
+
+I copied both the ``templates`` directory and the ``static`` directory from confirmation2017. The ``templates``
+directory contains ``base.html`` with all the css file information and the ``static`` directory contains the ``site``
+directory with an ``images`` directory containing the Holy Spirit image and the three css files: ``custom.css``,
+``normalize.css`` and ``skeleton.css``. Checking the confirmation2017 version of ``dev.py`` I found it the same as
+I am using here so now I have to adjust my templates.
+
+Updating the html pages
+***********************
+
+To use the css I had to update the existing html pages:  login.html, logout.html and welcome.html. I followed the way I
+did it in christmas17 by having a separate header and footer file. It was a bit of an education since I had to remind
+myself of such things as using {{ block.super }} to actually get the benefits I was looking for -- such as getting part
+of the title from the parent page and part from the current page.
+
+The login.html Page
+*******************
+
+I want the login form to appear in a nice rounded box, like the trivia questions in christmas17, so I will try adding a
+"shadowed" class to the form itself and update custom.css to include::
+
+    .shadowed {
+        border-width: 2px;
+        border-style: solid;
+        border-color: black;
+        border-radius: 10px;
+        box-shadow: 10px 10px 20px rgba(0,0,0,0.8);
+        padding: 10px;
+    }
+
+.. _activity_model:
+
+.. index:: Problem Solutions; migrations
+
+Create the Activity Model
+-------------------------
+
+I used pretty much the same Activity model as in confirmation2017. The only change I made was to use 'index' in place of
+'number' to allow for the ordering of the activities the way I want them ordered.
+
+Now I will do a ``python manage.py makemigrations`` and ``python manage.py migrate`` and use the admin app to create at
+least one activity. Then I can improve the welcome page.
+
+It didn't work at first, just told me there were no changes, because I had not registered the model in
+``activity/admin.py``.
+
+Hmm... it still didn't work afterward. What is going on?
+
+Apparently the activity app needed to have a migrations folder with a blank ``__init__.py`` file in it. After I did that
+``makemigrations`` and ``migrate`` worked as expected.
+
+What happened to the migrations foler?  I don't know if I accidentally deleted it some time after it was created or if
+it just didn't make it into the git clone.
+
+Checking on github I see that there is no migrations folder under the acivity app, but there is one under the user app
+even though it only contains the empty ``__init__.py`` file. I may have accidentally deleted it after startapp created
+it. Just to be sure startapp does create it I will do a ``python manage.py startapp fakeapp`` and see if it comes with a
+migrations folder...
+
+Yep! The migrations folder is there! Hard telling what happened to the activity app's version -- unless I just didn't
+include it in git. I will check with TeamViewer...
+
+Yep, that was it! The rectory computer had a migrations folder in the activity app's directory but it's ``__init__.py``
+file was not marked to be included in git. Funny I would miss that but include ``conf-secrets.json``.
 

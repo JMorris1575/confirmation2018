@@ -1,20 +1,33 @@
-<p>
-    Enter the Username and Password you were given then click the "Login" button. Both the Username and the Password
-    are case sensitive.
-</p>
-<form method="post" action="{% url 'welcome' %}">
-    <p>
-        {% if next %}
-            <input type="hidden" name="next" value="{{ next }}">
-            <p>if next was true!</p>
-        {% endif %}
-        <label for="id_username">Username:</label>
-        <input type="text"
-               name="username" autofocus maxlength="254" required id="id_username" />
-        <label for="id_password">Password:</label>
-        <input type="password"
-               name="password" required id="id_password" />
-        <input value="Login" type="submit" />
-    </p>
-    {% csrf_token %}
-</form>
+{% extends parent_template|default:'user/base_user.html' %}
+
+{% block title %}
+    {{ block.super }}Login
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <div class="container">
+        <div class="offset-by-three six columns shadowed">
+            <p>
+                Enter the Username and Password you were given then click the "Login" button. Both the Username and the Password
+                are case sensitive.
+            </p>
+            <form class="offset-by-two eight columns" method="post" action="{% url 'login' %}">
+                <p class="row">
+                    {% if next %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                    {% endif %}
+                    <label for="id_username">Username:</label>
+                    <input class="u-full-width" type="text"
+                           name="username" autofocus maxlength="254" required id="id_username" />
+                    <label for="id_password">Password:</label>
+                    <input class="u-full-width" type="password"
+                           name="password" required id="id_password" />
+                    <input class="button-primary u-full-width" value="Login" type="submit" />
+                </p>
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

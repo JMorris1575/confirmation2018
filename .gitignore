@@ -2,3 +2,4 @@ docs/_build/doctrees/
 docs/_build/html/
 docs/_templates/
 .idea/
+confirmation/config/settings/conf-secrets.json
