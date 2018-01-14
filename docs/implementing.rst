@@ -480,3 +480,262 @@ After putting that into my ``base.html`` file the website now has a favicon!
 Finally, I didn't like the color of the text on the welcome page so I changed it to #2eb873 by setting that in the
 activity_text selector in custom.css. I'm not sure I like that one either but it's a start.
 
+Designing the Models
+--------------------
+
+My previous attempt at building *ConfirmationWebsite* used an Action model which was connected to an activity but it
+was a little confused as to what it was. It had a ``type`` field with choices as to which page it was but I'm not sure
+how multiple choice and true false questions would fit in. Perhaps the ``text`` field could contain the question while
+a separate ``Choice`` model would connect to possible responses.
+
+Here I will try to list the sorts of pages described in the planning document and the data that each one will need. That
+may help me come up with a more clear model design.
+
+Cover Page
+**********
+
+The cover page will need to display an overview of the activity and a list of pages for the activity. It has to know
+which activity it belongs to and which user is accessing it at the moment. Control buttons allow the user to Begin (or
+continue) the activity, or return to the Welcome Page. The Cover Page is much like a welcome page for the individual
+activities.
+
+Essay Page
+**********
+
+The esay page will allow the user to write out his or her answer to a question. It must display the question and contain
+a place to store the answer. It must know to which activity is belongs. It displays Previous and Next buttons at the
+bottom but the previous button is deactivated for the first page and the next button is deactivated until they have
+completed the current page. This function for the previous and next buttons is the same for all the following pages.
+
+Multiple Choice Page
+********************
+
+The multiple choice page displays the question and several possible answers with radio buttons from which the user is to
+select one choice. It is connected to an activity but will have to search for the choices that pertain to the current
+question on its own.  Previous and next buttons function as described above.
+
+True/False Page
+***************
+
+The true/false page is a multiple choice page with only two choices: True, and False. The page arranges to have the
+True choice always come first. It is connected to an activity but will only need to know whether the correct response is
+True or False. Previous and next buttons function as described above.
+
+Discussion Page
+***************
+
+The discussion page displays the current question plus all of the responses that have been given so far in the order in
+which they were given. An "Add Comment" button is available for the user to add to the discussion. An Edit link appears
+next to each comment made by the current user. Previous and next buttons function as described above.
+
+Model Design
+------------
+
+The above suggests that it may be useful to expand the Activity model to include the information needed for the Cover
+Page and create a Page model to connect to the Activity. The Page model could contain a choice field indicating what
+sort of page it is and could be the one various other models connect to:  such as a Choice model, an Essay model and
+a Discussion model.
+
+This still doesn't feel right though. I need to think about it some more.
+
+Imagining Template Creation
+---------------------------
+
+Perhaps if I imagine myself creating the templates, all of the CUD (Create, Update, Delete) templates, I will get a
+better idea of what features are needed in the models. I will have a go again at all of the various page types:
+
+Cover Page
+**********
+
+Displaying the Cover Page
++++++++++++++++++++++++++
+
+At the top there will be some kind of information box that tells the user what the activity is about and tries to give
+him or her some motivation for completing it.
+
+Beneath that is a list of the various pages of the activity. The ones that are not currently open to the user are grayed
+out, the ones already completed have a check mark next to them and can be clicked so that they can see and possibly edit
+their responses. (Only essay answers can be edited.) The next one in line to be completed and, possibly, open discussion
+pages are active links to go to those pages.  Beneath all of that is a button that says either "Begin" or "Continue"
+depending on whether the user has previously begun this activity.
+
+To display the cover page I will need:
+
+*   The activity name (from the Activity model)
+*   A list of the activity's pages (gathered from the Page model)
+*   A list of the pages in this activity that the user has completed (gathered from the Response model)
+
+Creating the Information on the Cover Page
+++++++++++++++++++++++++++++++++++++++++++
+
+Part of this is done by the administrator, or possibly by staff members, when an activity is created. Creating an
+activity will involve creating the various kinds of pages for that activity.
+
+The rest of it is done as the user completes pages of the activities. A record is kept referencing the user, the
+activity and the page just completed.  Also, for at least some of the pages, a record is made of the user's answer. This
+could be an essay, a discussion post, a multiple choice or a true/false answer. It seems best to try to combine all of
+them into one with different types of answer slots available.
+
+Here is a list of what I think I will need in this Response model:
+
+*   The activity
+*   The page
+*   The user (who could be the AnonymousUser)
+*   A large text field to hold essay and discussion responses
+*   A small text field to hold Multiple Choice or True/False answers
+*   A boolean field to indicate whether their answer was correct (for multiple choice and true/false pages)
+*   A time/date stamp for discussion responses to keep them in order
+
+This is also suggesting pages that are only available to the administrator and to the staff members (adult
+facilitators). I will design them separately when I finish the candidate pages.
+
+Updating the Information on the Cover Page
+++++++++++++++++++++++++++++++++++++++++++
+
+This will be updated either when the administrator/staff members update the contents or structure of the activities or
+when a user updates his or her responses.
+
+Deleting the Information on the Cover Page
+++++++++++++++++++++++++++++++++++++++++++
+
+This will be deleted when an activity itself is deleted. But what should I do if the activity has already been used? Can
+I make activities invisible but keep them intact in the database? I will have to think about this. It seems like a good
+idea to archive previous contents of the website for each group and only "delete" it when a new group starts. It would
+also be good not to have to reproduce all of the activities and pages for subsequent groups. I will have to think about
+how to do this. Perhaps it could involve putting the activities into groups and displaying only the current set, or
+sets, of activities. Maybe I would have to have groups of groups, one for each Confirmation class. This raises a lot of
+questions but I want to focus on the candidate version of the site for now.
+
+Essay Page
+**********
+
+Displaying the Essay Page
++++++++++++++++++++++++++
+
+The page will have the name of the activity, the page number (or some better name for it than that) and the question to
+be answered or the statement to be commented upon. There will be a text area available for the answer, with the
+insertion point already in it, and a submit button underneath. The Previous and Next buttons will show and be activated
+if the user can go backward or forward. Upon clicking the Submit button the candidate is shown a non-editable version of
+their response with an Edit button at the bottom of it.
+
+To display the Essay Page I will need:
+
+*   the Activity
+*   the page number (Part 1, Part 2, etc.?)
+*   a list of this user's responses to the parts of this activity.
+
+Creating the Information on the Essay Page
+++++++++++++++++++++++++++++++++++++++++++
+
+The question or statement to spur the written response will be supplied by the administrator or staff member when the
+activity is created or edited to include the page.
+
+The user's response will be created when he or she clicks the Submit button.
+
+Updating the Information on the Essay Page
+++++++++++++++++++++++++++++++++++++++++++
+
+The question or statement will be updated through the Activity update process.
+
+A user can update his or her response by returning to the page. If he or she deletes the response completely that
+that response is removed from the database and he or she no longer gets credit for it. The actions of the Previous
+and Next buttons are modified accordingly. I'll have to think about whether he or she can get to later pages already
+completed.
+
+Deleting the Information on the Essay Page
+++++++++++++++++++++++++++++++++++++++++++
+
+During the development of the activity the page can be deleted through the Activity update process or the Activity
+delete process. If there are already responses to that page they would be orphaned and so perhaps it would be better
+simply to make the page inactive instead of deleting it completely.
+
+A candidate can delete his or her response by clicking on the Edit button on the non-editable version of the Essay Page
+and then selecting Delete. The non-editable version of the Essay Page shows the same information as before but their
+response is placed under the question or statement instead of in an editing box. There is an Edit button at the bottom
+of the page along with the Previous and Next buttons.
+
+What I Learned from Thinking about the Essay Page
++++++++++++++++++++++++++++++++++++++++++++++++++
+
+I learned that each response page will have to have another, non-editable version also with Previous and Next buttons
+but also an Edit button to take the user to an editable version of the page.
+
+Multiple Choice Page
+********************
+
+Displaying the Multiple Choice Page
++++++++++++++++++++++++++++++++++++
+
+Editable
+^^^^^^^^
+
+
+
+Non-Editable
+^^^^^^^^^^^^
+
+
+
+Updating the Information on the Multiple Choice Page
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+Deleting the Information on the Multiple Choice Page
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+True/False Page
+***************
+
+Displaying the True/False Page
+++++++++++++++++++++++++++++++
+
+Editable
+^^^^^^^^
+
+
+
+Non-Editable
+^^^^^^^^^^^^
+
+
+
+Updating the Information on the True/False Page
++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+Deleting the Information on the True/False Page
++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+Discussion Page
+***************
+
+Displaying the Discussion Page
+++++++++++++++++++++++++++++++
+
+Editable
+^^^^^^^^
+
+
+
+Non-Editable
+^^^^^^^^^^^^
+
+
+
+Updating the Information on the Discussion Page
++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+Deleting the Information on the Discussion Page
++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
