@@ -823,26 +823,13 @@ Deleting the Information on the Discussion Page
 An administrator or staff member can delete a discussion page before it is published or make it invisible once it has
 already begun.
 
-Displaying the Poll Page
-++++++++++++++++++++++++
+Poll Pages
+**********
 
-Entry
-^^^^^
+Actually there are several poll pages, one for each page type except perhaps for the discussion page. Thus the
+creation, updating and deleting of poll information will be the same as for the corresponding page type. I just may
+have to come up with a boolean flag indicating whether the item is a poll or not.
 
-
-
-Display
-^^^^^^^
-
-
-
-Updating the Information on the Poll Page
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-Deleting the Information on the Poll Page
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
+Thinking about Model Design
+---------------------------
 
