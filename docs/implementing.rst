@@ -666,26 +666,73 @@ Multiple Choice Page
 Displaying the Multiple Choice Page
 +++++++++++++++++++++++++++++++++++
 
-Editable
-^^^^^^^^
+Entry
+^^^^^
 
+The version of the Multiple Choice Page that allows candidates to enter information will display the Activity Name, the
+page or step number, the question being asked and the possible choices for answers, as many of them as there are. The
+choices will be labeled with capital letters and each one will have a radio button associated with it. None of the radio
+buttons are selected when they first enter the page. There is a Submit button underneath the choices and Previous and
+Next buttons activated as appropriate. the Submit button is grayed out and inactive until the user selects one of the
+choices. After the user clicks Submit, the Display version of the page appears.
 
+Display
+^^^^^^^
 
-Non-Editable
-^^^^^^^^^^^^
+The Review form of the page displays the Activity Name, the page or step number, the question being asked and the
+possible choices for answers with the user's selection highlighted in some manner (color, weight, style of font?). Some
+questions may display the correct answer along with the user's answer and tell them whether they are right or wrong.
+There may be an explanation of the correct answer included which may also explain why the others were incorrect. If an
+answer is given the user will not be allowed to edit their answer. Otherwise, an Edit button will be on the page which
+does give the user that ability. Previous and Next buttons appear as usual.
 
+It seems that I have not yet written down any plans for the Activity model or the Page model. I think I am ready to do
+this now.
 
+Here are my current thoughts about the Activity model:
+
+*   an integer index number for use in ordering the list of activities
+*   the activity name
+*   the slug for the activity
+*   overview text for the activity
+*   publish date for the activity (date on which it begins to appear on the website)
+*   closing date for the activity (date on which it ceases to appear on the website)
+
+Here are my current thoughts about the Page model (which used to be called the Action model - perhaps a good name):
+
+*   the associated activity
+*   an integer for use in ordering the list of actions
+*   the type of action: essay, multiple choice, true/false, discussion, opinion poll
+*   a text field to hold the question, statement or discussion point
+*   a boolean to indicate whether the action is to be timed
+*   an optional text field giving an explanation of the correct answer for those that have correct answers
+*   a boolean indicating whether an answer is given after a user's response which tells whether the user can change it.
+*   a boolean to indicate whether this page is currently active (so used pages can be made inactive instead of deleted?)
+*   a boolean for True/False questions that have a definite answer (as opposed to poll questions)
+*   a boolean to tell whether the discussion is public or anonymous
+
+There will also have to be a Choice model to contain the possible multiple choice answers:
+
+*   the action or question with which this choice is associated
+*   a field to order the list of choices (either starting as, or converted to, a letter)
+*   a text field containing the text of the choice
+*   a boolean field indicating whether this answer is the correct one
 
 Updating the Information on the Multiple Choice Page
 ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+The questions and choices can be updated by the administrator or staff members through the Activity update process.
 
+If a candidate wants to update their response they may do so only on those responses where answers have not already
+been given.
 
 Deleting the Information on the Multiple Choice Page
 ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+The questions and choices can be deleted by the administrator or staff members through th Activity update process
+during development or may be made inactive through the Activity update process.
 
-
+The user is only permitted to delete their response on questions that do not give an answer. (poll questions?)
 
 True/False Page
 ***************
@@ -693,25 +740,44 @@ True/False Page
 Displaying the True/False Page
 ++++++++++++++++++++++++++++++
 
-Editable
-^^^^^^^^
+Entry
+^^^^^
 
+The page that allows candidates to respond to True/False questions will display the activity name, the current page,
+part or action number, the statement to which they are to respond and radio buttons for their selection of either True
+or False. True will always appear on top. Underneath this area will be a Submit button and the Previous and Next buttons
+which operate in the usual way.
 
+Display
+^^^^^^^
 
-Non-Editable
-^^^^^^^^^^^^
+The display page shows the activity name, the current page, part or action number, the statement to which the user
+responded and the response given, either True or False. The correct answer and an optional explanation may also appear.
+If the answer does not appear, there is an Edit button that allows them to change their response. The Previous and Next
+buttons work as usual.
 
+If there needs to be a separate model for True/False questions here is an idea for it:
 
+*   the activity
+*   the page, part or action number
+*   the statement text
+*   a boolean with the correct answer
 
 Updating the Information on the True/False Page
 +++++++++++++++++++++++++++++++++++++++++++++++
 
+The statements and correct answer can be updated by the administrator and possibly one or more staff members in the
+Activity editing process.
 
+A candidate may be able to change their answer if the answer was not already given.
 
 Deleting the Information on the True/False Page
 +++++++++++++++++++++++++++++++++++++++++++++++
 
+A true/false question can be deleted by the administrator or staff members through th Activity update process during
+development or may be made inactive through the Activity update process if the page already has responses.
 
+The user is only permitted to delete their response on questions that do not give an answer. (poll questions?)
 
 Discussion Page
 ***************
@@ -719,23 +785,64 @@ Discussion Page
 Displaying the Discussion Page
 ++++++++++++++++++++++++++++++
 
-Editable
-^^^^^^^^
+Entry
+^^^^^
 
+When a candidate comes to the discussion page he or she sees the Activity name, the page or action number and the
+question or statement forming the discussion point. Underneath that, in the order in which they were added, comes the
+entries that were made to the discussion so far. Each one may or may not have the name of the contributor depending on
+the nature of the discussion, open or anonymous. If the discussion is open (or public) any responses this user
+contributed have an edit link next to them. At the bottom is an "Add Comment" button if they want to add to the
+discussion. When he or she clicks it a text box appears on the page for entering the comment. The same box appears,
+filled, if they click the Edit link next to an earlier comment he or she made. Previous and Next buttons appear as
+usual.
 
+Currently I am thinking the discussion comments can be handled by the Response model but I may have to rethink that. I
+keep thinking about what I've read about the design of Django apps: that they should do one thing and do it well. Does
+this suggest that I have separate apps for each kind of page? Will this change the Page model giving it a link to
+whatever model in a different app is needed. I will have to consider this possibility. One advantage is that these apps
+may be reusable in other programs that involve various kinds of quizzes. Like the trivia app in Christmas2017, or the
+polls app in the Django tutorial. Hmm...
 
-Non-Editable
-^^^^^^^^^^^^
+Display
+^^^^^^^
 
-
+There is no separate Display version of this page since everything is displayed and entered on the same page described
+above.
 
 Updating the Information on the Discussion Page
 +++++++++++++++++++++++++++++++++++++++++++++++
 
-
+The administrator or a staff member can edit the discussion question or statement during the creation or editing of an
+activity. Or later if it seems prudent. An administrator or staff member can also remove inappropriate comments made by
+candidates or hide the whole page if that becomes necessary.
 
 Deleting the Information on the Discussion Page
 +++++++++++++++++++++++++++++++++++++++++++++++
+
+An administrator or staff member can delete a discussion page before it is published or make it invisible once it has
+already begun.
+
+Displaying the Poll Page
+++++++++++++++++++++++++
+
+Entry
+^^^^^
+
+
+
+Display
+^^^^^^^
+
+
+
+Updating the Information on the Poll Page
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+Deleting the Information on the Poll Page
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 
