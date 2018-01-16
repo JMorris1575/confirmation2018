@@ -830,6 +830,85 @@ Actually there are several poll pages, one for each page type except perhaps for
 creation, updating and deleting of poll information will be the same as for the corresponding page type. I just may
 have to come up with a boolean flag indicating whether the item is a poll or not.
 
-Thinking about Model Design
----------------------------
+Thinking about the Design
+-------------------------
 
+Okay, should I use several apps or try to do it all with the activity app? As noted above, having several apps keeps to
+the idea of having an app do just one thing and do it well and may simplify some things about the model design too. I'm
+thinking that the Page model is too complicated with ten different fields, some of them being used only for particular
+versions of a page. Although, come to think of it, it's only the boolean for True/False questions indicating the correct
+answer, that
+
+On the other hand, it isn't clear to me how the page model would connect to the models in the various apps. Perhaps they
+would connect to the page model.
+
+It seems the purpose of the page model is to give me a way to list the various actions for an activity and keep track
+of things for the Previous and Next buttons. I don't see how this could easily be done without having one place to go to
+list them all and present them all.
+
+Model Design
+------------
+
+So here is a start to the model design using just one activity app:
+
+.. csv-table::*Activity Model*
+    :header: Field, Type, Attributes, Comments
+    :widths: auto
+
+    index, PositiveSmallIntegerField, unique=True
+    name, CharField, max_length=40
+    slug, SlugField, max_length=15; unique=True; db_index=True?, docs say "Implies setting Field.db_index to True"
+    overview, CharField, max_length=512
+    publish_date, DateField,,date on which it begins to appear
+    closing_date, DateField,,date on which it ceases to appear
+    visible, BooleanField, default=False, default is false so that it will not appear until publish_date
+
+.. csv-table::*Page Model*
+    :header: Field, Type, Attributes, Comments
+    :widths: auto
+
+    activity, ForeignKey, Activity; on_delete=models.CASCADE
+    index, PositiveSmallIntegerField,, unique with activity
+    page_type, CharField, max_length=20; choices=Essay; MultiChoice; True/False; Discussion
+    text, CharField, max_length=256, for the question; statement or discussion point
+    explanation, CharField, max_length=512; blank=True, optional explanation for correct answer
+    give_answer, BooleanField, default=False, indicates whether an answer is given after the user responds
+    active, BooleanField, default=True, indicates whether the page will be visible
+    has_correct, BooleanField, default=?, indicates whether MultiChoice or True/False questions have a correct answer
+    true_false, BooleanField, blank=True, indicates the correct answer to a True/False question
+    public, BooleanField, default=True, indicates whether a discussion or poll is public or private
+
+activity and index are unique together.
+
+Note: I did not include the timed BooleanField I had considered before for keeping track of how long it takes the user
+to complete a page. I wondered whether I really have much cause to do that. I also wondered if a different use might be
+a good idea: to limit the time a user can spend on certain pages, but I don't know how to implement that.
+
+.. csv-table::*Response Model*
+    :header: Field, Type, Attributes, Comments
+    :widths: auto
+
+    user, ForeignKey, User; on_delete=models.CASCADE, could be the AnonymousUser
+    activity, ForeignKey, Activity; on_delete=models.CASCADE
+    page, ForeignKey, Page; on_delete=models.CASCADE
+    time_stamp, DateTimeField, auto_now_add=True, date/time stamp for when the response was created
+    last_edited, DateTimeField, auto_now=True, date/time stamp for the last edit
+    essay, TextField, blank=True, contains responses to essay and discussion pages
+    multi_choice, CharField, max_length=1; blank=True, the user's response to multi-choice questions
+    true_false, BooleanField, blank=True, the user's response to true/false questions
+    correct, BooleanField, blank=True, whether the user's response was correct
+
+user, activity and page are unique together
+
+.. csv-table::*Choice Model*
+    :header: Field, Type, Attributes, Comments
+    :widths: auto
+
+    page, ForeignKey, Page; on_delete=models.CASCADE
+    index, PositiveSmallIntegerField,
+    text, CharField, max_length=256
+    correct, BooleanField, blank=True, indicates this choice is correct (if has_correct is True in Page model).
+
+page and index are unique together
+
+No more than one choice of a set may be marked as correct.
