@@ -851,7 +851,7 @@ Model Design
 
 So here is a start to the model design using just one activity app:
 
-.. csv-table::*Activity Model*
+.. csv-table:: **Activity Model**
     :header: Field, Type, Attributes, Comments
     :widths: auto
 
@@ -863,20 +863,22 @@ So here is a start to the model design using just one activity app:
     closing_date, DateField,,date on which it ceases to appear
     visible, BooleanField, default=False, default is false so that it will not appear until publish_date
 
-.. csv-table::*Page Model*
+|
+
+.. csv-table:: **Page Model**
     :header: Field, Type, Attributes, Comments
     :widths: auto
 
     activity, ForeignKey, Activity; on_delete=models.CASCADE
     index, PositiveSmallIntegerField,, unique with activity
     page_type, CharField, max_length=20; choices=Essay; MultiChoice; True/False; Discussion
-    text, CharField, max_length=256, for the question; statement or discussion point
+    text, CharField, max_length=512, for the question; statement or discussion point
     explanation, CharField, max_length=512; blank=True, optional explanation for correct answer
-    give_answer, BooleanField, default=False, indicates whether an answer is given after the user responds
-    active, BooleanField, default=True, indicates whether the page will be visible
-    has_correct, BooleanField, default=?, indicates whether MultiChoice or True/False questions have a correct answer
-    true_false, BooleanField, blank=True, indicates the correct answer to a True/False question
-    public, BooleanField, default=True, indicates whether a discussion or poll is public or private
+    opinion, BooleanField, default=False, indicates whether MultiChoice or True/False questions have a correct answer
+    reveal_answer, BooleanField, blank=True, indicates whether an answer is given after the user responds
+    visible, BooleanField, default=True, indicates whether the page will be visible
+    tf_answer, BooleanField, blank=True, indicates the correct answer to a True/False question
+    open, BooleanField, default=True, indicates whether a discussion or poll is open or anonymous
 
 activity and index are unique together.
 
@@ -884,7 +886,7 @@ Note: I did not include the timed BooleanField I had considered before for keepi
 to complete a page. I wondered whether I really have much cause to do that. I also wondered if a different use might be
 a good idea: to limit the time a user can spend on certain pages, but I don't know how to implement that.
 
-.. csv-table::*Response Model*
+.. csv-table:: **Response Model**
     :header: Field, Type, Attributes, Comments
     :widths: auto
 
@@ -900,7 +902,7 @@ a good idea: to limit the time a user can spend on certain pages, but I don't kn
 
 user, activity and page are unique together
 
-.. csv-table::*Choice Model*
+.. csv-table:: **Choice Model**
     :header: Field, Type, Attributes, Comments
     :widths: auto
 
