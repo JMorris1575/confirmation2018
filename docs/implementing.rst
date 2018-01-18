@@ -923,3 +923,91 @@ No more than one choice of a set may be marked as correct.
 
     filename, CharField, max_length=30, the filename as it appears in the page_images folder in the static directory
     category, CharField, max_length=20, the category that can be used to create tabbed pages of similar images
+
+Adjusting the Database to the new Models
+----------------------------------------
+
+Here is the plan:
+
+*   use the admin to erase all entries except for the User model
+*   do a makemigrations
+*   do a migrate
+
+That didn't work. Since I had already created the models, the admin program would not let me into the existing Activity
+model to change anything. I had to do it as follows:
+
+*   do a makemigrations and fill in the ``closing_date`` and ``publish_date`` fields with ``timezone.now``
+*   do a migrate
+*   the admin app can now be used to remove existing information if you so desire, or add new model contents
+
+This is how it was done on my home computer. Once I add new information to the database I will have to transfer
+to my other computers as follows. First, on the computer that is most current:
+
+*   use dumpdata auth.user, activity > *<date>*user_activity.json to create a fixture on the most current computer
+*   add that fixture to git and do a commit
+*   do a git push
+
+Then, on the computer being transferred to:
+
+*   do a git pull
+*   do a makemigrations filling in ``closing_date`` and ``publish_date`` with ``timezone.now`` as above
+*   do a migrate
+*   do a loaddata *<date>*user_activity.json to read the information into the database
+
+The Tedious Work of Adding Pages
+--------------------------------
+
+I decided to leave the current acitivities: "Noah: The REAL Story" and "God? Are you there?" and begin working on pages
+to display them and create, edit and delete them. I decided to add two or three phony users to the User model so that it
+will now contain:
+
+*   Jim as the superuser/administrator
+*   Sylvia as the Supervisor/administrator, password: svd12345
+*   Fred as a Team member, password frf12345
+*   Diego as a Candidate, password: dfd12345
+*   Susan as a Candidate, password: sfs12345
+
+Before I do this I will have to re-study using Django groups.
+
+Groups
+******
+
+Planning the Groups
++++++++++++++++++++
+
+According to https://docs.djangoproject.com/en/2.0/topics/auth/default/ beyond just permissions, I can use groups to
+categorize users and develop code myself that gives them access to various parts of the site. With this in mind I'm
+thinking of the following new groups:
+
+*   Candidate, which gives access to the published activities and allows them to enter and edit their own answers
+*   Team, which allows access to that,  to pages displaying their candidates' progress and to activity development pages
+*   Supervisor, which allows access to all that and allows the setting of publish and closing dates
+*   Administrator, the superusers, who have access to everything
+
+Creating the Groups
++++++++++++++++++++
+
+As an experiment I used the admin to add the groups as follows:
+
+*   Candidate: no permissions for anything, test later to see if that prevents them from adding responses
+*   Team: no permissions for anything, test later to see if they can access things through the website if not the admin
+*   Supervisor: no permissions but I gave Sylvia staff status when I created her User information
+*   Administrator: no permissions but I put myself into the Administrator group
+
+In order to fully experiment with these groups I will have to create some actual pages to interact with and see if the
+right people can do the right things. Now, however all I can do is check to see if the right people can login and, once
+they do, whether they have access to the admin site.
+
+.. csv-table:: **Test for Access to admin App**
+    :header: User, Expected Access, Actual Access, Notes
+    :widths: auto
+
+    Jim, Yes, Yes, Has access to Groups
+    Sylvia, Yes, Yes, Cannot access Groups
+    Fred, No, No, Invited him to login under a different account
+    Susan, No, No, Invited her to login under a different account
+    Diego, No, No, Invited him to login under a different account
+
+Plan for the Initial Pages
+**************************
+

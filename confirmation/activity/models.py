@@ -19,8 +19,16 @@ class Activity(models.Model):
         ordering = ['index']
 
 
+class Image(models.Model):
+    filename = models.CharField(max_length=30)
+    category = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.filename
+
+
 class Page(models.Model):
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE())
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     index = models.PositiveSmallIntegerField()
     page_type = models.CharField(max_length=20,
                                  choices=[('ES', 'Essay'),
@@ -28,7 +36,7 @@ class Page(models.Model):
                                           ('TF', 'True-False'),
                                           ('DS', 'Discussion')])
     text = models.CharField(max_length=512)
-    image = models.ForeignKey(Image, blank=True, on_delete=models.CASCADE())
+    image = models.ForeignKey(Image, blank=True, on_delete=models.CASCADE)
     explanation = models.CharField(max_length=512, blank=True)
     opinion = models.BooleanField(default=False)        # opinion questions do not have right and wrong answers
     reveal_answer = models.BooleanField(blank=True)     # indicates whether the answer is revealed after user's response
@@ -69,9 +77,9 @@ class Page(models.Model):
 
 
 class Response(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE())
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE())
-    page = models.ForeignKey(Page, on_delete=models.CASCADE())
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     last_edited = models.DateTimeField(auto_now=True)
     essay = models.TextField(blank=True)
@@ -89,7 +97,7 @@ class Response(models.Model):
 
 
 class Choice(models.Model):
-    page = models.ForeignKey(Page, on_delete=models.CASCADE())
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
     index = models.PositiveSmallIntegerField()
     text = models.CharField(max_length = 256)
     correct = models.BooleanField(blank=True)       # indicates this choice is correct if opinion if False in Page model
@@ -100,11 +108,4 @@ class Choice(models.Model):
     def choiceLetter(self, index):
         return chr(64 + index) + ') '
 
-
-class Image(models.Model):
-    filename = models.CharField(max_length=30)
-    category = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.filename
 
