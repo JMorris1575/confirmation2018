@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
@@ -27,6 +28,7 @@ class Page(models.Model):
                                           ('TF', 'True-False'),
                                           ('DS', 'Discussion')])
     text = models.CharField(max_length=512)
+    image = models.ForeignKey(Image, blank=True, on_delete=models.CASCADE())
     explanation = models.CharField(max_length=512, blank=True)
     opinion = models.BooleanField(default=False)        # opinion questions do not have right and wrong answers
     reveal_answer = models.BooleanField(blank=True)     # indicates whether the answer is revealed after user's response
@@ -64,3 +66,45 @@ class Page(models.Model):
             return '/activity/' + slug + '/congrats/'
         else:
             return '/activity/' + slug + '/' + str(index + 1) + '/'
+
+
+class Response(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE())
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE())
+    page = models.ForeignKey(Page, on_delete=models.CASCADE())
+    created = models.DateTimeField(auto_now_add=True)
+    last_edited = models.DateTimeField(auto_now=True)
+    essay = models.TextField(blank=True)
+    multi_choice = models.CharField(max_length=1, blank=True)
+    true_false = models.BooleanField(blank=True)
+    correct = models.BooleanField(blank=True)
+
+    def __str__(self):
+        name = self.user.first_name + ' ' + self.user.last_name
+        if name[-1] == 's':
+            possessive_text = "' response to "
+        else:
+            possessive_text = "'s response to "
+        return name + possessive_text + str(self.activity) + ' ' + str(self.page)
+
+
+class Choice(models.Model):
+    page = models.ForeignKey(Page, on_delete=models.CASCADE())
+    index = models.PositiveSmallIntegerField()
+    text = models.CharField(max_length = 256)
+    correct = models.BooleanField(blank=True)       # indicates this choice is correct if opinion if False in Page model
+
+    def __str__(self):
+        return self.choiceLetter(self.index) + self.text
+
+    def choiceLetter(self, index):
+        return chr(64 + index) + ') '
+
+
+class Image(models.Model):
+    filename = models.CharField(max_length=30)
+    category = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.filename
+

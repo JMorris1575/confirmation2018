@@ -704,6 +704,7 @@ Here are my current thoughts about the Page model (which used to be called the A
 *   an integer for use in ordering the list of actions
 *   the type of action: essay, multiple choice, true/false, discussion, opinion poll
 *   a text field to hold the question, statement or discussion point
+*   an image field connecting to an image to be displayed on the page
 *   a boolean to indicate whether the action is to be timed
 *   an optional text field giving an explanation of the correct answer for those that have correct answers
 *   a boolean indicating whether an answer is given after a user's response which tells whether the user can change it.
@@ -873,6 +874,7 @@ So here is a start to the model design using just one activity app:
     index, PositiveSmallIntegerField,, unique with activity
     page_type, CharField, max_length=20; choices=Essay; MultiChoice; True/False; Discussion
     text, CharField, max_length=512, for the question; statement or discussion point
+    image, ForeignKey, Image; on_delete=models.CASCADE; blank=True, keyed to the image, if any, to display on the page
     explanation, CharField, max_length=512; blank=True, optional explanation for correct answer
     opinion, BooleanField, default=False, indicates whether MultiChoice or True/False questions have a correct answer
     reveal_answer, BooleanField, blank=True, indicates whether an answer is given after the user responds
@@ -914,3 +916,10 @@ user, activity and page are unique together
 page and index are unique together
 
 No more than one choice of a set may be marked as correct.
+
+.. csv-table:: **Image Model**
+    :header: Field, Type, Attributes, Comments
+    :widths: auto
+
+    filename, CharField, max_length=30, the filename as it appears in the page_images folder in the static directory
+    category, CharField, max_length=20, the category that can be used to create tabbed pages of similar images
