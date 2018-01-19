@@ -866,13 +866,15 @@ So here is a start to the model design using just one activity app:
 
 |
 
+.. _page_model:
+
 .. csv-table:: **Page Model**
     :header: Field, Type, Attributes, Comments
     :widths: auto
 
     activity, ForeignKey, Activity; on_delete=models.CASCADE
     index, PositiveSmallIntegerField,, unique with activity
-    page_type, CharField, max_length=20; choices=Essay; MultiChoice; True/False; Discussion
+    page_type, CharField, max_length=20; choices=Instructions; Essay; MultiChoice; True/False; Discussion
     text, CharField, max_length=512, for the question; statement or discussion point
     image, ForeignKey, Image; on_delete=models.CASCADE; blank=True, keyed to the image, if any, to display on the page
     explanation, CharField, max_length=512; blank=True, optional explanation for correct answer
@@ -887,6 +889,8 @@ activity and index are unique together.
 Note: I did not include the timed BooleanField I had considered before for keeping track of how long it takes the user
 to complete a page. I wondered whether I really have much cause to do that. I also wondered if a different use might be
 a good idea: to limit the time a user can spend on certain pages, but I don't know how to implement that.
+
+I added the Instruction page_type later. :ref:`See below.<instruction_page_idea>`
 
 .. csv-table:: **Response Model**
     :header: Field, Type, Attributes, Comments
@@ -943,7 +947,7 @@ model to change anything. I had to do it as follows:
 This is how it was done on my home computer. Once I add new information to the database I will have to transfer
 to my other computers as follows. First, on the computer that is most current:
 
-*   use dumpdata auth.user, activity > *<date>*user_activity.json to create a fixture on the most current computer
+*   use dumpdata auth.user, activity > <date>user_activity.json to create a fixture on the most current computer
 *   add that fixture to git and do a commit
 *   do a git push
 
@@ -952,10 +956,30 @@ Then, on the computer being transferred to:
 *   do a git pull
 *   do a makemigrations filling in ``closing_date`` and ``publish_date`` with ``timezone.now`` as above
 *   do a migrate
-*   do a loaddata *<date>*user_activity.json to read the information into the database
+*   do a loaddata <date>user_activity.json to read the information into the database
 
-The Tedious Work of Adding Pages
---------------------------------
+.. _url_plan:
+
+The URL Patterns
+----------------
+
+Here are the URL Patterns I developed while :ref:`putting the pages together<building_pages>`. I used my previous work
+on confirmation17 as a starter.
+
+.. csv-table:: **URL Patterns**
+    :header: URL, Page(s) Addressed, Views/Redirects, Notes
+    :widths: auto
+
+    /, , RedirectView to user.login
+    user/, , RedirectView to user.login
+    user/login/, login.html, auth_views.LoginView
+    user/logout/, registration/logout.html, auth_views.LogoutView
+    activity/, , RedirectView to /activity/welcome/
+    activity/welcome/, welcome.html, WelcomeView
+    activity/<slug>/summary/, summary.html, SummaryView
+
+Adding Groups
+-------------
 
 I decided to leave the current acitivities: "Noah: The REAL Story" and "God? Are you there?" and begin working on pages
 to display them and create, edit and delete them. I decided to add two or three phony users to the User model so that it
@@ -969,11 +993,8 @@ will now contain:
 
 Before I do this I will have to re-study using Django groups.
 
-Groups
-******
-
 Planning the Groups
-+++++++++++++++++++
+*******************
 
 According to https://docs.djangoproject.com/en/2.0/topics/auth/default/ beyond just permissions, I can use groups to
 categorize users and develop code myself that gives them access to various parts of the site. With this in mind I'm
@@ -985,7 +1006,7 @@ thinking of the following new groups:
 *   Administrator, the superusers, who have access to everything
 
 Creating the Groups
-+++++++++++++++++++
+*******************
 
 As an experiment I used the admin to add the groups as follows:
 
@@ -1008,6 +1029,61 @@ they do, whether they have access to the admin site.
     Susan, No, No, Invited her to login under a different account
     Diego, No, No, Invited him to login under a different account
 
+.. _building_pages:
+
+The Tedious Work of Adding Pages
+--------------------------------
+
 Plan for the Initial Pages
 **************************
 
+Starting with the page for creating activities would be just too complicated so I have decided to create them via the
+admin app for now. If I work on the Welcome page that will require using the admin app to fake some user responses too.
+Then, one by one, I can create the display version of each page, followed by the entry version of each page.
+
+.. _instruction_page_idea:
+
+In thinking about all this I may have discovered the need for another page. Some pages simply give instructions to
+do something and then come back when finished. I will have to add that page type to the Page model then do another
+makemigrations and migrate. That seems best to do before actually adding any pages.
+
+I just added: ``('IN', 'Instructions'),`` to the choice field in the Page model. I added it to the Page Model table
+:ref:`above<page_model>` too just for completeness. I did the ``makemigrations`` and the ``migrate`` and added the
+migrations file to git without incident.
+
+Here is a plan for testing the initial pages:
+
+*   Add an Instruction page to the Noah activity
+*   Design and implement a URL pattern for a page summarizing an activity
+*   Modify the Welcome page so that the list of activity names becomes a list of links.
+*   Build a summary.html page and test the Noah link.
+*   Build an instruction.html page, get it looking good, and see that you get to it from the welcome page link
+*   Build a congrats.html page, get it looking good.
+*   Sign in as Susan and "complete" the first Noah Activity page. See that you get to the congrats page.
+*   Sign in as Diego and go to the Noah activity. Do not complete the activity.
+*   Add an Essay page to the Noah activity.
+*   Modify the Welcome page so that the number of pages for each activity is visible.
+*   Modify the Welcome page so that the number of pages the current user has completed is visible.
+*   Check this for Susan and Diego.
+*   Build an essay.html page, get it looking good, see that you get to it from the Next button for Susan but not Diego.
+*   Check to see that the Previous button brings Susan back to the essay page but without the "Finished" button
+
+That should be more than enough to do for now!
+
+Adding an Instruction page to the Noah activity
++++++++++++++++++++++++++++++++++++++++++++++++
+
+I had forgotten to register the new models in the activity app's admin.py program but, after doing so, and refreshing
+``localhost:8000/admin/`` a couple of times, they all appeared.
+
+In the admin app I was able to add the instruction page without difficulty.
+
+Putting Links on the Welcome Page
++++++++++++++++++++++++++++++++++
+
+Each Welcome Page link should link the user to an activity's summary page which will be at:
+
+``<activity-slug>/summary/``
+
+but that reminds me that I have not yet included a plan for the url patterns. I will create it so that it appears
+:ref:`before this section<url_plan>`.

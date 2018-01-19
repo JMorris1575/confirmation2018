@@ -58,6 +58,10 @@ header {
     margin-top: 20px;
 }
 
+.no-underline {
+    text-decoration: none;
+}
+
 .shadowed {
     margin-top: 30px;
     margin-bottom: 30px;

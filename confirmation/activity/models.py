@@ -31,12 +31,13 @@ class Page(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     index = models.PositiveSmallIntegerField()
     page_type = models.CharField(max_length=20,
-                                 choices=[('ES', 'Essay'),
+                                 choices=[('IN', 'Instructions'),
+                                          ('ES', 'Essay'),
                                           ('MC', 'MultipleChoice'),
                                           ('TF', 'True-False'),
                                           ('DS', 'Discussion')])
     text = models.CharField(max_length=512)
-    image = models.ForeignKey(Image, blank=True, on_delete=models.CASCADE)
+    image = models.ForeignKey(Image, null=True, blank=True, on_delete=models.CASCADE)
     explanation = models.CharField(max_length=512, blank=True)
     opinion = models.BooleanField(default=False)        # opinion questions do not have right and wrong answers
     reveal_answer = models.BooleanField(blank=True)     # indicates whether the answer is revealed after user's response

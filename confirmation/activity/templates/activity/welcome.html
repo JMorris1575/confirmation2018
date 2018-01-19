@@ -13,13 +13,17 @@
         </div>
         <div class="offset-by-two eight columns activity_text row shadowed">
             <p class="heading">
-                ACTIVITIES AVAILABLE
+                ACTIVITY LIST
             </p>
-            {% for activity in activities %}
-                <p>
-                    {{ activity }}
-                </p>
-            {% endfor %}
+            <ul class="link-list">
+                {% for activity in activities %}
+                    <a class="no-underline" href="/activity/{{ activity.slug }}/summary/">
+                        <li class="row">
+                            {{ activity.index }}. {{ activity }}
+                        </li>
+                    </a>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 
