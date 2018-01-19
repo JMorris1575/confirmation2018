@@ -11,6 +11,9 @@
             <p class="heading">
                 Activity: {{ activity }}
             </p>
+            <p>
+                {{ activity.overview }}
+            </p>
             {% if pages %}
                 <p>Sections:</p>
                 {% for page in pages %}

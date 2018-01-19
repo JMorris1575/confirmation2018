@@ -3,11 +3,20 @@ from django.conf import settings
 
 # Create your models here.
 
+class Image(models.Model):
+    filename = models.CharField(max_length=30)
+    category = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.filename
+
+
 class Activity(models.Model):
     index = models.PositiveSmallIntegerField(unique=True)
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=20, unique=True)
     overview = models.CharField(max_length=512, blank=True)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, blank=True)
     publish_date = models.DateField()
     closing_date = models.DateField()
     visible = models.BooleanField(default=False)
@@ -17,14 +26,6 @@ class Activity(models.Model):
 
     class Meta:
         ordering = ['index']
-
-
-class Image(models.Model):
-    filename = models.CharField(max_length=30)
-    category = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.filename
 
 
 class Page(models.Model):
