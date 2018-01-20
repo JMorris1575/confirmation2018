@@ -1029,6 +1029,11 @@ they do, whether they have access to the admin site.
     Susan, No, No, Invited her to login under a different account
     Diego, No, No, Invited him to login under a different account
 
+.. Note::
+
+When trying to copy my new users to the rectory computer I first had to add the groups through the admin program in the
+order listed above:  Candidate, Team, Supervisor, Administrator. Then the loaddata worked.
+
 .. _building_pages:
 
 The Tedious Work of Adding Pages

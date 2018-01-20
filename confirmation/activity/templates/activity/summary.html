@@ -1,4 +1,5 @@
 {% extends 'activity/base_activity.html' %}
+{% load static %}
 
 {% block title %}
     {{ block.super }}{{ activity }} Summary
@@ -7,20 +8,28 @@
 {% block content %}
 
     <div class="container">
-        <div class="offset-by-two eight columns activity_text row shadowed">
-            <p class="heading">
-                Activity: {{ activity }}
-            </p>
-            <p>
-                {{ activity.overview }}
-            </p>
-            {% if pages %}
-                <p>Sections:</p>
-                {% for page in pages %}
-                    <p>{{ page }}</p>
-                {% endfor %}
-            {% endif %}
+        <div class="offset-by-two eight columns activity_text shadowed">
+            <div class="row">
+                <div class="four columns">
+                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                </div>
+                <div class="eight columns heading">
+                    {{ activity }}
+                </div>
+            </div>
+            <div class="row">
+                <p class="twelve columns">
+                    {{ activity.overview }}
+                </p>
+            </div>
+            <div class="row">
+                {% if pages %}
+                    <div class="offset-by-one eleven columns">Sections:</div>
+                    {% for page in pages %}
+                        <div class="offset-by-one eleven columns">{{ page }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
     </div>
-
 {% endblock %}
