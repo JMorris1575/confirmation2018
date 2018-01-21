@@ -1031,8 +1031,8 @@ they do, whether they have access to the admin site.
 
 .. Note::
 
-When trying to copy my new users to the rectory computer I first had to add the groups through the admin program in the
-order listed above:  Candidate, Team, Supervisor, Administrator. Then the loaddata worked.
+    When trying to copy my new users to the rectory computer I first had to add the groups through the admin program in the
+    order listed above:  Candidate, Team, Supervisor, Administrator. Then the loaddata worked.
 
 .. _building_pages:
 
@@ -1092,3 +1092,126 @@ Each Welcome Page link should link the user to an activity's summary page which 
 
 but that reminds me that I have not yet included a plan for the url patterns. I will create it so that it appears
 :ref:`before this section<url_plan>`.
+
+Things Discovered
++++++++++++++++++
+
+Actually, the welcome page needs to link to a page that summarizes the activity and the pages it has available. Also,
+the welcome page is supposed to report on such things as how many pages an activity has and how many the user has
+completed. This seems to call for a table with the headings:
+
+Activities, Pages Available, Pages Completed, Finished?
+
+or some such thing.
+
+I will have to do some more study on Django's ORM to figure out how to best do this.
+
+In working on the summary page I decided to add a ``title`` field to the Page model. The title will appear as the link
+to that page on the summary page.
+
+Welcome Page Revisited
+++++++++++++++++++++++
+
+The Welcome Page is supposed to :ref:`display the user's progress<progress_display>`. That seems more difficult to
+implement than I thought it would be.
+
+The idea was that, while listing the available activities, the template would also list the current user's status on
+each of the activities, that is, whether they can Start that activity, or if they are a certain percentage of the way
+through that activity, or if they have completed that activity. (Another possibility is that the activity doesn't have
+any pages for it yet and is NOT ready to be accessed.)
+
+To access and count the current user's responses to all of the pages of the activity currently being listed was a bit
+too much to handle with template logic so I put it into the WelcomeView::
+
+    def get(self, request):
+        activities = Activity.objects.all()
+        user_stats = {}
+        for activity in activities:
+            pages = Page.objects.filter(activity=activity)
+            page_count = len(pages)
+            completed = len(Response.objects.filter(user=request.user, activity=activity))
+            if page_count != 0:
+                user_stats[activity.slug] = completed/page_count * 100
+            else:
+                user_stats[activity.slug] = -1
+
+        return render(request, self.template_name, {'activities':activities, 'stats':user_stats})
+
+It creates a dictionary which it sends in the context named stats. The keys in the dictionary are the corresponding
+activities slugs, the values are the percentage the current user has completed or -1 if there are no pages to the
+acivity yet.
+
+It took me quite a while to figure out how to access this information in the welcome.html template because the construct
+I thought would work: ``stats.activity.slug`` to pick out stats[activity.slug] did not work. Finally I got this to
+work::
+
+    <table class="u-full-width">
+        {% for activity in activities %}
+            <tr>
+                <td>
+                    <a class="no-underline" href="/activity/{{ activity.slug }}/summary/">
+                        {{ activity.index }}. {{ activity }}
+                    </a>
+                </td>
+                <td>
+                    {% for key, value in stats.items %}
+                        {% if key == activity.slug %}
+                            {{ value }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+but this seems to violate the Django ideal of keeping logic out of templates as much as possible. They do suggest using
+a custom template tag for things like this so I will study up on it.
+
+.. index:: custom template tags
+
+Custom Template Tags
+^^^^^^^^^^^^^^^^^^^^
+
+Whoa! The material at https://docs.djangoproject.com/en/2.0/ref/templates/api/ seems way beyond my abilities. I searched
+for Custom Template Tags and got https://docs.djangoproject.com/en/2.0/howto/custom-template-tags/ . This seems to be
+written a bit more in my language.
+
+Outline of Learnings:
+
+*   the custom template tags should be in the app in which they are to be used
+*   they should be contained in a ``templatetags`` directory within that app
+*   the ``templatetags`` directory should be a python package so include a blank __init__.py file
+*   the development server will have to be restarted after adding the ``templatetags`` module
+*   if my custom template tags are in ``activity_extras`` templates using them need a {% load activity_extras %} tag
+*   my tag library will need a module-level variable named ``register``, an instance of ``template.Library()``
+
+I just tried it and... IT WORKED!!! And it wasn't all that difficult. Here is the entire ``activity_extras.py`` file::
+
+    from django import template
+    from ..models import Activity, Page, Response
+
+    register = template.Library()
+
+    @register.simple_tag
+    def activity_stats(stats, slug):
+        return stats[slug]
+
+That allowed me to simplify the pertinent line in welcome.html to ``{% activity_stats stats activity.slug %}`` and it
+replaced the five line for-loop I was using before.
+
+I think I'll keep the calculation of the stats in the view or else I would have to add a rather large list of arguments:
+user, activity, page, response. This seems simpler.
+
+Visibility of Activities
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+There was also supposed to be a check as to whether the activity was to be published yet and/or if it was marked as
+visible. My current version of the Welcome page doesn't check for such things. I will consider here how to go about
+doing that.
+
+
+Improving the User's Activity Status Information
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Both the information supplied and the appearance need to be improved.
+

@@ -10,21 +10,21 @@
     <div class="container">
         <div class="offset-by-two eight columns activity_text shadowed">
             <div class="row">
-                <div class="four columns">
-                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
-                </div>
-                <div class="eight columns heading">
+                <div class="twelve columns heading">
                     {{ activity }}
                 </div>
             </div>
-            <div class="row">
-                <p class="twelve columns">
+            <div class="overview row">
+                <p class="eight columns">
                     {{ activity.overview }}
                 </p>
+                <div class="four columns">
+                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                </div>
             </div>
             <div class="row">
                 {% if pages %}
-                    <div class="offset-by-one eleven columns">Sections:</div>
+                    <div class="offset-by-one eleven columns">Activities:</div>
                     {% for page in pages %}
                         <div class="offset-by-one eleven columns">{{ page }}</div>
                     {% endfor %}

@@ -37,6 +37,7 @@ class Page(models.Model):
                                           ('MC', 'MultipleChoice'),
                                           ('TF', 'True-False'),
                                           ('DS', 'Discussion')])
+    title = models.CharField(max_length=25)
     text = models.CharField(max_length=512)
     image = models.ForeignKey(Image, null=True, blank=True, on_delete=models.CASCADE)
     explanation = models.CharField(max_length=512, blank=True)
@@ -51,7 +52,7 @@ class Page(models.Model):
         ordering = ['activity', 'index']
 
     def __str__(self):
-        return str(self.activity) + ' - Page ' + str(self.index)
+        return str(self.index) + '. ' + str(self.title)
 
     def get_absolute_url(self):
         return '/activity/' + self.activity.slug + '/' + str(self.index) + '/'
@@ -92,10 +93,10 @@ class Response(models.Model):
     def __str__(self):
         name = self.user.first_name + ' ' + self.user.last_name
         if name[-1] == 's':
-            possessive_text = "' response to "
+            possessive_ending = "'"
         else:
-            possessive_text = "'s response to "
-        return name + possessive_text + str(self.activity) + ' ' + str(self.page)
+            possessive_ending = "'s"
+        return name + possessive_ending + ' response to ' + str(self.activity) + ' ' + str(self.page)
 
 
 class Choice(models.Model):

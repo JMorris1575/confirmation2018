@@ -41,6 +41,8 @@ Access to the website will probably most often be obtained through the parish we
 individual will be prompted for the username and password I assigned them when I announced the opening of the site. This
 can come through e-mail or at a Confirmation session for those whose e-mail addresses I do not have.
 
+.. _progress_display:
+
 The Welcome Page
 ++++++++++++++++
 

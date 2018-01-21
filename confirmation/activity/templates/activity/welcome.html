@@ -1,4 +1,5 @@
 {% extends 'activity/base_activity.html' %}
+{% load activity_extras %}
 
 {% block title %}
     {{ block.super }}Welcome
@@ -13,17 +14,22 @@
         </div>
         <div class="offset-by-two eight columns activity_text row shadowed">
             <p class="heading">
-                ACTIVITY LIST
+                TOPICS:
             </p>
-            <ul class="link-list">
+            <table class="u-full-width">
                 {% for activity in activities %}
-                    <a class="no-underline" href="/activity/{{ activity.slug }}/summary/">
-                        <li class="row">
-                            {{ activity.index }}. {{ activity }}
-                        </li>
-                    </a>
+                    <tr>
+                        <td>
+                            <a class="no-underline" href="/activity/{{ activity.slug }}/summary/">
+                                {{ activity.index }}. {{ activity }}
+                            </a>
+                        </td>
+                        <td>
+                            {% activity_stats stats activity.slug %}
+                        </td>
+                    </tr>
                 {% endfor %}
-            </ul>
+            </table>
         </div>
     </div>
 
