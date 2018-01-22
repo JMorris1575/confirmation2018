@@ -3,22 +3,34 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Activity, Page, Response
 
+import datetime
+
 # Create your views here.
 
 class WelcomeView(View):
     template_name = 'activity/welcome.html'
 
     def get(self, request):
-        activities = Activity.objects.all()
+        activities = Activity.objects.filter(publish_date__lte=datetime.date.today(),
+                                             closing_date__gt=datetime.date.today(),
+                                             visible=True)
         user_stats = {}
         for activity in activities:
             pages = Page.objects.filter(activity=activity)
             page_count = len(pages)
-            completed = len(Response.objects.filter(user=request.user, activity=activity))
+            completed = len(Response.objects.filter(user=request.user, activity=activity, completed=True))
             if page_count != 0:
-                user_stats[activity.slug] = completed/page_count * 100
+                percent_completed = completed/page_count * 100
+                print('percent_completed = ', percent_completed)
+                if percent_completed == 0:
+                    msg = 'Ready to Start'
+                elif percent_completed < 100:
+                    msg = '{:.1f}'.format(percent_completed) + '% Complete'
+                else:
+                    msg = 'Finished!'
             else:
-                user_stats[activity.slug] = -1
+                msg = 'Not Yet Available'
+            user_stats[activity.slug] = msg
 
         return render(request, self.template_name, {'activities':activities, 'stats':user_stats})
 
