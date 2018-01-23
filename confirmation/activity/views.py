@@ -43,5 +43,17 @@ class SummaryView(View):
 
     def get(self, request, activity_slug):
         activity = Activity.objects.get(slug=activity_slug)
+        pages = Page.objects.filter(activity=activity.pk)
+        responses = Response.objects.filter(user=request.user, activity=activity.pk)
+        data = []
+        changing_msg = 'Up next...'
+        for page in pages:
+            if responses.filter(page=page.pk):
+                data.append((page, 'Completed'))
+            else:
+                data.append((page, changing_msg))
+                changing_msg = 'Pending'
+
+        print('data = ', data)
         return render(request, self.template_name, {'activity': activity,
-                                                    'pages':Page.objects.filter(activity=activity.pk)})
+                                                    'data': data})

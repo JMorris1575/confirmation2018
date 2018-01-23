@@ -1,5 +1,6 @@
 {% extends 'activity/base_activity.html' %}
 {% load static %}
+{% load activity_extras %}
 
 {% block title %}
     {{ block.super }}{{ activity }} Summary
@@ -23,11 +24,23 @@
                 </div>
             </div>
             <div class="row">
-                {% if pages %}
+                {% if data %}
                     <div class="offset-by-one eleven columns">Activities:</div>
-                    {% for page in pages %}
-                        <div class="offset-by-one eleven columns">{{ page }}</div>
-                    {% endfor %}
+                    <table class="u-full-width">
+                        {% for page, progress in data %}
+                        <tr>
+                            <td>
+                                <a class="no-underline link-list"
+                                   href="/activity/{{ activity.slug }}/{{ page.index }}\">
+                                    {{ page }}
+                                </a>
+                            </td>
+                            <td class="progress">
+                                {{ progress }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
                 {% endif %}
             </div>
         </div>

@@ -977,6 +977,8 @@ on confirmation17 as a starter.
     activity/, , RedirectView to /activity/welcome/
     activity/welcome/, welcome.html, WelcomeView
     activity/<slug>/summary/, summary.html, SummaryView
+    activity/<slug>/n/, <page-type>.html, PageView, PageView selects the final view depending on the page-type
+
 
 Adding Groups
 -------------
@@ -1060,9 +1062,9 @@ Here is a plan for testing the initial pages:
 
 *   Add an Instruction page to the Noah activity
 *   Design and implement a URL pattern for a page summarizing an activity
-*   Modify the Welcome page so that the list of activity names becomes a list of links.
+*   Modify the Welcome page so that the list of activity names becomes a list of links to the summary page.
 *   Build a summary.html page and test the Noah link.
-*   Build an instruction.html page, get it looking good, and see that you get to it from the welcome page link
+*   Build an instruction.html page, get it looking good, and see that you get to it from the summary page link
 *   Build a congrats.html page, get it looking good.
 *   Sign in as Susan and "complete" the first Noah Activity page. See that you get to the congrats page.
 *   Sign in as Diego and go to the Noah activity. Do not complete the activity.
@@ -1076,7 +1078,7 @@ Here is a plan for testing the initial pages:
 That should be more than enough to do for now!
 
 Adding an Instruction page to the Noah activity
-+++++++++++++++++++++++++++++++++++++++++++++++
+***********************************************
 
 I had forgotten to register the new models in the activity app's admin.py program but, after doing so, and refreshing
 ``localhost:8000/admin/`` a couple of times, they all appeared.
@@ -1084,7 +1086,7 @@ I had forgotten to register the new models in the activity app's admin.py progra
 In the admin app I was able to add the instruction page without difficulty.
 
 Putting Links on the Welcome Page
-+++++++++++++++++++++++++++++++++
+*********************************
 
 Each Welcome Page link should link the user to an activity's summary page which will be at:
 
@@ -1094,7 +1096,7 @@ but that reminds me that I have not yet included a plan for the url patterns. I 
 :ref:`before this section<url_plan>`.
 
 Things Discovered
-+++++++++++++++++
+*****************
 
 Actually, the welcome page needs to link to a page that summarizes the activity and the pages it has available. Also,
 the welcome page is supposed to report on such things as how many pages an activity has and how many the user has
@@ -1110,7 +1112,7 @@ In working on the summary page I decided to add a ``title`` field to the Page mo
 to that page on the summary page.
 
 Welcome Page Revisited
-++++++++++++++++++++++
+**********************
 
 The Welcome Page is supposed to :ref:`display the user's progress<progress_display>`. That seems more difficult to
 implement than I thought it would be.
@@ -1170,7 +1172,7 @@ a custom template tag for things like this so I will study up on it.
 .. index:: custom template tags
 
 Custom Template Tags
-^^^^^^^^^^^^^^^^^^^^
+++++++++++++++++++++
 
 Whoa! The material at https://docs.djangoproject.com/en/2.0/ref/templates/api/ seems way beyond my abilities. I searched
 for Custom Template Tags and got https://docs.djangoproject.com/en/2.0/howto/custom-template-tags/ . This seems to be
@@ -1203,7 +1205,7 @@ I think I'll keep the calculation of the stats in the view or else I would have 
 user, activity, page, response. This seems simpler.
 
 Visibility of Activities
-^^^^^^^^^^^^^^^^^^^^^^^^
+++++++++++++++++++++++++
 
 There was also supposed to be a check as to whether the activity was to be published yet and/or if it was marked as
 visible. My current version of the Welcome page doesn't check for such things. I will consider here how to go about
@@ -1211,7 +1213,27 @@ doing that.
 
 
 Improving the User's Activity Status Information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+++++++++++++++++++++++++++++++++++++++++++++++++
 
 Both the information supplied and the appearance need to be improved.
+
+The information was best supplied by the view. I included the "Ready to Start", "xx.x% Completed", "Finished" and "Not
+Yet Ready" messages in the ``stats`` dictionary supplied by the ``WelcomeView``.
+
+For now I am opting for the sea-green color ``#2eb873`` for all of the text in the TOPICS box. The link text is further
+modified by the ``link-list`` class which makes it bold face. The file skeleton.css supplies an aqua-blue color when
+the mouse hovers over the link.
+
+Adding Links to the Summary Page
+********************************
+
+The summary page currently only shows a list of pages and no way to get to those pages.
+
+Here is my sequence of implementation:
+
+*   make the list into a table
+*   make the page names into links
+*   add the progress information
+*   activate or deactivate the links according to the progress information
+
 

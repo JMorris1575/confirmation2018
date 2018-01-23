@@ -20,12 +20,12 @@
                 {% for activity in activities %}
                     <tr>
                         <td>
-                            <a class="no-underline" href="/activity/{{ activity.slug }}/summary/">
+                            <a class="no-underline link-list" href="/activity/{{ activity.slug }}/summary/">
                                 {{ forloop.counter }}. {{ activity }}
                             </a>
                         </td>
-                        <td>
-                            {% activity_stats stats activity.slug %}
+                        <td class="progress">
+                            {% dict_read stats activity.slug %}
                         </td>
                     </tr>
                 {% endfor %}

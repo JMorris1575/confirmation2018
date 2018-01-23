@@ -69,6 +69,10 @@ header {
     border-bottom: 1px solid black;
 }
 
+.progress {
+    color: #2eb873;
+}
+
 .shadowed {
     margin-top: 30px;
     margin-bottom: 30px;
