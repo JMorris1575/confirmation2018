@@ -25,19 +25,72 @@
             </div>
             <div class="row">
                 {% if data %}
-                    <div class="offset-by-one eleven columns">Activities:</div>
+                    <div class="twelve columns">Activities:</div>
                     <table class="u-full-width">
                         {% for page, progress in data %}
                         <tr>
-                            <td>
-                                <a class="no-underline link-list"
-                                   href="/activity/{{ activity.slug }}/{{ page.index }}\">
-                                    {{ page }}
-                                </a>
-                            </td>
-                            <td class="progress">
-                                {{ progress }}
-                            </td>
+                            <!--<td>-->
+                                <!--{% if progress == 'Pending' %}-->
+                                    <!--<p class="inactive-link">-->
+                                        <!--{{ page }}-->
+                                    <!--</p>-->
+                                <!--{% else %}-->
+                                    <!--<a class="no-underline link-list"-->
+                                       <!--href="/activity/{{ activity.slug }}/{{ page.index }}\">-->
+                                        <!--{{ page }}-->
+                                    <!--</a>-->
+                                <!--{% endif %}-->
+                            <!--</td>-->
+                            <!--{% if progress == 'Pending' %}-->
+                                <!--<td class="progress">-->
+                                    <!--<p class="inactive-link">-->
+
+                                    <!--</p>-->
+                                <!--</td>-->
+                            <!--{% else %}-->
+                                <!--<td class="progress">-->
+                                    <!--{{ progress }}-->
+                                <!--</td>-->
+                            <!--{% endif %}-->
+                            {% if progress == 'Pending' %}
+                                <td>
+                                    <p>
+                                        {{ page }}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                    </p>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <p>
+                                        {{ page }}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        {{ progress }}
+                                    </p>
+                                </td>
+                                <td>
+                                    {% if progress == 'Up next...' %}
+                                        <a class="button button-primary u-full-width"
+                                           href="activity/{{ activity.slug }}/{{ page.index }}/">
+                                            Enter
+                                        </a>
+                                    {% else %}
+                                        <a class="button button-primary u-full-width"
+                                           href="activity/{{ activity.slug }}/{{ page.index }}/">
+                                            Review
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </table>

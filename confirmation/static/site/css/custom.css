@@ -28,6 +28,12 @@ header {
     font-size: 1.5em;
 }
 
+.inactive-link {
+    margin-bottom: 0px;
+    font-weight: bold;
+    color: #a0a0a0;
+}
+
 .info_box {
     font-family: 'Arial', sans;
     font-size: 1.2em;
