@@ -52,3 +52,22 @@ class SummaryView(View):
                 changing_msg = 'Pending'
         return render(request, self.template_name, {'activity': activity,
                                                     'data': data})
+
+
+class PageView(View):
+
+    def get(self, request, activity_slug, page_index):
+        activity = Activity.objects.get(slug=activity_slug)
+        page = Page.objects.get(activity=activity.pk, index=page_index)
+        response = Response.objects.filter(user=request.user, activity=activity.pk, page=page.pk)
+        if page.page_type == 'IN':
+            self.template_name = 'activity/instructions.html'
+            context = self.get_instruction_context(request, activity, page, response)
+        return render(request, self.template_name, context)
+
+    def get_instruction_context(self, request, activity, page, response):
+        context = {}
+        context['activity'] = activity
+        context['page'] = page
+        context['response'] = response
+        return context

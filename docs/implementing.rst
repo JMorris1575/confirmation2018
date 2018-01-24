@@ -1276,5 +1276,20 @@ there is enough of a separation between the table and the Return to Welcome Page
 Implementing the Instruction Page
 *********************************
 
+Here I envision as the steps leading to implementing the Instruction Page:
+
+*   create the url to reach any of the pages
+*   create a PageView (function view?) to select between pages
+*   figure out how each page method can send the right values to it's pages (via the context dictionary?)
+*   create the instruction.html stub page - see that it displays
+*   get the instructions to display
+*   add a Start Activity button and see that it gets to the post method
+*   see to it that the Start button's post method records the start time and returns to this instruction page
+*   add a Finished Activity button that appears after the Start Activity button is clicked
+*   make the Finished button's post method record finish time, mark activity as complete and return to the summary page
+*   make returning to a completed and timed instruction page display the time it took
+*   make returning to a completed but untimed instruction page simply display a "Finished" message of some kind
+*   make the Instruction page look good
+
 
 

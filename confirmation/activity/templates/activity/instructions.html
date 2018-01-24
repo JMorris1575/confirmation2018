@@ -1,0 +1,29 @@
+{% extends 'activity/base_activity.html' %}
+{% load static %}
+
+{% block title %}
+    {{ block.super }}Instructions
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="offset-by-two eight columns activity-text shadowed">
+            <div class="row">
+                <div class="eight columns heading">
+                    {{ activity }}
+                </div>
+                <div class="four columns">
+                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                </div>
+
+            </div>
+            <div class="page-text row">
+                <p class="u-full-width">
+                    {{ page.text }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

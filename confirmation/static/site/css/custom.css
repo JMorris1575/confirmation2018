@@ -8,7 +8,7 @@ header {
         font-family: 'Gloria Hallelujah', cursive;
 }
 
-.activity_text {
+.activity-text {
     font-family: 'Arial', sans;
     font-size: 1.2em;
     color: #2eb873;
@@ -45,7 +45,7 @@ header {
     color: #a0a0a0;
 }
 
-.info_box {
+.info-box {
     font-family: 'Arial', sans;
     font-size: 1.2em;
     color: #d40000;
@@ -58,7 +58,7 @@ header {
     border-radius: 5px;
 }
 
-.info_text {
+.info-text {
     margin-bottom: 0;
 }
 
@@ -79,7 +79,7 @@ header {
     text-decoration: none;
 }
 
-.overview {
+.page-text {
     margin-top: 10px;
     border-top: 1px solid black;
     padding-top: 10px;

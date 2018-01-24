@@ -1,6 +1,5 @@
 {% extends 'activity/base_activity.html' %}
 {% load static %}
-{% load activity_extras %}
 
 {% block title %}
     {{ block.super }}{{ activity }} Summary
@@ -9,16 +8,19 @@
 {% block content %}
 
     <div class="container">
-        <div class="offset-by-two eight columns activity_text shadowed">
+        <div class="offset-by-two eight columns activity-text shadowed">
             <div class="row">
                 <div class="twelve columns heading">
                     {{ activity }}
                 </div>
             </div>
-            <div class="overview row">
+            <div class="page-text row">
                 <p class="eight columns">
                     {{ activity.overview }}
                 </p>
+                <div class="four columns">
+                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                </div>
                 <div class="four columns">
                     <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
                 </div>
@@ -60,12 +62,12 @@
                                 <td>
                                     {% if progress == 'Up next...' %}
                                         <a class="button button u-full-width"
-                                           href="activity/{{ activity.slug }}/{{ page.index }}/">
+                                           href="/activity/{{ activity.slug }}/{{ page.index }}/">
                                             Do it...
                                         </a>
                                     {% else %}
                                         <a class="button button u-full-width"
-                                           href="activity/{{ activity.slug }}/{{ page.index }}/">
+                                           href="/activity/{{ activity.slug }}/{{ page.index }}/">
                                             Review it...
                                         </a>
                                     {% endif %}
