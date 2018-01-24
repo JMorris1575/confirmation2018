@@ -14,6 +14,17 @@ header {
     color: #2eb873;
 }
 
+.button {
+    color: #2eb873;
+    border-color: #2eb873;
+}
+
+.button:hover {
+    background-color: #2eb873;
+    color: white;
+    border-color: transparent;
+}
+
 .center-text {
     text-align: center;
 }
@@ -57,11 +68,11 @@ header {
     margin-right: 10px;
 }
 
-.link-list {
+.table-list {
     list-style-type: none;
     color: #2eb873;
-    font-weight: bold;
-    margin-top: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .no-underline {

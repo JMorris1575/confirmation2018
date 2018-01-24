@@ -54,12 +54,13 @@
                             <!--{% endif %}-->
                             {% if progress == 'Pending' %}
                                 <td>
-                                    <p>
+                                    <p class="table-list">
                                         {{ page }}
                                     </p>
                                 </td>
                                 <td>
-                                    <p>
+                                    <p class="table-list">
+                                        Pending
                                     </p>
                                 </td>
                                 <td>
@@ -68,25 +69,25 @@
                                 </td>
                             {% else %}
                                 <td>
-                                    <p>
+                                    <p class="table-list">
                                         {{ page }}
                                     </p>
                                 </td>
                                 <td>
-                                    <p>
+                                    <p class="table-list">
                                         {{ progress }}
                                     </p>
                                 </td>
                                 <td>
                                     {% if progress == 'Up next...' %}
-                                        <a class="button button-primary u-full-width"
+                                        <a class="button button u-full-width"
                                            href="activity/{{ activity.slug }}/{{ page.index }}/">
-                                            Enter
+                                            Do it...
                                         </a>
                                     {% else %}
-                                        <a class="button button-primary u-full-width"
+                                        <a class="button button u-full-width"
                                            href="activity/{{ activity.slug }}/{{ page.index }}/">
-                                            Review
+                                            Look it over...
                                         </a>
                                     {% endif %}
                                 </td>
