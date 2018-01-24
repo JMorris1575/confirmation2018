@@ -14,25 +14,22 @@ class WelcomeView(View):
         activities = Activity.objects.filter(publish_date__lte=datetime.date.today(),
                                              closing_date__gt=datetime.date.today(),
                                              visible=True)
-        user_stats = {}
+        data = []
         for activity in activities:
             pages = Page.objects.filter(activity=activity)
             page_count = len(pages)
             completed = len(Response.objects.filter(user=request.user, activity=activity, completed=True))
             if page_count != 0:
                 percent_completed = completed/page_count * 100
-                print('percent_completed = ', percent_completed)
-                if percent_completed == 0:
-                    msg = 'Ready to Start'
-                elif percent_completed < 100:
+                if percent_completed < 100:
                     msg = '{:.1f}'.format(percent_completed) + '% Complete'
                 else:
                     msg = 'Finished!'
             else:
                 msg = 'Not Yet Available'
-            user_stats[activity.slug] = msg
+            data.append((activity, msg))
 
-        return render(request, self.template_name, {'activities':activities, 'stats':user_stats})
+        return render(request, self.template_name, {'data': data})
 
     def post(self, request):
         return render(request, self.template_name)
@@ -53,7 +50,5 @@ class SummaryView(View):
             else:
                 data.append((page, changing_msg))
                 changing_msg = 'Pending'
-
-        print('data = ', data)
         return render(request, self.template_name, {'activity': activity,
                                                     'data': data})

@@ -1171,6 +1171,8 @@ a custom template tag for things like this so I will study up on it.
 
 .. index:: custom template tags
 
+.. _custom_template_tags:
+
 Custom Template Tags
 ++++++++++++++++++++
 
@@ -1204,6 +1206,9 @@ replaced the five line for-loop I was using before.
 I think I'll keep the calculation of the stats in the view or else I would have to add a rather large list of arguments:
 user, activity, page, response. This seems simpler.
 
+As it turns out, I didn't really need to use a custom template tag here.
+(:ref:`See below<no_need_for_custom_template_tag>`.)
+
 Visibility of Activities
 ++++++++++++++++++++++++
 
@@ -1235,5 +1240,41 @@ Here is my sequence of implementation:
 *   make the page names into links
 *   add the progress information
 *   activate or deactivate the links according to the progress information
+*   make it all look good
+
+.. _no_need_for_custom_template_tag:
+
+I discovered that, since the {% for %} template tag can read in a list of lists, as in {% for x,y in points %}, I can
+use the WelcomeView and SummaryView to pack up a data list with tuples like (activity, msg) and (page, progress) and
+send that list to the welcome.html and summary.html templates. Thus, I don't need to use a custom template tag as
+:ref:`described above<custom_template_tags>`.
+
+I decided to use buttons as a means to getting to the pages instead of using the page titles as links. I override
+skeleton.css' ``.button`` class by changing the color and border color and also the ``.button:hover`` class to reverse
+the colors when the mouse hovers over a button. I notice that when I return to the page after an error (since I don't
+have the actual page views or urls or templates implemented yet) the colors revert to black until I do a refresh. I
+don't know if this is a problem that will show up in production however so I choose not to try to do anything about it.
+
+I realize that I'm not naming things well. Currently the list of pages is called "Acivities" and the list of activities
+on the Welcome page is called "Topics." I think I will change the heading on the Welcome page to say "Activities" and
+the heading on the summary page to say "Pages." Perhaps later I will come up with a better, more inviting and/or more
+descriptive, heading than "Pages." (For now I'm going with "Things to Do."
+
+Improving the Welcome Page Again
+********************************
+
+I wanted to have the Welcome page and the Summary page have a similar look and feel so I had to change from using
+activity names as links to using buttons as links. It was a little simpler here since only the caption of the buttons
+had to change, but I also had to change the WelcomeView to use a data list. I got it to working fairly quickly.
+
+I think the Summary page needs a link or a button at the bottom to return to the welcome page. I will make it a link so
+as not to make it too prominent.
+
+As it turned out, using a button made it look better. It was easier to center a button than the text of the link and
+there is enough of a separation between the table and the Return to Welcome Page button to make it seem right.
+
+Implementing the Instruction Page
+*********************************
+
 
 

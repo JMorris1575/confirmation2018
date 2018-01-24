@@ -13,23 +13,36 @@
             informative, and not incredibly boring. Let us know how we do on all three counts.</p>
         </div>
         <div class="offset-by-two eight columns activity_text row shadowed">
-            <p class="heading">
-                TOPICS:
-            </p>
-            <table class="u-full-width">
-                {% for activity in activities %}
-                    <tr>
-                        <td>
-                            <a class="no-underline link-list" href="/activity/{{ activity.slug }}/summary/">
-                                {{ forloop.counter }}. {{ activity }}
-                            </a>
-                        </td>
-                        <td class="progress">
-                            {% dict_read stats activity.slug %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+            {% if data %}
+                <div class="heading twelve columns">
+                    Activities:
+                </div>
+                <table class="u-full-width">
+                    {% for activity, msg in data %}
+                        <tr>
+                            <td>
+                                <p class="table-list">
+                                    {{ forloop.counter }}. {{ activity }}
+                                </p>
+                            </td>
+                            <td class="progress">
+                                {{ msg }}
+                            </td>
+                            <td>
+                                <a class="button u-full-width" href="/activity/{{ activity.slug }}/summary/">
+                                    {% if msg == '0.0% Complete' %}
+                                        Begin
+                                    {% elif msg == 'Finished!' %}
+                                        Finished!
+                                    {% else %}
+                                        Continue
+                                     {% endif %}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
         </div>
     </div>
 

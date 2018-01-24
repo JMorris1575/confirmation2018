@@ -25,33 +25,12 @@
             </div>
             <div class="row">
                 {% if data %}
-                    <div class="twelve columns">Activities:</div>
+                    <div class="heading twelve columns">
+                        Things to Do:
+                    </div>
                     <table class="u-full-width">
                         {% for page, progress in data %}
                         <tr>
-                            <!--<td>-->
-                                <!--{% if progress == 'Pending' %}-->
-                                    <!--<p class="inactive-link">-->
-                                        <!--{{ page }}-->
-                                    <!--</p>-->
-                                <!--{% else %}-->
-                                    <!--<a class="no-underline link-list"-->
-                                       <!--href="/activity/{{ activity.slug }}/{{ page.index }}\">-->
-                                        <!--{{ page }}-->
-                                    <!--</a>-->
-                                <!--{% endif %}-->
-                            <!--</td>-->
-                            <!--{% if progress == 'Pending' %}-->
-                                <!--<td class="progress">-->
-                                    <!--<p class="inactive-link">-->
-
-                                    <!--</p>-->
-                                <!--</td>-->
-                            <!--{% else %}-->
-                                <!--<td class="progress">-->
-                                    <!--{{ progress }}-->
-                                <!--</td>-->
-                            <!--{% endif %}-->
                             {% if progress == 'Pending' %}
                                 <td>
                                     <p class="table-list">
@@ -87,7 +66,7 @@
                                     {% else %}
                                         <a class="button button u-full-width"
                                            href="activity/{{ activity.slug }}/{{ page.index }}/">
-                                            Look it over...
+                                            Review it...
                                         </a>
                                     {% endif %}
                                 </td>
@@ -96,6 +75,9 @@
                         {% endfor %}
                     </table>
                 {% endif %}
+                <a class="button offset-by-three six columns" href="/activity/welcome/">
+                    Return to Welcome Page
+                </a>
             </div>
         </div>
     </div>
