@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Activity, Page, Response
@@ -64,6 +64,12 @@ class PageView(View):
             self.template_name = 'activity/instructions.html'
             context = self.get_instruction_context(request, activity, page, response)
         return render(request, self.template_name, context)
+
+    def post(self, request, activity_slug=None, page_index=None):
+        print(request.POST)
+        print('activity_slug = ', activity_slug)
+        print('page_index = ', page_index)
+        return redirect('summary', activity_slug )
 
     def get_instruction_context(self, request, activity, page, response):
         context = {}

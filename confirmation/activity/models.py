@@ -41,6 +41,7 @@ class Page(models.Model):
     text = models.CharField(max_length=512)
     image = models.ForeignKey(Image, null=True, blank=True, on_delete=models.CASCADE)
     explanation = models.CharField(max_length=512, blank=True)
+    timed = models.BooleanField(default=False)          # indicates whether this page is timed
     opinion = models.BooleanField(default=False)        # opinion questions do not have right and wrong answers
     reveal_answer = models.BooleanField(blank=True)     # indicates whether the answer is revealed after user's response
     visible = models.BooleanField(default=True)         # indicates whether the page will be visible

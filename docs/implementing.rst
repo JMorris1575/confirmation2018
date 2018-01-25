@@ -1279,8 +1279,8 @@ Implementing the Instruction Page
 Here I envision as the steps leading to implementing the Instruction Page:
 
 *   create the url to reach any of the pages
-*   create a PageView (function view?) to select between pages
-*   figure out how each page method can send the right values to it's pages (via the context dictionary?)
+*   create a PageView to select between pages
+*   figure out how each page method can send the right values to it's pages (via the context dictionary)
 *   create the instruction.html stub page - see that it displays
 *   get the instructions to display
 *   add a Start Activity button and see that it gets to the post method

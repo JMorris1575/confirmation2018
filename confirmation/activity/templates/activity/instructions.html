@@ -16,12 +16,30 @@
                 <div class="four columns">
                     <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
                 </div>
-
             </div>
             <div class="page-text row">
                 <p class="u-full-width">
                     {{ page.text }}
                 </p>
+            </div>
+            <div>
+                <form action="{% url 'page' activity.slug page.index %}" method="post">
+                    {% csrf_token %}
+                    {% if page.timed %}
+                        {% if response %}
+                            {% if not response.completed %}
+                                <input type="submit" value="Finish Activity" name="finish_activity"/>
+                            {% else %}
+                                <p>It took you from {{ response.created }} until {{ response.last_edited }} to
+                                complete this part of the activity.</p>
+                            {% endif %}
+                        {% else %}      <!-- no response from this user yet means he or she is just getting here -->
+                            <input type="submit" value="Start Activity" name="start_activity"/>
+                        {% endif %}
+                    {% else %}
+                        <input type="submit" value="Continue Activity" name="continue_activity"/>
+                    {% endif %}
+                </form>
             </div>
         </div>
     </div>
