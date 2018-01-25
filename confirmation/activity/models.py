@@ -64,7 +64,7 @@ class Page(models.Model):
         index = self.index
         slug = self.activity.slug
         if index == 1:
-            return '/activity/' + slug + '/'
+            return None
         else:
             return '/activity/' + slug + '/' + str(index - 1) + '/'
 
@@ -74,8 +74,9 @@ class Page(models.Model):
         index = self.index
         slug = self.activity.slug
         max = len(Page.objects.filter(activity=self.activity))
+        print('slug = ', slug)
         if index == max:
-            return '/activity/' + slug + '/congrats/'
+            return None
         else:
             return '/activity/' + slug + '/' + str(index + 1) + '/'
 

@@ -1325,4 +1325,23 @@ Since these are to appear on every page it makes sense to implement them once, i
 include them at the bottom of every page.
 
 Also, it is probably easier, and more in keeping with Django philosophy, to determine the availability of the previous
-and next buttons to a particular user in the model method rather than gumming up the template too much.  
+and next buttons to a particular user in the model method rather than gumming up the template too much.
+
+No, the model methods are good for determining whether previous or next pages are available, but determining whether a
+particular user can view them or not is best left to the view. I will implement that after I get more pages.
+
+Then again, I don't want the Next button appearing if the candidate can't actually get to that page. Hmm... I'll have to
+re-think it again. (Is the current user available from the model? I think it is.)
+
+Implementing the Essay Page
+***************************
+
+The steps I envision are as follows:
+
+*   move the context formation into the body of the view
+*   add what happens when an ES page comes to the get method
+*   create the essay.html page stub and see that it displays
+*   fill out the entry version of the essay.html page
+*   add what happens when an ES page comes to the post method
+*   check to see if the previous and next buttons are operating correctly
+*   figure out how a candidate can edit his or her responses

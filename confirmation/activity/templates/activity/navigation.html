@@ -1,0 +1,10 @@
+<div class="row">
+    <p>
+        {% if page.previous %}
+            <a class="u-pull-left three columns button" href="{{ page.previous }}">Previous</a>
+        {% endif %}
+        {% if page.next %}
+            <a class="u-pull-right three columns button" href="{{ page.next }}">Next</a>
+        {% endif %}
+    </p>
+</div>

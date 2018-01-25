@@ -22,7 +22,7 @@
                     {{ page.text }}
                 </p>
             </div>
-            <div>
+            <div class="row">
                 <form action="{% url 'page' activity.slug page.index %}" method="post">
                     {% csrf_token %}
                     {% if not response %}
@@ -37,6 +37,7 @@
                     {% endif %}
                 </form>
             </div>
+            {% include 'activity/navigation.html' %}
         </div>
     </div>
 
