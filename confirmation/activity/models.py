@@ -88,8 +88,8 @@ class Response(models.Model):
     last_edited = models.DateTimeField(auto_now=True)
     essay = models.TextField(blank=True)
     multi_choice = models.CharField(max_length=1, blank=True)
-    true_false = models.BooleanField(blank=True)
-    correct = models.BooleanField(blank=True)
+    true_false = models.NullBooleanField()
+    correct = models.NullBooleanField()
     completed = models.BooleanField(default=False)
 
     def __str__(self):

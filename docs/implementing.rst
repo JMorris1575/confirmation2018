@@ -1284,12 +1284,45 @@ Here I envision as the steps leading to implementing the Instruction Page:
 *   create the instruction.html stub page - see that it displays
 *   get the instructions to display
 *   add a Start Activity button and see that it gets to the post method
-*   see to it that the Start button's post method records the start time and returns to this instruction page
-*   add a Finished Activity button that appears after the Start Activity button is clicked
-*   make the Finished button's post method record finish time, mark activity as complete and return to the summary page
-*   make returning to a completed and timed instruction page display the time it took
+*   see to it that the Start button's post method records the start time and returns to this instruction page (X)
+*   add a Finished Activity button that appears after the Start Activity button is clicked (X)
+*   see to it that Finished button's post method records finish time and marks activity as complete (X)
+*   make returning to a completed and timed instruction page display the time it took (X)
 *   make returning to a completed but untimed instruction page simply display a "Finished" message of some kind
 *   make the Instruction page look good
+*   add the Previous and Next buttons
 
+Timing the Instruction Page
++++++++++++++++++++++++++++
 
+I need to think through how timed pages are supposed to work. The timing needs to be started when the candidate first
+enters the page. That means within the 'get' part of the view however much it goes against the grain. Then, since I
+would like to avoid false measurements as much as possible, I would need to give careful instructions on leaving the
+page and then re-entering it when finished. But that might seem to the candidates to deprive them of another look at the
+instructions.
 
+Another idea is to start with a "Start Timer" button which, when they click it, posts their starting time and returns
+them to the same page which now displays a "Stop Timer" button. I would still have to give careful instructions. Perhaps
+like the following::
+
+    With the Start Timer button showing:
+
+    This is a timed activity. Click the 'Start Timer' button below when you are ready to start.
+
+    With the Stop Timer button showing:
+
+    You can complete the activity with this instruction page showing or leave this page, or the whole website, while you
+    finish it. The "Stop Timer" button will show whenever you come to this page until you click it. Click it when you
+    have finished the instructions above.
+
+On the other hand, this whole thing might be more trouble than it's worth. There are too many ways for it to go wrong
+and little benefit to having the information anyway. I think I will not implement this feature.
+
+Adding the Previous and Next Buttons
+++++++++++++++++++++++++++++++++++++
+
+Since these are to appear on every page it makes sense to implement them once, in a file called nav_buttons.html and
+include them at the bottom of every page.
+
+Also, it is probably easier, and more in keeping with Django philosophy, to determine the availability of the previous
+and next buttons to a particular user in the model method rather than gumming up the template too much.  

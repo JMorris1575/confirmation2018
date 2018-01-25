@@ -14,12 +14,16 @@ header {
     color: #2eb873;
 }
 
-.button {
+.button,
+ button,
+ input[type="submit"] {
     color: #2eb873;
     border-color: #2eb873;
 }
 
-.button:hover {
+.button:hover,
+ button:hover,
+ input[type="submit"]:hover {
     background-color: #2eb873;
     color: white;
     border-color: transparent;
