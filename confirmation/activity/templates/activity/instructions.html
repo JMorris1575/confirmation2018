@@ -1,44 +1,21 @@
 {% extends 'activity/base_activity.html' %}
-{% load static %}
 
 {% block title %}
     {{ block.super }}Instructions
 {% endblock %}
 
-{% block content %}
-
-    <div class="container">
-        <div class="offset-by-two eight columns activity-text shadowed">
-            <div class="row">
-                <div class="eight columns heading">
-                    {{ activity }}
-                </div>
-                <div class="four columns">
-                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
-                </div>
-            </div>
-            <div class="page-text row">
-                <p class="u-full-width">
-                    {{ page.text }}
-                </p>
-            </div>
-            <div class="row">
-                <form action="{% url 'page' activity.slug page.index %}" method="post">
-                    {% csrf_token %}
-                    {% if not response %}
-                        <input class="offset-by-three six columns button"
-                               type="submit"
-                               value="Finished"
-                               name="finished"/>
-                    {% else %}
-                        <p class="offset-by-one ten columns">
-                            You finished this page on {{ response.created }}
-                        </p>
-                    {% endif %}
-                </form>
-            </div>
-            {% include 'activity/navigation.html' %}
-        </div>
-    </div>
-
+{% block page-content %}
+    <form action="{% url 'page' activity.slug page.index %}" method="post">
+        {% csrf_token %}
+        {% if not response %}
+            <input class="offset-by-three six columns button"
+                   type="submit"
+                   value="Finished"
+                   name="finished"/>
+        {% else %}
+            <p class="offset-by-one ten columns">
+                You finished this page on {{ response.created }}
+            </p>
+        {% endif %}
+    </form>
 {% endblock %}

@@ -1382,3 +1382,34 @@ did for the Christmas website.
 Also, it might sometimes be nice for the users to see other people's responses after they have made their own response.
 In that case, should they be allowed to edit their response?
 
+I just realized that, as currently designed, the Response model is capable of handling a "discussion" because the same
+user can make several entries for the same activity and page number. Thus I need to prevent users from changing their
+responses to essay questions except in a very controlled way. Thus I have opted to display an uneditable version of
+their essay response on the essay page after they have responded and give them an Edit button, or Edit and Delete
+buttons to handle those operations. I think I will need new URLs for those circumstances perhaps::
+
+    <activity-slug>/<page-index>/edit/
+    <activity-slug>/<page-index>/delete/
+
+Making a Shared page.html
+*************************
+
+It occurs to me that each page should have a simple way to get back to the summary page if they should so desire, or
+maybe it should be a simple way to get back to the welcome page.
+
+This looks more and more as if I need to implement a ``page.html`` that can be shared by all of the various kinds of
+pages files. It should work like ``base.html`` works for all of the pages of the website but that works when the other
+website pages "extend" ``base.html`` but since the activity pages already extend ``base.htm.`` through such things as
+``base_activity.html`` can I put another file into the mix. (I just tried adding a line to ``base_activity.html``
+thinking it would display on all of the activity pages, but it did not. Time for more study of how that {% extends %}
+tag works.
+
+Ah! It seems from reading https://docs.djangoproject.com/en/2.0/ref/templates/language/#template-inheritance that my
+``base_activity.html`` may have needed to include a {% block content %}{% endblock %} pair to have anything display.
+
+That didn't work either. What DID work was to include a new {% block page-content %} in ``base_activity.html`` and then
+replace the {% block content %} tags in the acivity page html files with {% block page-content %}. Now to move what is
+common to all activity page files to ``base_activity.html``.
+
+
+
