@@ -8,9 +8,29 @@
 {% block content %}
     <div class="container">
         <div class="offset-by-two eight columns activity-text shadowed">
-            <p>
-                Hello from essay.html!
-            </p>
+            <div class="row">
+                <div class="eight columns heading">
+                    {{ activity }}
+                </div>
+                <div class="four columns">
+                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                </div>
+            </div>
+            <div class="page-text row">
+                <p class="u-full-width">
+                    {{ page.text }}
+                    <br/>
+                    Answer in the space below, then click the "Submit" button.
+                </p>
+                <form action="{% url 'page' activity.slug page.index %}" method="post">
+                    {% csrf_token %}
+                    {% with essay=response.essay %}
+                        <textarea class="u-full-width text-field" name="essay" autofocus>{{ essay }}</textarea>
+                        <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+                    {% endwith %}
+                </form>
+            </div>
+            {% include 'activity/navigation.html' %}
         </div>
     </div>
 {% endblock %}

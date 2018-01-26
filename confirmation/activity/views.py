@@ -77,4 +77,9 @@ class PageView(View):
         if page.page_type == 'IN':
             response = Response(user=request.user, activity=activity, page=page, completed=True)
             response.save()
+        elif page.page_type == 'ES':
+            print(request.POST)
+            response = Response(user=request.user, activity=activity, page=page,
+                                essay=request.POST['essay'].strip(), completed=True)
+            response.save()
         return redirect('summary', activity_slug )

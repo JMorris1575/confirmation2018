@@ -74,7 +74,6 @@ class Page(models.Model):
         index = self.index
         slug = self.activity.slug
         max = len(Page.objects.filter(activity=self.activity))
-        print('slug = ', slug)
         if index == max:
             return None
         else:

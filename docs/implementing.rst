@@ -1345,3 +1345,40 @@ The steps I envision are as follows:
 *   add what happens when an ES page comes to the post method
 *   check to see if the previous and next buttons are operating correctly
 *   figure out how a candidate can edit his or her responses
+
+.. index:: Problems; textarea input spaces
+
+Fixing Problem with Extra Spaces in Input
++++++++++++++++++++++++++++++++++++++++++
+
+The essay text entered through the ``<textarea>`` tag was picking up extra spaces. I could get them out of the database
+entry by using ``essay=request.POST[essay].strip()`` in the post method of the PageView but they were creeping in again
+when returning to the page. I discovered they were being picked up as the spaces between the ``<textarea>`` open and
+close tags ``</textarea>``. When I got rid of those spaces by using::
+
+    <form action="{% url 'page' activity.slug page.index %}" method="post">
+        {% csrf_token %}
+        {% with essay=response.essay %}
+            <textarea class="u-full-width text-field" name="essay" autofocus>{{ essay }}</textarea>
+            <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+        {% endwith %}
+    </form>
+
+the extra spaces disappeared from the ``<textarea>`` when displayed with a pre-existing entry.
+
+Rethinking the Essay Page
++++++++++++++++++++++++++
+
+So far the entry version of the page and the edit version of the page look identical, and there is no delete version of
+the page. I kind of like the idea of at least a similar look to the pages but the post method has to know if it is
+supposed to create, or edit, or delete an entry. I suppose I could simply display the user's response in <p> tags,
+then replace the Submit button with Edit and Delete buttons which bring the user to a new page in each case, or a
+different version of the same page.
+
+Could I, instead, just change the mode of the existing page, or change the results by adjusting the href of the buttons
+(both in <a> tags)? Can I use <a> tag buttons in a <form> with its action already set? I think I need to study what I
+did for the Christmas website.
+
+Also, it might sometimes be nice for the users to see other people's responses after they have made their own response.
+In that case, should they be allowed to edit their response?
+
