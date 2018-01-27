@@ -10,5 +10,5 @@ urlpatterns = [
     path('<slug:activity_slug>/summary/', login_required(SummaryView.as_view()), name='summary'),
     path('<slug:activity_slug>/<int:page_index>/', login_required(PageView.as_view()), name='page'),
     path('<slug:activity_slug>/<int:page_index>/edit', login_required(PageEditView.as_view()), name='edit'),
-    path('<slug:acivity_slug>/<int:page_index>/delete', login_required(PageDeleteView.as_view()), name='delete'),
+    path('<slug:activity_slug>/<int:page_index>/delete', login_required(PageDeleteView.as_view()), name='delete'),
 ]

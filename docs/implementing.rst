@@ -1419,6 +1419,8 @@ mixins work again.
 
 .. index:: Mixins
 
+.. index:: Problems; catching the DoesNotExist error
+
 Mixins
 ++++++
 
@@ -1427,4 +1429,46 @@ https://docs.djangoproject.com/en/2.0/topics/class-based-views/mixins/ instead. 
 on using generic class based views for everything and I don't think I want to do that. It does have a
 JSONResponseMixin example, however, that seems to just supply a couple of methods that can be used by my views.
 
-*Django Unleashed*
+*Django Unleashed* seemed to concur so I created the following mixin::
+
+    class ResponseMixin:
+
+        """
+        This mixin gets single responses from the Response model depending on the user, activity and page
+        """
+
+        def get_response_info(self, user=None, activity_slug=None, page_index=None):
+            activity = Activity.objects.get(slug=activity_slug)
+            page = Page.objects.get(activity=activity, index=page_index)
+            try:
+                response = Response.objects.get(user=user, activity=activity, page=page)
+            except Response.DoesNotExist:
+                response = None
+            return activity, page, response
+
+I included the try/except block with some difficulty. I took me a while to find out where the DoesNotExist error was
+coming from. I thought I had to import it but it turns out it is part of the model itself so what I've shown above is
+all that is necessary.
+
+Now each of my Page views contains this line::
+
+    activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
+
+instead of the three lines required before.
+
+Editing Essays
+++++++++++++++
+
+It was easy to edit the essays. I created an essay_edit.html page containing a form very much like the one on the
+essay.html page. The post method of the PageEdit view does the actual work.
+
+Deleting Essays
++++++++++++++++
+
+This would not be too difficult either but it could cause problems if a candidate deletes earlier parts of an activity.
+What should it do? Delete it and everything after it? That doesn't seem right.
+
+I think responses should only be deleted as long as the user has not gone any further. That will involve hiding the
+Delete button in those cases and also making sure they can't accomplish deleting by entering
+``activity/<activity_slug>/<page_index>/delete/`` by hand either. That will take some thought.
+

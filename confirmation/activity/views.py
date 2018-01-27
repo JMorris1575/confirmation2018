@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Activity, Page, Response
 
 import datetime
@@ -57,29 +56,22 @@ class SummaryView(View):
 class ResponseMixin:
 
     """
-    This current implementation presumes that a Response is available for this activity and page
-    If not a DoesNotExist error is generated
-    Perhaps I can create a Try/Except structure to handle this and then be able to use this mixin (perhaps renamed) for
-    all of my Page views.
+    This mixin gets single responses from the Response model depending on the user, activity and page
     """
 
     def get_response_info(self, user=None, activity_slug=None, page_index=None):
         activity = Activity.objects.get(slug=activity_slug)
         page = Page.objects.get(activity=activity, index=page_index)
-        response = Response.objects.get(user=user, activity=activity, page=page)
+        try:
+            response = Response.objects.get(user=user, activity=activity, page=page)
+        except Response.DoesNotExist:
+            response = None
         return activity, page, response
 
 class PageView(ResponseMixin, View):
 
     def get(self, request, activity_slug, page_index):
         activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
-        # activity = Activity.objects.get(slug=activity_slug)
-        # page = Page.objects.get(activity=activity.pk, index=page_index)
-        # responses = Response.objects.filter(user=request.user, activity=activity.pk, page=page.pk)
-        # if len(responses) != 0:
-        #     response = responses[0]
-        # else:
-        #     response = None
         context = {'activity': activity, 'page': page, 'response': response}
         if page.page_type == 'IN':
             self.template_name = 'activity/instructions.html'
@@ -116,6 +108,11 @@ class PageEditView(ResponseMixin, View):
         return redirect('page', activity_slug, page_index)
 
 
-class PageDeleteView(View):
+class PageDeleteView(ResponseMixin, View):
 
-    pass
+    def get(self, request, activity_slug=None, page_index=None):
+        activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
+        context = {'activity':activity, 'page':page, 'response':response}
+        if page.page_type == 'ES':
+            self.template_name = 'activity/essay_delete.html'
+        return render(request, self.template_name, context)
