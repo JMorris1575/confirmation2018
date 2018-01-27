@@ -1411,5 +1411,20 @@ That didn't work either. What DID work was to include a new {% block page-conten
 replace the {% block content %} tags in the acivity page html files with {% block page-content %}. Now to move what is
 common to all activity page files to ``base_activity.html``.
 
+Editing and Deleting Responses on the Essay Page
+************************************************
 
+Though this went fairly easily, I did notice I was repeating a lot of code in the views. I think I need to study how
+mixins work again.
 
+.. index:: Mixins
+
+Mixins
+++++++
+
+I didn't use mixins in christmas17 so I studied the material at
+https://docs.djangoproject.com/en/2.0/topics/class-based-views/mixins/ instead. The material there seems to focus more
+on using generic class based views for everything and I don't think I want to do that. It does have a
+JSONResponseMixin example, however, that seems to just supply a couple of methods that can be used by my views.
+
+*Django Unleashed*

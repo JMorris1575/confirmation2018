@@ -5,5 +5,10 @@
 {% endblock %}
 
 {% block page-content %}
-    <p>Hi. I'm the essay edit page.</p>
+    <p>Edit your response in the space below, then click the Submit button.</p>
+    <form class="row separator" action="{% url 'edit' activity.slug page.index %}" method="post">
+        {% csrf_token %}
+        <textarea class="u-full-width text-field" name="essay" autofocus>{{ response.essay }}</textarea>
+        <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+    </form>
 {% endblock %}
