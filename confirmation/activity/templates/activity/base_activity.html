@@ -4,7 +4,7 @@
 {% block content %}
     <div class="container">
         <div class="offset-by-two eight columns activity-text shadowed">
-            <div class="row">
+            <div class="row separator">
                 <div class="eight columns heading">
                     {{ activity }}
                 </div>
@@ -16,26 +16,9 @@
                 <p class="u-full-width">
                     {{ page.text }}
                 </p>
-                {% block page-content %}
-                {% endblock %}
             </div>
-            <div class="row">
-                <p>
-                    {% if page.previous %}
-                        <a class="u-pull-left three columns button" href="{{ page.previous }}">Previous</a>
-                        <a class="six columns button" href="{% url 'summary' activity.slug %}">
-                            Return to Summary Page
-                        </a>
-                    {% else %}
-                        <a class="offset-by-three six columns button" href="{% url 'summary' activity.slug %}">
-                            Reurn to Summary Page
-                        </a>
-                    {% endif %}
-                    {% if page.next %}
-                        <a class="u-pull-right three columns button" href="{{ page.next }}">Next</a>
-                    {% endif %}
-                </p>
-            </div>
+            {% block page-content %}
+            {% endblock %}
         </div>
     </div>
 {% endblock %}

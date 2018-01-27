@@ -78,8 +78,25 @@ class PageView(View):
             response = Response(user=request.user, activity=activity, page=page, completed=True)
             response.save()
         elif page.page_type == 'ES':
-            print(request.POST)
             response = Response(user=request.user, activity=activity, page=page,
                                 essay=request.POST['essay'].strip(), completed=True)
             response.save()
         return redirect('summary', activity_slug )
+
+
+class PageEditView(View):
+
+    def get(self, request, activity_slug=None, page_index=None):
+        activity = Activity.objects.get(slug=activity_slug)
+        page = Page.objects.get(index=page_index)
+        response = Response.objects.get(user=request.user, activity=activity, page=page)
+        context = {'activity': activity, 'page': page, 'response': response}
+        if page.page_type == 'ES':
+            self.template_name = 'activity/essay_edit.html'
+
+        return render(request, self.template_name, context)
+
+
+
+class PageDeleteView(View):
+    pass

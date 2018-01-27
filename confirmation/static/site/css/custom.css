@@ -29,6 +29,7 @@ header {
  input[type='submit']:focus {
     color: #0e9853;
     border-color: #0e9853;
+    background-color: #e6ffe6;
 }
 
 .button.button-primary,
@@ -104,13 +105,18 @@ header {
 
 .page-text {
     margin-top: 10px;
-    border-top: 1px solid black;
     padding-top: 10px;
-    border-bottom: 1px solid black;
 }
 
 .progress {
     color: #2eb873;
+}
+
+.response-display {
+    color: black;
+    border: 1px solid #2eb873;
+    padding: 10px;
+    margin: 15px;
 }
 
 .shadowed {
@@ -122,6 +128,11 @@ header {
     border-radius: 10px;
     box-shadow: 10px 10px 20px rgba(0,0,0,0.8);
     padding: 10px;
+}
+
+.separator {
+    padding-bottom: 10px;
+    border-bottom: 1px solid black;
 }
 
 .table-list {

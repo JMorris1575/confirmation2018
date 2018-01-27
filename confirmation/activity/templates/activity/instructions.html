@@ -13,9 +13,12 @@
                    value="Finished"
                    name="finished"/>
         {% else %}
-            <p class="offset-by-one ten columns">
-                You finished this page on {{ response.created }}
-            </p>
+            <div class="row separator">
+                <p class="u-full-width center-text">
+                    You finished this page on {{ response.created }}
+                </p>
+            </div>
         {% endif %}
     </form>
+    {% include 'activity/navigation.html' %}
 {% endblock %}

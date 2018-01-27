@@ -3,13 +3,13 @@
 <div class="row">
     <p>
         {% if page.previous %}
-            <a class="u-pull-left three columns button" href="{{ page.previous }}">Previous</a>
+            <a class="u-pull-left three columns button" href="{{ page.previous }}">Back</a>
             <a class="six columns button" href="{% url 'summary' activity.slug %}">
-                Return to Summary Page
+                Summary Page
             </a>
         {% else %}
             <a class="offset-by-three six columns button" href="{% url 'summary' activity.slug %}">
-                Reurn to Summary Page
+                Summary Page
             </a>
         {% endif %}
         {% if page.next %}

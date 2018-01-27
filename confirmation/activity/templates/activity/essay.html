@@ -5,14 +5,40 @@
 {% endblock %}
 
 {% block page-content %}
-    <p class="u-full-width">
-        Answer in the space below, then click the "Submit" button.
-    </p>
-    <form action="{% url 'page' activity.slug page.index %}" method="post">
-        {% csrf_token %}
-        {% with essay=response.essay %}
-            <textarea class="u-full-width text-field" name="essay" autofocus>{{ essay }}</textarea>
-            <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
-        {% endwith %}
-    </form>
+    {% with essay=response.essay %}
+        {% if not essay %}
+            <p class="row u-full-width">
+                Answer in the space below, then click the "Submit" button.
+            </p>
+            <form class="row separator" action="{% url 'page' activity.slug page.index %}" method="post">
+                {% csrf_token %}
+                <textarea class="u-full-width text-field" name="essay" autofocus>{{ essay }}</textarea>
+                <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+            </form>
+        {% else %}
+            <div class="row">
+                <div class="offset-by-one ten columns">
+                    Your response:
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-by-one ten columns response-display">
+                    {{ essay }}
+                </div>
+            </div>
+            <div class="row separator">
+                <div class="center-element offset-by-three six columns">
+                    <a class="button u-pull-left five columns" type="button"
+                       href="{% url 'edit' activity.slug page.index %}">
+                        Edit
+                    </a>
+                    <a class="button u-pull-right five columns" type="button"
+                       href="{% url 'delete' activity.slug page.index %}">
+                        Delete
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% include 'activity/navigation.html' %}
 {% endblock %}
