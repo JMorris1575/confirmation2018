@@ -32,10 +32,12 @@
                        href="{% url 'edit' activity.slug page.index %}">
                         Edit
                     </a>
-                    <a class="button u-pull-right five columns" type="button"
-                       href="{% url 'delete' activity.slug page.index %}">
-                        Delete
-                    </a>
+                    {% if response.can_delete %}
+                        <a class="button u-pull-right five columns" type="button"
+                           href="{% url 'delete' activity.slug page.index %}">
+                            Delete
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}

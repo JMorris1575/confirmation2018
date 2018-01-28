@@ -12,7 +12,7 @@
                 Summary Page
             </a>
         {% endif %}
-        {% if page.next %}
+        {% if page.next and response.can_goto_next %}
             <a class="u-pull-right three columns button" href="{{ page.next }}">Next</a>
         {% endif %}
     </p>

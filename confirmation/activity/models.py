@@ -69,8 +69,10 @@ class Page(models.Model):
             return '/activity/' + slug + '/' + str(index - 1) + '/'
 
     def next(self):
-        # how do I make sure this doesn't lead the user to a page he or she is not allowed
-        # to visit yet?
+        """
+        Returns true if there is a next page to go to
+        :return: boolean
+        """
         index = self.index
         slug = self.activity.slug
         max = len(Page.objects.filter(activity=self.activity))
@@ -78,6 +80,13 @@ class Page(models.Model):
             return None
         else:
             return '/activity/' + slug + '/' + str(index + 1) + '/'
+
+    # def get_index(self):
+    #     """
+    #     returns the index of the current page
+    #     :return: integer
+    #     """
+    #     return self.index
 
 
 class Response(models.Model):
@@ -100,6 +109,25 @@ class Response(models.Model):
             possessive_ending = "'s"
         return name + possessive_ending + ' response to ' + str(self.activity) + ' ' + str(self.page)
 
+    def can_delete(self):
+        """
+        returns True if this response can be deleted, false otherwise
+        A respons can be deleted if it is the user has not completed any pages beyond this one in the current activity
+        :return: boolean
+        """
+        this_index = self.page.index
+        number_completed = len(Response.objects.filter(user=self.user, activity=self.activity))
+        if this_index == number_completed:
+            return True
+        else:
+            return False
+
+    def can_goto_next(self):
+        """
+        Returns true if this user has completed this page and so can go to the next
+        :return: boolean
+        """
+        return self.completed
 
 class Choice(models.Model):
     page = models.ForeignKey(Page, on_delete=models.CASCADE)

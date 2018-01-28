@@ -1472,3 +1472,14 @@ I think responses should only be deleted as long as the user has not gone any fu
 Delete button in those cases and also making sure they can't accomplish deleting by entering
 ``activity/<activity_slug>/<page_index>/delete/`` by hand either. That will take some thought.
 
+Making sure the Delete button and Next button don't show up when they are not supposed to was rather easy. I just wrote
+some model methods in the Response model called ``can_goto_next`` and ``can_delete``. What surprises me is that, within
+these methods I could not refer to the current response's page's index simply by writing ``self.page.index`` until I
+created a model method in the Page model called ``get_page_index``. I just happened upon that name, I will try to change
+it to see if something else would work as well...
+
+Never mind! I CAN use ``self.page.index`` it's just that PyCharm doesn't seem to recognize it, or any of the other field
+names.
+
+
+
