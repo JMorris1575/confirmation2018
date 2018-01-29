@@ -1,0 +1,18 @@
+{% extends 'activity/base_activity.html' %}
+
+{% block title %}
+    {{ block.super }}Written Response
+{% endblock %}
+
+{% block page-content %}
+    <form class="row separator" action="{% url 'page' activity.slug page.index %}" method="post">
+        {% csrf_token %}
+        {% for choice in choices %}
+            <p class="offset-by-one eleven columns">
+                <input type="radio" name="choice" value="{{ choice.index }}">  {{ choice }}</input>
+            </p>
+        {% endfor %}
+        <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+    </form>
+    {% include 'activity/navigation.html' %}
+{% endblock %}

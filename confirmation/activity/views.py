@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import Activity, Page, Response
+from .models import Activity, Page, Response, Choice
 
 import datetime
 
@@ -77,6 +77,10 @@ class PageView(ResponseMixin, View):
             self.template_name = 'activity/instructions.html'
         elif page.page_type == 'ES':
             self.template_name = 'activity/essay.html'
+        elif page.page_type == 'MC':
+            self.template_name = 'activity/multi-choice.html'
+            choices = Choice.objects.filter(page=page)
+            context['choices'] = choices
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):
@@ -89,7 +93,7 @@ class PageView(ResponseMixin, View):
             response = Response(user=request.user, activity=activity, page=page,
                                 essay=request.POST['essay'].strip(), completed=True)
             response.save()
-        return redirect('summary', activity_slug )
+        return redirect('page', activity_slug, page_index )
 
 
 class PageEditView(ResponseMixin, View):
@@ -116,3 +120,8 @@ class PageDeleteView(ResponseMixin, View):
         if page.page_type == 'ES':
             self.template_name = 'activity/essay_delete.html'
         return render(request, self.template_name, context)
+
+    def post(self, request, activity_slug=None, page_index=None):
+        activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
+        response.delete()
+        return redirect('summary', activity_slug)

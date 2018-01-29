@@ -142,3 +142,7 @@ class Choice(models.Model):
         return chr(64 + index) + ') '
 
 
+    class Meta:
+        ordering = ['index']
+
+

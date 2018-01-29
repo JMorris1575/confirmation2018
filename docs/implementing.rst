@@ -1481,5 +1481,54 @@ it to see if something else would work as well...
 Never mind! I CAN use ``self.page.index`` it's just that PyCharm doesn't seem to recognize it, or any of the other field
 names.
 
+Implementing the Multiple-Choice Page
+*************************************
+
+This ought to be fairly easy both because I have recently done something like this in the trivia app in christmas17 and
+because much of the groundwork, such as the ``navigation.html`` page, the ResponseMixin and the changes in the
+``base_activity.html`` file, has already been set in place. Here is what I think I should do:
+
+*   Check to make sure questions and choices have already been created
+*   Modify PageView's ``get`` method to include 'MC' pages
+*   Create a stub ``multi_choice.html`` page
+*   Add the question to the page
+*   Add the possible responses to the page
+*   Modify PageView''s ``post`` method to include 'MC' pages
+*   Make sure a user's responses are being recorded correctly
+*   If an answer is to be given right away, make sure it is
+*   If there is an explanation for the answer make sure it displays properly
+*   Make sure an answer is NOT given when it is not supposed to be
+*   Make sure Edit and Delete buttons appear only when the answer is not given
+*   Create the Edit page
+*   Make sure the Edit page works
+*   Create the Delete page
+*   Make sure the Delete page works
+
+For testing purposes I just added a second multiple choice question -- this one not giving an explanation. I will have
+to remember to create another fixture file to transfer the data.
+
+
+
+
+.. index:: Quizzes
+
+Idea for Quizzes
+----------------
+
+The next thing up is to implement multiple-choice pages but it occurred to me that it might be nice to be able to
+collect multiple-choice questions into a single entity, called a quiz?, instead of putting them into activities one by
+one. Then why not allow a mix of questions: multiple-choice, essay, True/False, and maybe even implement matching type
+questions.
+
+I think this could be done by creating another model called Quiz, and maybe learn how to get the admin to call the
+plural "Quizzes." I would have to add an optional field to each page type to refer to the quiz it belongs to and then
+put a quiz into the activity instead of the individual pages. I could also develop a new quiz.html page to display the
+quizzes. I'm thinking it could display the questions and their answers as they proceed through the quiz and then, after
+they submit the whole thing, I can give them instant results, and prevent them from changing their answers.
+
+I decided to delay the implementation of this feature until after the basic site is done.
+
+I also decided to put this section outside the page implementation section.
+
 
 
