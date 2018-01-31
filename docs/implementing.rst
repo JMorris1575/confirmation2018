@@ -1507,6 +1507,37 @@ because much of the groundwork, such as the ``navigation.html`` page, the Respon
 For testing purposes I just added a second multiple choice question -- this one not giving an explanation. I will have
 to remember to create another fixture file to transfer the data.
 
+Error Messages
+++++++++++++++
+
+I used what I did in the trivia acivity in christmas17 to try to get a box to appear around the error message and the
+choices when the user did not select any choice but I couldn't get it to appear around anything more than just the error
+message. I don't know why. Maybe something will occur to me overnight. Meanwhile I am just having the error message and
+choices appear in red bold-face type. I still don't like the spacing of the error message however. (It looks better if
+I put it in <p></p> tags.)
+
+Recording the Response
+++++++++++++++++++++++
+
+When I do make a response it seems to record correctly but, currently, it just displays the same question and choices as
+if giving the user another chance at it. I need to modify the ``get`` method in the 'MC' portion of the PageView, or
+perhaps just the template. It's too late in the evening to think too clearly about it.
+
+Displaying the User's Multiple Choice Response
+++++++++++++++++++++++++++++++++++++++++++++++
+
+There are two fields in the Page model that determine the appearance of the multi-choice page when a response has been
+giveen:
+
+*   A) ``page.reveal_answer`` - a boolean flag set to True if the answer is to be revealed
+*   B) ``page.explanation`` - a character field with an explanation for the answer
+
+*   If A is True and B is not empty, the user's answer displays with a correct or incorrect message with the explanation
+*   if A is True and B is empty, the user's answer displays with a correct or incorrect message
+*   If A is False, the user's answer is displayed with Edit and Delete buttons that allow for each action
+
+To create and test this requires another change to the database so that I have all three possibilities represented.
+
 
 
 

@@ -37,7 +37,7 @@ class Page(models.Model):
                                           ('MC', 'MultipleChoice'),
                                           ('TF', 'True-False'),
                                           ('DS', 'Discussion')])
-    title = models.CharField(max_length=25)
+    title = models.CharField(max_length=40)
     text = models.CharField(max_length=512)
     image = models.ForeignKey(Image, null=True, blank=True, on_delete=models.CASCADE)
     explanation = models.CharField(max_length=512, blank=True)
@@ -97,7 +97,7 @@ class Response(models.Model):
     last_edited = models.DateTimeField(auto_now=True)
     essay = models.TextField(blank=True)
     multi_choice = models.CharField(max_length=1, blank=True)
-    true_false = models.NullBooleanField()
+    true_false = models.NullBooleanField(null=True)
     correct = models.NullBooleanField()
     completed = models.BooleanField(default=False)
 
@@ -129,11 +129,14 @@ class Response(models.Model):
         """
         return self.completed
 
+    def user_choice(self):
+        return Choice.objects.get(page=self.page, index=int(self.multi_choice))
+
 class Choice(models.Model):
     page = models.ForeignKey(Page, on_delete=models.CASCADE)
     index = models.PositiveSmallIntegerField()
     text = models.CharField(max_length = 256)
-    correct = models.BooleanField(blank=True)       # indicates this choice is correct if opinion if False in Page model
+    correct = models.BooleanField(blank=True)       # indicates this choice is correct if opinion is False in Page model
 
     def __str__(self):
         return self.choiceLetter(self.index) + self.text
@@ -143,6 +146,6 @@ class Choice(models.Model):
 
 
     class Meta:
-        ordering = ['index']
+        ordering = ['page', 'index']
 
 

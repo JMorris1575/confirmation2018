@@ -60,6 +60,11 @@ header {
     text-align: center;
 }
 
+.error-display {
+    color: red;
+    font-weight: bold;
+}
+
 .formatted {
     white-space: pre-wrap;
 }

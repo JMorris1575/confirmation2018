@@ -93,6 +93,23 @@ class PageView(ResponseMixin, View):
             response = Response(user=request.user, activity=activity, page=page,
                                 essay=request.POST['essay'].strip(), completed=True)
             response.save()
+        elif page.page_type == 'MC':
+            choices = Choice.objects.filter(page=page)
+            try:
+                choice_index = request.POST['choice']
+            except (KeyError, Choice.DoesNotExist):
+                self.template_name = 'activity/multi-choice.html'
+                context = {'activity':activity, 'page':page, 'choices':choices, 'response':None}
+                context['error_message'] = 'You must choose one of the responses below.'
+                return render(request, self.template_name, context)
+            choice = choices.get(index=choice_index)
+            response = Response(user=request.user, activity=activity,
+                                page=page, multi_choice=str(choice_index),
+                                completed=True)
+            if not page.opinion:
+                response.correct = choice.correct
+            response.save()
+
         return redirect('page', activity_slug, page_index )
 
 

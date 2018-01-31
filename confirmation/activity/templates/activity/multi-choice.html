@@ -5,14 +5,32 @@
 {% endblock %}
 
 {% block page-content %}
-    <form class="row separator" action="{% url 'page' activity.slug page.index %}" method="post">
-        {% csrf_token %}
-        {% for choice in choices %}
-            <p class="offset-by-one eleven columns">
-                <input type="radio" name="choice" value="{{ choice.index }}">  {{ choice }}</input>
-            </p>
-        {% endfor %}
-        <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
-    </form>
+    {% if not response %}
+        <form class="row separator" action="{% url 'page' activity.slug page.index %}" method="post">
+            {% csrf_token %}
+            {% if error_message %}
+            <div class="error-display">
+                <p>{{ error_message }}</p>
+                {% for choice in choices %}
+                    <p class="offset-by-one eleven columns">
+                        <input type="radio" name="choice" value="{{ choice.index }}">  {{ choice }}</input>
+                    </p>
+                {% endfor %}
+                <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+            </div>
+            {% else %}
+                {% for choice in choices %}
+                    <p class="offset-by-one eleven columns">
+                        <input type="radio" name="choice" value="{{ choice.index }}">  {{ choice }}</input>
+                    </p>
+                {% endfor %}
+                <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+            {% endif %}
+        </form>
+    {% else %}
+        <p>
+            You answered {{ response.user_choice }}
+        </p>
+    {% endif %}
     {% include 'activity/navigation.html' %}
 {% endblock %}
