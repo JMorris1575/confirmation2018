@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block page-content %}
-    <form class="row separator" action="{% url 'page' activity.slug page.index %}" method="post">
+    <form class="row separator" action="{% url 'edit' activity.slug page.index %}" method="post">
         {% csrf_token %}
         {% for choice in choices %}
             <p class="offset-by-one eleven columns">

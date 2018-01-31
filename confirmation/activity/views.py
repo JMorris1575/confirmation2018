@@ -27,7 +27,7 @@ class WelcomeView(View):
             else:
                 msg = 'Not Yet Available'
             data.append((activity, msg))
-
+        print('data = ', data)
         return render(request, self.template_name, {'data': data})
 
     def post(self, request):
@@ -67,6 +67,7 @@ class ResponseMixin:
         except Response.DoesNotExist:
             response = None
         return activity, page, response
+
 
 class PageView(ResponseMixin, View):
 
@@ -133,7 +134,8 @@ class PageEditView(ResponseMixin, View):
             response.essay = request.POST['essay'].strip()
             response.save()
         elif page.page_type == 'MC':
-            pass
+            response.multi_coice = request.POST['choice']
+            response.save()
         return redirect('page', activity_slug, page_index)
 
 
@@ -144,6 +146,8 @@ class PageDeleteView(ResponseMixin, View):
         context = {'activity':activity, 'page':page, 'response':response}
         if page.page_type == 'ES':
             self.template_name = 'activity/essay_delete.html'
+        if page.page_type == 'MC':
+            self.template_name = 'activity/multi-choice-delete.html'
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):

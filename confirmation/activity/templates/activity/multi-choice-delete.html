@@ -1,0 +1,21 @@
+{% extends 'activity/base_activity.html' %}
+
+{% block title %}
+    {{ block.super }}Delete Multiple Choice Response
+{% endblock %}
+
+{% block page-content %}
+    <form class="row separator" action="{% url 'delete' activity.slug page.index %}" method="post">
+        {% csrf_token %}
+        {% with response.user_choice as user_choice %}
+            <p>
+                You answered {{ user_choice }}
+            </p>
+        {% endwith %}
+        <p>
+            Are you sure you want to delete this response? It will result in this part of the activity being marked
+            as incomplete.
+        </p>
+        <input class="offset-by-four four columns button-primary" value="Delete" type="submit"/>
+    </form>
+{% endblock %}
