@@ -120,12 +120,20 @@ class PageEditView(ResponseMixin, View):
         context = {'activity': activity, 'page': page, 'response': response}
         if page.page_type == 'ES':
             self.template_name = 'activity/essay_edit.html'
+        elif page.page_type == 'MC':
+            self.template_name = 'activity/multi-choice-edit.html'
+            choices = Choice.objects.filter(page=page)
+            context['choices'] = choices
+
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):
         activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
-        response.essay = request.POST['essay'].strip()
-        response.save()
+        if page.page_type == 'ES':
+            response.essay = request.POST['essay'].strip()
+            response.save()
+        elif page.page_type == 'MC':
+            pass
         return redirect('page', activity_slug, page_index)
 
 

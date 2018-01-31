@@ -28,9 +28,24 @@
             {% endif %}
         </form>
     {% else %}
-        <p>
-            You answered {{ response.user_choice }}
-        </p>
+        {% with response.user_choice as user_choice %}
+            <p>
+                You answered {{ user_choice }}
+            </p>
+            {% if page.reveal_answer %}
+                {% if response.correct %}
+                    <p>That is correct!</p>
+                {% else %}
+                    <p>Sorry! That is not correct.</p>
+                    <p>The correct answer is: {{ user_choice.correct_choice }}</p>
+                {% endif %}
+                {% if page.explanation != '' %}
+                    <p>{{ page.explanation }}</p>
+                {% endif %}
+            {% else %}
+                {% include 'activity/edit-delete.html' %}
+            {% endif %}
+        {% endwith %}
     {% endif %}
     {% include 'activity/navigation.html' %}
 {% endblock %}

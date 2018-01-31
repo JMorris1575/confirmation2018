@@ -5,11 +5,16 @@
     <div class="container">
         <div class="offset-by-two eight columns activity-text shadowed">
             <div class="row separator">
-                <div class="eight columns heading">
+                <div class="page-image">
+                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                </div>
+                <div class="heading">
                     {{ activity }}
                 </div>
-                <div class="four columns">
-                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                <div class="row">
+                     <p class="sub-heading">
+                         {{ page.title }}
+                     </p>
                 </div>
             </div>
             <div class="page-text row">

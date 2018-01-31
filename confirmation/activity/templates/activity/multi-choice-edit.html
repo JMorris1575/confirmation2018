@@ -1,0 +1,21 @@
+{% extends 'activity/base_activity.html' %}
+
+{% block title %}
+    {{ block.super }}Edit Multiple Choice Response
+{% endblock %}
+
+{% block page-content %}
+    <form class="row separator" action="{% url 'page' activity.slug page.index %}" method="post">
+        {% csrf_token %}
+        {% for choice in choices %}
+            <p class="offset-by-one eleven columns">
+                {% if response.multi_choice == choice.index %}
+                    <input type="radio" name="choice" value="{{ choice.index }}" checked="checked">  {{ choice }}</input>
+                {% else %}
+                    <input type="radio" name="choice" value="{{ choice.index }}">  {{ choice }}</input>
+                {% endif %}
+            </p>
+        {% endfor %}
+        <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+    </form>
+{% endblock %}

@@ -1536,7 +1536,18 @@ giveen:
 *   if A is True and B is empty, the user's answer displays with a correct or incorrect message
 *   If A is False, the user's answer is displayed with Edit and Delete buttons that allow for each action
 
-To create and test this requires another change to the database so that I have all three possibilities represented.
+To create and test this requires another change to the information in the database so that I have all three
+possibilities represented.
+
+..index:: Problems; database migration
+
+Database Changes
+++++++++++++++++
+
+In the process of getting the Edit function of the third type of page to work I had to change the field type of
+the multi_choice field in the Response model to PositiveSmallIntegerField. After doing the ``makemigrations`` the
+``migrate`` did not work complaining about how "" was an improper thing to be putting into an integer field. I had to
+use the admin to delete ALL of my existing responses in the database to get ``migrate`` to work.
 
 
 

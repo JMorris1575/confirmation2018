@@ -81,13 +81,6 @@ class Page(models.Model):
         else:
             return '/activity/' + slug + '/' + str(index + 1) + '/'
 
-    # def get_index(self):
-    #     """
-    #     returns the index of the current page
-    #     :return: integer
-    #     """
-    #     return self.index
-
 
 class Response(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -96,9 +89,9 @@ class Response(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     last_edited = models.DateTimeField(auto_now=True)
     essay = models.TextField(blank=True)
-    multi_choice = models.CharField(max_length=1, blank=True)
-    true_false = models.NullBooleanField(null=True)
-    correct = models.NullBooleanField()
+    multi_choice = models.PositiveSmallIntegerField(null=True, blank=True)
+    true_false = models.BooleanField(default=False)
+    correct = models.NullBooleanField(null=True)
     completed = models.BooleanField(default=False)
 
     def __str__(self):
@@ -143,6 +136,10 @@ class Choice(models.Model):
 
     def choiceLetter(self, index):
         return chr(64 + index) + ') '
+
+    def correct_choice(self):
+        print('Choices = ', Choice.objects.filter(page=self.page))
+        return Choice.objects.get(page=self.page, correct=True)
 
 
     class Meta:
