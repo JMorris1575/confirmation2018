@@ -1549,6 +1549,47 @@ the multi_choice field in the Response model to PositiveSmallIntegerField. After
 ``migrate`` did not work complaining about how "" was an improper thing to be putting into an integer field. I had to
 use the admin to delete ALL of my existing responses in the database to get ``migrate`` to work.
 
+Editting and Deleting Multi-Choice Responses
+++++++++++++++++++++++++++++++++++++++++++++
+
+This wasn't too difficult, except for the problem outlined above. It mostly just follows what I did for editing and
+deleting essay responses.
+
+Implementing the True/False Page
+********************************
+
+Here are my initial thoughts as to what needs to be done:
+
+*   Check the database with admin and come up with a better subtitle for the page
+*   Modify PageView's ``get`` method to include 'TF' pages
+*   Create a stub ``true-false.html`` page
+*   Add the question to the page
+*   Add the possible responses to the page
+*   Modify PageView''s ``post`` method to include 'TF' pages
+*   Make sure a user's responses are being recorded correctly
+*   If an answer is to be given right away, make sure it is
+*   If there is an explanation for the answer make sure it displays properly
+*   Make sure an answer is NOT given when it is not supposed to be
+*   Make sure Edit and Delete buttons appear only when the answer is not given
+*   Create the Edit page
+*   Make sure the Edit page works
+*   Create the Delete page
+*   Make sure the Delete page works
+
+The plan is almost identical to the plan for Multi-Choice pages so I think I'll probably be doing a lot of copying --
+especially since the True/False page is really just a special case of the Multi-Choice page.
+
+.. index:: Problems; image next to column of text
+
+Getting the Heading to look Good
+++++++++++++++++++++++++++++++++
+
+Because the subtitle I came up with for the true/false page was short: "Faith in Noah," it displayed NEXT to the main
+heading instead of below it. I checked and found that other pages with short subtitles were doing the same. It seems I
+should be able to put a <div> tag around the heading and subheading and another one around the image and have them
+display properly. We'll see...
+
+
 
 
 

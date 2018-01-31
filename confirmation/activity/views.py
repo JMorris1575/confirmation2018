@@ -82,6 +82,8 @@ class PageView(ResponseMixin, View):
             self.template_name = 'activity/multi-choice.html'
             choices = Choice.objects.filter(page=page)
             context['choices'] = choices
+        elif page.page_type == 'TF':
+            self.template_name = 'activity/true-false.html'
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):

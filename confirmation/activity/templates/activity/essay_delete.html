@@ -5,8 +5,6 @@
 {% endblock %}
 
 {% block page-content %}
-    <p>Are you sure you want to delete this response? It will result in this part of the activity being marked
-        as incomplete.</p>
     <form class="row separator" action="{% url 'delete' activity.slug page.index %}" method="post">
         {% csrf_token %}
         <div class="row">
@@ -19,6 +17,10 @@
                 {{ response.essay }}
             </div>
         </div>
+        <p>
+            Are you sure you want to delete this response? It will result in this part of the activity being marked
+            as incomplete.
+        </p>
         <input class="offset-by-four four columns button-primary" value="Delete" type="submit"/>
     </form>
 {% endblock %}
