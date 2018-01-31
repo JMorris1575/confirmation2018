@@ -5,7 +5,49 @@
 {% endblock %}
 
 {% block page-content %}
-    <p>
-        This is going to be the True/False page.
-    </p>
+    {% if not response %}
+        <form class="row separator" action="{% url 'page' activity.slug page.index %}" method="post">
+            {% csrf_token %}
+            {% if error_message %}
+            <div class="error-display">
+                <p>{{ error_message }}</p>
+                <p class="offset-by-one eleven columns">
+                    <input type="radio" name="choice" value=True>  True</input>
+                </p>
+                <p class="offset-by-one eleven columns">
+                    <input type="radio" name="choice" value=False>  False</input>
+                </p>
+                <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+            </div>
+            {% else %}
+                <p class="offset-by-one eleven columns">
+                    <input type="radio" name="choice" value=True>  True</input>
+                </p>
+                <p class="offset-by-one eleven columns">
+                    <input type="radio" name="choice" value=False>  False</input>
+                </p>
+                <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+            {% endif %}
+        </form>
+    {% else %}
+        {% with response.true_false as user_choice %}
+            <p>
+                You answered {{ user_choice }}
+            </p>
+            {% if page.reveal_answer %}
+                {% if response.correct %}
+                    <p>That is correct!</p>
+                {% else %}
+                    <p>Sorry! That is not correct.</p>
+                {% endif %}
+                {% if page.explanation != '' %}
+                    <p>{{ page.explanation }}</p>
+                {% endif %}
+            {% else %}
+                {% include 'activity/edit-delete.html' %}
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+    {% include 'activity/navigation.html' %}
+
 {% endblock %}

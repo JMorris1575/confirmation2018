@@ -112,6 +112,20 @@ class PageView(ResponseMixin, View):
             if not page.opinion:
                 response.correct = choice.correct
             response.save()
+        elif page.page_type == 'TF':
+            try:
+                user_response = request.POST['choice']
+            except KeyError:
+                self.template_name = 'activity/true-false.html'
+                context = {'activity':activity, 'page':page, 'response':None}
+                context['error_message'] = 'You must select either True or False.'
+                return render(request, self.template_name, context)
+            response = Response(user=request.user, activity=activity,
+                                page=page, true_false=request.POST['choice'],
+                                completed=True)
+            if not page.opinion:
+                response.correct = page.tf_answer
+            response.save()
 
         return redirect('page', activity_slug, page_index )
 

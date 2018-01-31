@@ -1589,7 +1589,41 @@ heading instead of below it. I checked and found that other pages with short sub
 should be able to put a <div> tag around the heading and subheading and another one around the image and have them
 display properly. We'll see...
 
+It wasn't that difficult implement. I just had to think it through carefully. Defining the problem as I did above
+helped too I think. Here is the ``base_activity.html`` file::
 
+    {% block content %}
+        <div class="container">
+            <div class="offset-by-two eight columns activity-text shadowed">
+                <div class="row separator">
+                    <div class="u-pull-left">
+                        <p class="heading">
+                            {{ activity }}
+                        </p>
+                        <p class="sub-heading">
+                            {{ page.title }}
+                        </p>
+                    </div>
+                    <div class="page-image">
+                        <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                    </div>
+                </div>
+                <div class="page-text row">
+                    <p class="u-full-width">
+                        {{ page.text }}
+                    </p>
+                </div>
+                {% block page-content %}
+                {% endblock %}
+            </div>
+        </div>
+    {% endblock %}
+
+Filling Out the True/False Page
++++++++++++++++++++++++++++++++
+
+This should not be that difficult. I will be like multi-choice.html except the choice <input> tag(s) will be replaced by
+two "hardwired" <input> tags with True and False as their values.
 
 
 
