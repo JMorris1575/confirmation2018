@@ -30,23 +30,22 @@
             {% endif %}
         </form>
     {% else %}
-        {% with response.true_false as user_choice %}
-            <p>
-                You answered {{ user_choice }}
-            </p>
-            {% if page.reveal_answer %}
-                {% if response.correct %}
-                    <p>That is correct!</p>
-                {% else %}
-                    <p>Sorry! That is not correct.</p>
-                {% endif %}
-                {% if page.explanation != '' %}
-                    <p>{{ page.explanation }}</p>
-                {% endif %}
+        <p>
+            You answered {{ response.true_false }}
+        </p>
+        {% if page.reveal_answer %}
+            {% if response.correct %}
+                <p>That is correct!</p>
             {% else %}
-                {% include 'activity/edit-delete.html' %}
+                <p>Sorry! That is not correct.</p>
             {% endif %}
-        {% endwith %}
+            {{ page.explanation }}
+            {% if page.explanation != '' %}
+                <p>{{ page.explanation }}</p>
+            {% endif %}
+        {% else %}
+            {% include 'activity/edit-delete.html' %}
+        {% endif %}
     {% endif %}
     {% include 'activity/navigation.html' %}
 

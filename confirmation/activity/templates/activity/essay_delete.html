@@ -1,26 +1,18 @@
-{% extends 'activity/base_activity.html' %}
+{% extends 'activity/base_delete.html' %}
 
 {% block title %}
     {{ block.super }}Edit Written Response
 {% endblock %}
 
-{% block page-content %}
-    <form class="row separator" action="{% url 'delete' activity.slug page.index %}" method="post">
-        {% csrf_token %}
-        <div class="row">
-            <div class="offset-by-one ten columns">
-                Your response:
-            </div>
+{% block delete-page-content %}
+    <div class="row">
+        <div class="offset-by-one ten columns">
+            Your response:
         </div>
-        <div class="row">
-            <div class="offset-by-one ten columns response-display">
-                {{ response.essay }}
-            </div>
+    </div>
+    <div class="row">
+        <div class="offset-by-one ten columns response-display">
+            {{ response.essay }}
         </div>
-        <p>
-            Are you sure you want to delete this response? It will result in this part of the activity being marked
-            as incomplete.
-        </p>
-        <input class="offset-by-four four columns button-primary" value="Delete" type="submit"/>
-    </form>
+    </div>
 {% endblock %}

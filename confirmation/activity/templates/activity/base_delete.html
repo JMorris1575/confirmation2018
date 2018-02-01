@@ -1,0 +1,20 @@
+{% extends 'activity/base_activity.html' %}
+
+{% block page-content %}
+    <form class="row separator" action="{% url 'delete' activity.slug page.index %}" method="post">
+        {% csrf_token %}
+
+        {% block delete-page-content %}
+        {% endblock %}
+
+        <p>
+            Are you sure you want to delete this response? It will result in this part of the activity being marked
+            as incomplete.
+        </p>
+        <div class="center-element offset-by-three six columns">
+            <input class="u-pull-left five columns button" name="user-choice" value="Delete" type="submit"/>
+            <input class="u-pull-right five columns button" name="user-choice" value="Cancel" type="submit"/>
+        </div>
+    </form>
+    {% include 'activity/navigation.html' %}
+{% endblock %}

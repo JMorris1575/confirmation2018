@@ -175,5 +175,8 @@ class PageDeleteView(ResponseMixin, View):
 
     def post(self, request, activity_slug=None, page_index=None):
         activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
-        response.delete()
-        return redirect('summary', activity_slug)
+        if request.POST['user-choice'] == 'Delete':
+            response.delete()
+            return redirect('summary', activity_slug)
+        else:
+            return redirect('page', activity_slug, page_index)

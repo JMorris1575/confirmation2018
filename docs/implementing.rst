@@ -1637,6 +1637,65 @@ all of the delete pages and maybe the edit pages too.
 
 That sounds like a job for tomorrow when I'm rested.
 
+Adding a Cancel Button to the Delete Pages
+++++++++++++++++++++++++++++++++++++++++++
+
+*The HTML PocketGuide* (pp. 171-172) seems to indicate that the processing script gets both the ``name`` and the
+``value`` of <input> tags of type submit.  So, if I include those in the form on my delete pages they should be
+available for detection in my views. (I checked just to be sure, it does seem to need both of them to be set. If only
+``value`` is set, nothing gets sent.
+
+But it seems it may be useful to create a generic ``base_delete.html`` page that extends ``base_activity.html`` since
+the delete pages are so much alike. I will look into this.
+
+Yes, that is a good idea! It very much simplifies writing the individual delete pages.
+
+Implementing the Discussion Page
+********************************
+
+Discussion pages allow a user to make more than one entry and display all of the entries from all of the users either
+in forward or reverse order. I think the forward order will be best here.
+
+When it comes to editing and deleting, each comment by the current user should be open for editing but not for deleting.
+That, it seems to me, would break up the flow of the discussion. Perhaps edited comments should be prefixed with some
+kind of indicator such as [Edited: <date>]
+
+I can imagine discussions coming in three types:
+*   Open discussions where each user's name displays next to his or her comment
+*   Private(?) discussions where the user's name is recorded, editing works, but the name is not displayed
+*   Secret discussions where the "AnonymousUser" is recorded as making all of the entries. Editing will not work.
+
+For Private and Secret discussions the comments can be numbered for later reference. Perhaps that would be helpful for
+Open discussions too. I suppose what I have here is a blog of sorts. Perhaps it merits its own app but, if so, I'm not
+sure how I would integrate it into the page system I have already set up. I will have to think about this.
+
+It also seems that some changes to the Page model are going to be necessary to indicate which kind of discussion we're
+dealing with at any particular time.
+
+As I think about it I suspect creating another app IS in order here. I've already done that in the ``comment`` app part
+of the Christmas websites. The views of the app can still be called from the activity urls it seems to me but I can
+look and see how it was done on the Christmas websites.
+
+No, there was not a separate ``comment`` app on the Christmas websites, the comment capability was part of the ``gifts``
+app. It was the ``question`` app that had the blog-like capabilities but one entered that through a link on the header
+menu. Time for more study. Can one app's urls call another apps views? I don't see why not, they would just have to be
+imported. Perhaps something like that was done in *Django Unleashed* for the website developed there.
+
+Going to the book's GitHub repository ( https://github.com/jambonrose/DjangoUnleashed-1.8 ), I didn't see anywhere that
+was done. I'll look in Django's own documentation.
+
+Couldn't find much there, at least not that I want to deal with now (making an app reusable) but stackoverflow.com has
+some questions about this indicating that it can be done
+( https://stackoverflow.com/questions/47801621/unable-to-import-view-from-different-app ) and explaining how to get to
+a namespace in a template ( https://stackoverflow.com/questions/26812980/django-template-url-from-another-app ). I'll
+give it a try.
+
+Creating a Discussion App
++++++++++++++++++++++++++
+
+I created the ``discussion`` app with ``python manage.py startapp discussion`` and added all of the files it created
+(including the ``__init__.py`` in ``migrations``) to git.
+
 
 
 .. index:: Quizzes
