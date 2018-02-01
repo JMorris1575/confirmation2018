@@ -1625,6 +1625,18 @@ Filling Out the True/False Page
 This should not be that difficult. I will be like multi-choice.html except the choice <input> tag(s) will be replaced by
 two "hardwired" <input> tags with True and False as their values.
 
+Editing and Deleting a True/False Page
+++++++++++++++++++++++++++++++++++++++
+
+Since editing a True/False response simply means to toggle the response from True to False or vice versa, I just took
+care of toggling the user's response in the get method of the 'TF' section of the PageEdit view.
+
+Deleting the response followed the usual pattern of asking them if they wanted to delete it and then click the Delete
+button. But I realized that if they DIDN'T want to delete it, I gave them no way out. I need to put a Cancel button on
+all of the delete pages and maybe the edit pages too.
+
+That sounds like a job for tomorrow when I'm rested.
+
 
 
 .. index:: Quizzes

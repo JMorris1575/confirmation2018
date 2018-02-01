@@ -141,6 +141,10 @@ class PageEditView(ResponseMixin, View):
             self.template_name = 'activity/multi-choice-edit.html'
             choices = Choice.objects.filter(page=page)
             context['choices'] = choices
+        elif page.page_type == 'TF':
+            response.true_false = not response.true_false
+            response.save()
+            return redirect('page', activity_slug, page_index)
 
         return render(request, self.template_name, context)
 
@@ -152,6 +156,7 @@ class PageEditView(ResponseMixin, View):
         elif page.page_type == 'MC':
             response.multi_coice = request.POST['choice']
             response.save()
+
         return redirect('page', activity_slug, page_index)
 
 
@@ -164,6 +169,8 @@ class PageDeleteView(ResponseMixin, View):
             self.template_name = 'activity/essay_delete.html'
         if page.page_type == 'MC':
             self.template_name = 'activity/multi-choice-delete.html'
+        if page.page_type == 'TF':
+            self.template_name = 'activity/true-false-delete.html'
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):
