@@ -1493,7 +1493,7 @@ because much of the groundwork, such as the ``navigation.html`` page, the Respon
 *   Create a stub ``multi_choice.html`` page
 *   Add the question to the page
 *   Add the possible responses to the page
-*   Modify PageView''s ``post`` method to include 'MC' pages
+*   Modify PageView's ``post`` method to include 'MC' pages
 *   Make sure a user's responses are being recorded correctly
 *   If an answer is to be given right away, make sure it is
 *   If there is an explanation for the answer make sure it displays properly
@@ -1565,7 +1565,7 @@ Here are my initial thoughts as to what needs to be done:
 *   Create a stub ``true-false.html`` page
 *   Add the question to the page
 *   Add the possible responses to the page
-*   Modify PageView''s ``post`` method to include 'TF' pages
+*   Modify PageView's ``post`` method to include 'TF' pages
 *   Make sure a user's responses are being recorded correctly
 *   If an answer is to be given right away, make sure it is
 *   If there is an explanation for the answer make sure it displays properly
@@ -1696,6 +1696,51 @@ Creating a Discussion App
 I created the ``discussion`` app with ``python manage.py startapp discussion`` and added all of the files it created
 (including the ``__init__.py`` in ``migrations``) to git.
 
+Plan for Implementing Discussion Pages
+++++++++++++++++++++++++++++++++++++++
+
+Here is the plan, though it may be modified by having a separate app:
+
+*   Modify PageView's ``get`` method to include 'DS' pages, redirect to the corresponding discussion url
+*   update url patterns at the site level to include the discussion urls
+*   figure out and implement the url patters in the discussion app
+*   Create a stub ``discussion.html`` page in the discussion app
+*   Create a ``base_discussion.html`` page to be extended by ``discussion.html`` (plus private and secret versions?)
+*   Add the question to the page
+*   Add a form with a textview for the user to enter longish entries
+*   Add a way to display the current state of the discussion
+*   Modify PageView's ``post`` method to include 'DS' pages
+*   Make sure a user's responses are being recorded correctly
+*   Add an Edit link to the current user's comments
+*   Create the Edit page
+*   Make sure the Edit page works
+*   Add an indicator to show an entry has been edited and when
+*   Make it usable for private discussions (and come up with a better name: semi-confidential?)
+*   Make is usable for secret discussions (and come up with a better name: confidential?)
+
+I don't know that I will need separate templates for semi-confidential and confidential discussions so, at least for now
+I will not try to implement them in ``disucssion.urls.py``.
+
+Implementing discussion/views.py
+++++++++++++++++++++++++++++++++
+
+.. index:: Problems;unresolved reference in PyCharm
+
+In creating ``discussion/views.py`` and trying to import the models from the activity app I wrote::
+
+    from activity.models import Activity, Page, Response, Choice
+
+but PyCharm underlined it in wavy red lines indicating it was an unresolved reference. It worked perfectly well,
+however once I actually created a view which displayed my ``discussion.html`` stub. I fixed this by going to
+File->Settings->Project<project name>->Project Structure and marking the ``confirmation`` directory as a source folder
+by selecting it and then clicking the blue src folder above.
+
+I thought of using a mixin for this view just like I did in the ``activity`` app, and it was working too! I copied the
+ResponseMixin class from ``activity/views.py`` to a ``mixins.py`` file in ``config``. Then importing that file in
+``discussion/views.py`` I could use it to create the DiscussionView. However, ResponseMixin was designed to return a
+single response and I'm going to have several responses for each discussion question, and, as I'm planning it now, there
+is only going to be one DiscussionView. I can get what I need within the view itself without violating the DRY
+principle. (For now I'm leaving ``mixins.py`` in the ``config`` folder just in case I find it useful later.
 
 
 .. index:: Quizzes

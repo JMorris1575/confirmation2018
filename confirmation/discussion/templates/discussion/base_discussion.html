@@ -1,0 +1,38 @@
+{% extends parent_template|default:"base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="offset-by-two eight columns activity-text shadowed">
+            <div class="row">
+                <div class="u-pull-left">
+                    <p class="heading">
+                        {{ activity }}
+                    </p>
+                    <p class="sub-heading">
+                        {{ page.title }}
+                    </p>
+                </div>
+                <div class="page-image">
+                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                </div>
+            </div>
+        </div>
+        <div class="offset-by-two eight columns activity-text shadowed">
+            <div class="page-text row">
+                <p class="u-full-width">
+                    {{ page.text }}
+                </p>
+                {% if responses %}
+                    {% for response in responses %}
+                        <p>
+                            {{ response }}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        {% block page-content %}
+        {% endblock %}
+    </div>
+{% endblock %}
