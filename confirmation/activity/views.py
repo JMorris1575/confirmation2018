@@ -128,6 +128,9 @@ class PageView(ResponseMixin, View):
             if not page.opinion:
                 response.correct = page.tf_answer
             response.save()
+        elif page.page_type == 'DS':
+            print("I'm here in the PageView post method.")
+            return redirect('discussion', activity_slug, page_index)
 
         return redirect('page', activity_slug, page_index )
 

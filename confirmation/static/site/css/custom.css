@@ -14,6 +14,11 @@ header {
     color: #2eb873;
 }
 
+.border {
+    border: 1px solid #2eb873;
+    padding: 5px;
+}
+
 .button,
  button,
  input[type="submit"] {
@@ -70,15 +75,18 @@ header {
 }
 
 .heading {
-    font-family: 'Arial', sans;
     font-weight: bold;
     font-size: 1.5em;
 }
 
 .sub-heading {
-    font-family: 'Arial', sans;
     font-weight: bold;
     font-size: 1.2em;
+}
+
+.discussion-heading {
+    font-weight: bold;
+    margin: 0 0 5px 0;
 }
 
 .page-image {

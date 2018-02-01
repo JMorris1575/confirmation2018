@@ -46,7 +46,11 @@ class Page(models.Model):
     reveal_answer = models.BooleanField(blank=True)     # indicates whether the answer is revealed after user's response
     visible = models.BooleanField(default=True)         # indicates whether the page will be visible
     tf_answer = models.BooleanField(blank=True)         # correct response to True/False questions if opinion=False
-    open = models.BooleanField(default=True)            # indicates whether a discussion or poll is open or anonymous
+    discussion_type = models.CharField(max_length=20,   # indicates type of discussion
+                                       choices=[('OP', 'Open'),
+                                                ('SA', 'Semi-Anonymous'),
+                                                ('AN', 'Anonymous')],
+                                       null=True)
 
     class Meta:
         unique_together = ('activity', 'index')
@@ -80,6 +84,19 @@ class Page(models.Model):
             return None
         else:
             return '/activity/' + slug + '/' + str(index + 1) + '/'
+
+    def discussion_explanation(self):
+        if self.discussion_type == 'OP':
+            msg = "In an open discussion, your name will appear next to each entry you make and you will be able to "
+            msg += "edit your entries at any time."
+        elif self.discussion_type == 'SA':
+            msg = "In a semi-anonymous discussion, your name will NOT appear next to your entries but team members "
+            msg += "be able to see who made each comment. You will be able to edit your entries at any time."
+        else:
+            msg = "In an anonymous discussion your name is not recorded anywhere in the system and no one will be able "
+            msg += "to tell who made which comment. Because entries are not recorded with names, edits will not be "
+            msg += "possible. Keep in mind, however, nothing on the internet is completely anonymous. "
+        return msg
 
 
 class Response(models.Model):
