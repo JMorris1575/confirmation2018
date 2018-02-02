@@ -14,7 +14,9 @@ class DiscussionView(View):
         print('Got to the get method')
         activity = Activity.objects.get(slug=activity_slug)
         page = Page.objects.get(index=page_index)
-        responses = Response.objects.filter(user=request.user, activity=activity, page=page)
+        if not page.allowed(request.user, activity_slug, page_index):
+            return redirect('summary', activity_slug)
+        responses = Response.objects.filter(activity=activity, page=page)
         if len(responses) == 0:
             responses = None
         context = {'activity':activity, 'page':page, 'responses':responses}

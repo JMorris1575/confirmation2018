@@ -89,6 +89,15 @@ header {
     margin: 0 0 5px 0;
 }
 
+.discussion-name {
+    font-size: 0.7em;
+    font-weight: bold;
+}
+
+.discussion-response {
+    font-size: 0.8em;
+}
+
 .page-image {
     float: right;
 }

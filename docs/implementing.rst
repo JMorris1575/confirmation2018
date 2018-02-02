@@ -1742,6 +1742,21 @@ single response and I'm going to have several responses for each discussion ques
 is only going to be one DiscussionView. I can get what I need within the view itself without violating the DRY
 principle. (For now I'm leaving ``mixins.py`` in the ``config`` folder just in case I find it useful later.
 
+.. index:: access to pages
+
+Checking Whether Users Can Access Pages They Shouldn't
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+While working on the Discussion page I made a couple of entries for Fr. Jim Morris and then switched my identity to
+Diego. Well, Diego hadn't completed any part of Noah: The Real Story but was immediately sent to the last page in the
+list. This should not happen. I will check to see if it happens with other pages too...
+
+It does! That probably means Diego can enter URLs ahead of where he is and get to those pages too. I will check...
+
+Yep, he can!
+
+To fix this I think I will have to change the get method of the PageView to include some kind of test and, if the test
+fails sends the user back to the summary page for that activity.
 
 .. index:: Quizzes
 

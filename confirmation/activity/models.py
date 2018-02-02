@@ -62,9 +62,28 @@ class Page(models.Model):
     def get_absolute_url(self):
         return '/activity/' + self.activity.slug + '/' + str(self.index) + '/'
 
+    def allowed(self, user, activity_slug, page_index):
+        """
+        Returns True if the user is allowed to go to the page at /activity/<activity_slug>/<page_index>, having
+        completed the page just before this one
+        :return: boolean
+        """
+        if self.index == 1:
+            return True             # user is always allowed to go to the first page
+        else:
+            activity = Activity.objects.get(slug=activity_slug)
+            page = Page.objects.get(activity=activity, index=page_index)
+            try:
+                response = Response.objects.get(user=user, activity=activity, page=page)
+            except Response.DoesNotExist:
+                return False        # user has not responded to previous page
+            return True             # user has responded to previous page
+
     def previous(self):
-        # how do I make sure this doesn't lead the user to improper places or make sure it
-        # goes to display rather than input pages?
+        """
+        Returns the previous page if there is one, otherwise returns None
+        :return: '/activity/<activity_slug>/<page_index>/ or None
+        """
         index = self.index
         slug = self.activity.slug
         if index == 1:
@@ -74,8 +93,8 @@ class Page(models.Model):
 
     def next(self):
         """
-        Returns true if there is a next page to go to
-        :return: boolean
+        Returns the next page if there is one, otherwise returns None
+        :return: '/activity/<activity_slug>/<page_index>/ or None
         """
         index = self.index
         slug = self.activity.slug

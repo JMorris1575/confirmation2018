@@ -33,9 +33,14 @@
                 </p>
                 {% if responses %}
                     {% for response in responses %}
-                        <p class="discussion-response">
-                            {{ response.user.first_name }}: {{ response.essay }}
-                        </p>
+                        <div class="row">
+                            <div class="three columns discussion-name">
+                                {{ forloop.counter }}. {{ response.user.first_name }} {{ response.user.last_name }}:
+                            </div>
+                            <div class="nine columns discussion-response">
+                                {{ response.essay }}
+                            </div>
+                        </div>
                     {% endfor %}
                 {% endif %}
             </div>

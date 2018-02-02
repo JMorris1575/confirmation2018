@@ -45,10 +45,10 @@ class SummaryView(View):
         changing_msg = 'Up next...'
         for page in pages:
             if responses.filter(page=page.pk):
-                data.append((page, 'Completed'))
+                data.append((page, 'Completed'))    # If user has a response, call the page complete
             else:
-                data.append((page, changing_msg))
-                changing_msg = 'Pending'
+                data.append((page, changing_msg))   # The first time we get here changing_msg='Up next...'
+                changing_msg = 'Pending'            # after that, changing_msg='Pending' for the rest of the pages
         return render(request, self.template_name, {'activity': activity,
                                                     'data': data})
 
@@ -73,6 +73,8 @@ class PageView(ResponseMixin, View):
 
     def get(self, request, activity_slug, page_index):
         activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
+        if not page.allowed(request.user, activity_slug, page_index):
+            return redirect('summary', activity_slug)
         context = {'activity': activity, 'page': page, 'response': response}
         if page.page_type == 'IN':
             self.template_name = 'activity/instructions.html'
