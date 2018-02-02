@@ -73,9 +73,8 @@ class Page(models.Model):
         else:
             activity = Activity.objects.get(slug=activity_slug)
             page = Page.objects.get(activity=activity, index=page_index)
-            try:
-                response = Response.objects.get(user=user, activity=activity, page=page)
-            except Response.DoesNotExist:
+            responses = Response.objects.filter(user=user, activity=activity, page=page)
+            if len(responses) == 0:
                 return False        # user has not responded to previous page
             return True             # user has responded to previous page
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import Activity, Page, Response, Choice
+from config.mixins import ResponseMixin
 
 import datetime
 
@@ -27,7 +28,6 @@ class WelcomeView(View):
             else:
                 msg = 'Not Yet Available'
             data.append((activity, msg))
-        print('data = ', data)
         return render(request, self.template_name, {'data': data})
 
     def post(self, request):
@@ -53,29 +53,28 @@ class SummaryView(View):
                                                     'data': data})
 
 
-class ResponseMixin:
-
-    """
-    This mixin gets single responses from the Response model depending on the user, activity and page
-    """
-
-    def get_response_info(self, user=None, activity_slug=None, page_index=None):
-        activity = Activity.objects.get(slug=activity_slug)
-        page = Page.objects.get(activity=activity, index=page_index)
-        try:
-            response = Response.objects.get(user=user, activity=activity, page=page)
-        except Response.DoesNotExist:
-            response = None
-        return activity, page, response
+# class ResponseMixin:
+#
+#     """
+#     This mixin gets single responses from the Response model depending on the user, activity and page
+#     """
+#
+#     def get_response_info(self, user=None, activity_slug=None, page_index=None):
+#         activity = Activity.objects.get(slug=activity_slug)
+#         page = Page.objects.get(activity=activity, index=page_index)
+#         try:
+#             response = Response.objects.get(user=user, activity=activity, page=page)
+#         except Response.DoesNotExist:
+#             response = None
+#         return activity, page, response
 
 
 class PageView(ResponseMixin, View):
 
     def get(self, request, activity_slug, page_index):
-        activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)
-        context = {'activity': activity, 'page': page, 'response': response}
         if page.page_type == 'IN':
             self.template_name = 'activity/instructions.html'
         elif page.page_type == 'ES':
@@ -125,13 +124,12 @@ class PageView(ResponseMixin, View):
                 context['error_message'] = 'You must select either True or False.'
                 return render(request, self.template_name, context)
             response = Response(user=request.user, activity=activity,
-                                page=page, true_false=request.POST['choice'],
+                                page=page, true_false=user_response,
                                 completed=True)
             if not page.opinion:
                 response.correct = page.tf_answer
             response.save()
         elif page.page_type == 'DS':
-            print("I'm here in the PageView post method.")
             return redirect('discussion', activity_slug, page_index)
 
         return redirect('page', activity_slug, page_index )
@@ -140,8 +138,7 @@ class PageView(ResponseMixin, View):
 class PageEditView(ResponseMixin, View):
 
     def get(self, request, activity_slug=None, page_index=None):
-        activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
-        context = {'activity': activity, 'page': page, 'response': response}
+        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
         if page.page_type == 'ES':
             self.template_name = 'activity/essay_edit.html'
         elif page.page_type == 'MC':
@@ -149,6 +146,7 @@ class PageEditView(ResponseMixin, View):
             choices = Choice.objects.filter(page=page)
             context['choices'] = choices
         elif page.page_type == 'TF':
+            response = context['response']
             response.true_false = not response.true_false
             response.save()
             return redirect('page', activity_slug, page_index)
@@ -170,8 +168,7 @@ class PageEditView(ResponseMixin, View):
 class PageDeleteView(ResponseMixin, View):
 
     def get(self, request, activity_slug=None, page_index=None):
-        activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
-        context = {'activity':activity, 'page':page, 'response':response}
+        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
         if page.page_type == 'ES':
             self.template_name = 'activity/essay_delete.html'
         if page.page_type == 'MC':
@@ -181,8 +178,9 @@ class PageDeleteView(ResponseMixin, View):
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):
-        activity, page, response = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
         if request.POST['user-choice'] == 'Delete':
+            response = responses[0]
             response.delete()
             return redirect('summary', activity_slug)
         else:

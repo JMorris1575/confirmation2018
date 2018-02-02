@@ -35,10 +35,16 @@
                     {% for response in responses %}
                         <div class="row">
                             <div class="three columns discussion-name">
-                                {{ forloop.counter }}. {{ response.user.first_name }} {{ response.user.last_name }}:
+                                {{ forloop.counter }}.
+                                {% if page.discussion_type == 'OP' %}
+                                    {{ response.user.first_name }} {{ response.user.last_name }}:
+                                {% endif %}
                             </div>
                             <div class="nine columns discussion-response">
                                 {{ response.essay }}
+                                {% if response.user == user %}
+                                    <a href="{% url 'discussion_edit' activity.slug page.index %}">Edit</a>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}

@@ -1758,6 +1758,61 @@ Yep, he can!
 To fix this I think I will have to change the get method of the PageView to include some kind of test and, if the test
 fails sends the user back to the summary page for that activity.
 
+Refactoring ResponseMixin
++++++++++++++++++++++++++
+
+I had been testing the Discussion Page as Diego, who has made no responses yet. When I switched to myself I got an
+error about Response.objects.get returning too many objects. This was because calls to DiscussionView come through
+PageView in the activity app and PageView was presuming no more than one response to come from ``get_response_info``.
+
+My solution is klunky, but it seems to be working for the Discussion page anyway. I will have to test entry, editing
+and deleting on all of the different page types however since this change affects all of them.
+
+Also, I used the option of creating the ResponseMixin in ``config/mixins.py`` so it can be used by all apps, currently
+the activity app and the discussion app. Here is the ResponseMixin class::
+
+    class ResponseMixin:
+
+        """
+        This mixin gets a response or QuerySet of responses with the corresponding activity and page
+        from the user, activity_slug and page_index
+        """
+
+        def get_response_info(self, user=None, activity_slug=None, page_index=None):
+            activity = Activity.objects.get(slug=activity_slug)
+            page = Page.objects.get(activity=activity, index=page_index)
+            responses = Response.objects.filter(user=user, activity=activity, page=page)
+            single_response = None              # single_response = None for no responses and if there are more than one
+            if len(responses) == 1:
+                response = responses[0]
+            context = {'activity':activity, 'page':page, 'response':single_response}
+            return activity, page, responses, context
+
+This required a different approach in the views. Here is what I did in the get method of PageView::
+
+    class PageView(ResponseMixin, View):
+
+        def get(self, request, activity_slug, page_index):
+            activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+            if not page.allowed(request.user, activity_slug, page_index):
+                return redirect('summary', activity_slug)
+            if page.page_type == 'IN':
+                self.template_name = 'activity/instructions.html'
+            elif page.page_type == 'ES':
+                self.template_name = 'activity/essay.html'
+            elif page.page_type == 'MC':
+                self.template_name = 'activity/multi-choice.html'
+                choices = Choice.objects.filter(page=page)
+                context['choices'] = choices
+            elif page.page_type == 'TF':
+                self.template_name = 'activity/true-false.html'
+            elif page.page_type == 'DS':
+                return redirect('discussion', activity_slug, page_index)
+            return render(request, self.template_name, context)
+
+
+
+
 .. index:: Quizzes
 
 Idea for Quizzes
