@@ -11,10 +11,10 @@ class ResponseMixin:
         activity = Activity.objects.get(slug=activity_slug)
         page = Page.objects.get(activity=activity, index=page_index)
         responses = Response.objects.filter(user=user, activity=activity, page=page)
-        single_response = None              # single_response = None for no responses and if there are more than one
+        response = None              # single_response = None for no responses and if there are more than one
         if len(responses) == 1:
             response = responses[0]
-        context = {'activity':activity, 'page':page, 'response':single_response}
+        context = {'activity':activity, 'page':page, 'response':response}
         return activity, page, responses, context
 
 

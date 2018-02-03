@@ -11,10 +11,10 @@ class DiscussionView(ResponseMixin, View):
     template_name = 'discussion/discussion.html'
 
     def get(self, request, activity_slug=None, page_index=None):
-        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, user_responses, context = self.get_response_info(request.user, activity_slug, page_index)
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)
-        context['responses'] = responses                        # get_response_info only returns a single response
+        context['responses'] = Response.objects.filter(activity=activity, page=page)   # get all the page's responses
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):

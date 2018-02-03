@@ -72,7 +72,7 @@ class Page(models.Model):
             return True             # user is always allowed to go to the first page
         else:
             activity = Activity.objects.get(slug=activity_slug)
-            page = Page.objects.get(activity=activity, index=page_index)
+            page = Page.objects.get(activity=activity, index=page_index-1)
             responses = Response.objects.filter(user=user, activity=activity, page=page)
             if len(responses) == 0:
                 return False        # user has not responded to previous page

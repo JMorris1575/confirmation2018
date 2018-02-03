@@ -1549,8 +1549,8 @@ the multi_choice field in the Response model to PositiveSmallIntegerField. After
 ``migrate`` did not work complaining about how "" was an improper thing to be putting into an integer field. I had to
 use the admin to delete ALL of my existing responses in the database to get ``migrate`` to work.
 
-Editting and Deleting Multi-Choice Responses
-++++++++++++++++++++++++++++++++++++++++++++
+Editing and Deleting Multi-Choice Responses
++++++++++++++++++++++++++++++++++++++++++++
 
 This wasn't too difficult, except for the problem outlined above. It mostly just follows what I did for editing and
 deleting essay responses.
@@ -1810,8 +1810,41 @@ This required a different approach in the views. Here is what I did in the get m
                 return redirect('discussion', activity_slug, page_index)
             return render(request, self.template_name, context)
 
+Testing After the Refactor
+++++++++++++++++++++++++++
 
+I will sign in as Diego and try to do everything possible with each page. Here is a table of tests
 
+.. csv-table:: **Create, Edit and Delete Tests for Each Page Type After Refactoring ResponseMixin**
+    :header: Page, Display, Create, Review, Edit, Delete
+    :widths: auto
+
+    /noah/1/ 'IN', Yes, Yes, No(1), -, -
+    /noah/2/ 'ES', No(2), Yes, Yes, No(3), Yes
+    /noah/3/ 'MC' AE, Yes, Yes, Yes, -, -
+    /noah/4/ 'MC' A, Yes, Yes, Yes, -, -
+    /noah/5/ 'MC', Yes, Yes, No(4), Yes
+    /noah/6/ 'TF' AE, Yes, Yes, No(5), -, -
+    /noah/7/ 'TF', Yes, Yes, Yes, Yes, Yes
+    /noah/8/ 'DS', No(6), Yes, Yes, No(7), -
+
+Notes:
+
+#.  Somehow, in ResponseMixin I used ``response = responses[0]`` instead of ``single_response = responses[0]``
+    I think I'd like to use response throughout anyway.
+#.  After completing page 1 Diego could not get to page 2. I think ``allowed`` must be returning False.
+    It was. I was checking if the current page was completed not the previous page setting ``page=page_index-1`` did
+    the trick.
+#.  I neglected to modify the post method of PageEditView to expect four values back from ``get_response_info``
+    I also had to get the value of ``response`` from the context: ``response = context['response']``
+#.  I get back to the Review page but nothing is changed... because I had ``response.multi_coice`` at the crucial point
+    where the value was to change instead of ``response.multi_choice = request.POST['choice']``.
+#.  The explanation displays twice because I left an extra ``{{ page.explanation }}`` in ``true_false.html`` for
+    debugging.
+#.  Jim's answers do not display when Diego is logged in because ``get_response_info`` only returns the responses for
+    the current user. I need to put ``context['responses'] = Response.objects.filter(activity=activity, page=page)``
+    into it.
+#.  I haven't implemented editing yet for discussion entries. That's up next.
 
 .. index:: Quizzes
 
