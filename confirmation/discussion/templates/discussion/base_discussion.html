@@ -43,7 +43,7 @@
                             <div class="nine columns discussion-response">
                                 {{ response.essay }}
                                 {% if response.user == user %}
-                                    <a href="{% url 'discussion_edit' activity.slug page.index %}">Edit</a>
+                                    <a href="{% url 'discussion_edit' activity.slug page.index response.pk %}">Edit</a>
                                 {% endif %}
                             </div>
                         </div>

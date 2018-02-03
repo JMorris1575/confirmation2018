@@ -31,5 +31,11 @@ class DiscussionView(ResponseMixin, View):
         return redirect('discussion', activity_slug, page_index)
 
 
-class DiscussionEditView(View):
-    pass
+class DiscussionEditView(ResponseMixin, View):
+
+    def get(self, request, activity_slug=None, page_index=None, response_pk=None):
+        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+        response = Response.objects.get(pk=response_pk)
+        print('DiscussionEditView get: response = ', response)
+        context['response'] = response
+        return render(request, 'discussion/discussion_entry_edit.html', context)
