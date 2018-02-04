@@ -1,0 +1,17 @@
+{% extends 'discussion/base_discussion.html' %}
+
+{% block title %}
+    {{ block.super }}Edit Discussion Entry
+{% endblock %}
+
+{% block page-content %}
+    <p>Edit your response in the space below, then click the Submit button,
+        or confirm that you want to delete it entirely by pressing the Delete button.</p>
+    <form class="row separator" action="{% url 'discussion_edit' activity.slug page.index response.pk %}" method="post">
+        {% csrf_token %}
+        <textarea class="u-full-width text-field" name="entry" autofocus>{{ response.essay }}</textarea>
+        <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+    </form>
+    <a class="offset-by-four four columns button"
+       href="{% url 'discussion_delete' activity.slug page.index response.pk %}">Delete</a>
+{% endblock %}

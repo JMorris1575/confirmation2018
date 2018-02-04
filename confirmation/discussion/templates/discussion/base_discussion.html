@@ -25,8 +25,6 @@
                     {{ page.discussion_explanation }}
                 </p>
             </div>
-        </div>
-        <div class="offset-by-two eight columns activity-text shadowed">
             <div class="page-text row separator">
                 <p class="u-full-width discussion-heading">
                     {{ page.text }}
@@ -37,7 +35,9 @@
                             <div class="three columns discussion-name">
                                 {{ forloop.counter }}.
                                 {% if page.discussion_type == 'OP' %}
-                                    {{ response.user.first_name }} {{ response.user.last_name }}:
+                                    <div class="u-pull-right">
+                                        {{ response.user.first_name }} {{ response.user.last_name }}:
+                                    </div>
                                 {% endif %}
                             </div>
                             <div class="nine columns discussion-response">
@@ -50,6 +50,8 @@
                     {% endfor %}
                 {% endif %}
             </div>
+        </div>
+        <div class="offset-by-two eight columns activity-text shadowed">
             {% block page-content %}
             {% endblock %}
         </div>

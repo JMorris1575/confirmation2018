@@ -9,9 +9,9 @@
         {% csrf_token %}
         <p class="u-full-width">
             {% if not responses %}
-                Start the discussion by entering your response in the area below then click the Submit button.
+                Start the discussion by typing your response in the box below then click the Submit button.
             {% else %}
-                Add to the discussion by entering your thoughts in the area below then click the Submit button.
+                Add to the discussion by typing your thoughts in the box below then click the Submit button.
             {% endif %}
         </p>
         <textarea class="u-full-width text-field" name="entry" autofocus></textarea>

@@ -38,4 +38,14 @@ class DiscussionEditView(ResponseMixin, View):
         response = Response.objects.get(pk=response_pk)
         print('DiscussionEditView get: response = ', response)
         context['response'] = response
-        return render(request, 'discussion/discussion_entry_edit.html', context)
+        return render(request, 'discussion/discussion_edit.html', context)
+
+    def post(self, request, activity_slug=None, page_index=None, response_pk=None):
+        response = Response.objects.get(pk=response_pk)
+        response.essay = request.POST['entry']
+        response.save()
+        return redirect('discussion', activity_slug, page_index)
+
+
+class DiscussionDeleteView(ResponseMixin, View):
+    pass
