@@ -1,0 +1,14 @@
+<div class="row separator">
+    <div class="center-element offset-by-three six columns">
+        <a class="button u-pull-left five columns" type="button"
+           href="{% url 'edit' activity.slug page.index %}">
+            Edit
+        </a>
+        {% if response.can_delete %}
+            <a class="button u-pull-right five columns" type="button"
+               href="{% url 'delete' activity.slug page.index %}">
+                Delete
+            </a>
+        {% endif %}
+    </div>
+</div>

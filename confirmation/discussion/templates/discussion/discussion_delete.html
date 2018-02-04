@@ -1,0 +1,29 @@
+{% extends 'discussion/base_discussion.html' %}
+
+{% block title %}
+    {{ block.super }}Delete Discussion Entry
+{% endblock %}
+
+{% block page-content %}
+    <form class="row separator" action="{% url 'discussion_delete' activity.slug page.index response.pk %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="offset-by-one ten columns">
+                Your response:
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-by-one ten columns response-display">
+                {{ response.essay }}
+            </div>
+        </div>
+        <p>
+            Are you sure you want to delete this entry?
+        </p>
+        <div class="center-element offset-by-three six columns">
+            <input class="u-pull-left five columns button" name="user-choice" value="Delete" type="submit"/>
+            <input class="u-pull-right five columns button" name="user-choice" value="Cancel" type="submit"/>
+        </div>
+    </form>
+    {% include 'navigation.html' %}
+{% endblock %}
