@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block page-content %}
-    <form class="row" action="{% url 'discussion' activity.slug page.index %}" method="post">
+    <form class="row separator" action="{% url 'discussion' activity.slug page.index %}" method="post">
         {% csrf_token %}
         <p class="u-full-width">
             {% if not responses %}
@@ -17,8 +17,7 @@
         <textarea class="u-full-width text-field" name="entry" autofocus></textarea>
         <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
     </form>
-
-    </form>
+    {% include 'activity/navigation.html' %}
 
 {% endblock %}
 

@@ -129,6 +129,9 @@ class Response(models.Model):
     correct = models.NullBooleanField(null=True)
     completed = models.BooleanField(default=False)
 
+    class Meta():
+        ordering = ['created']
+
     def __str__(self):
         name = self.user.first_name + ' ' + self.user.last_name
         if name[-1] == 's':
