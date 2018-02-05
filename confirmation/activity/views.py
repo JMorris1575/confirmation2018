@@ -156,14 +156,15 @@ class PageEditView(ResponseMixin, View):
     def post(self, request, activity_slug=None, page_index=None):
         activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
         response = context['response']
-        if page.page_type == 'ES':
-            response.essay = request.POST['essay'].strip()
-            response.save()
-        elif page.page_type == 'MC':
-            print('PageEditView post: response.multi_choice before: ', response.multi_choice)
-            response.multi_choice = request.POST['choice']
-            print('PageEditView post: response.multi_choice after: ', response.multi_choice)
-            response.save()
+        if request.POST['button'] == 'OK':            # if it's 'Cancel' skip right to the redirect
+            if page.page_type == 'ES':
+                response.essay = request.POST['essay'].strip()
+                response.save()
+            elif page.page_type == 'MC':
+                print('PageEditView post: response.multi_choice before: ', response.multi_choice)
+                response.multi_choice = request.POST['choice']
+                print('PageEditView post: response.multi_choice after: ', response.multi_choice)
+                response.save()
 
         return redirect('page', activity_slug, page_index)
 
@@ -182,7 +183,7 @@ class PageDeleteView(ResponseMixin, View):
 
     def post(self, request, activity_slug=None, page_index=None):
         activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
-        if request.POST['user-choice'] == 'Delete':
+        if request.POST['button'] == 'Delete':
             response = responses[0]
             response.delete()
             return redirect('summary', activity_slug)

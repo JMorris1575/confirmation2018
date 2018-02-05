@@ -10,10 +10,7 @@
     <form class="row separator" action="{% url 'discussion_edit' activity.slug page.index response.pk %}" method="post">
         {% csrf_token %}
         <textarea class="u-full-width text-field" name="entry" autofocus>{{ response.essay }}</textarea>
-        <div class="offset-by-three six columns">
-            <input class="button-primary u-pull-left" name="button" value="Edit" type="submit"/>
-            <input class="button u-pull-right" name="button" value="Cancel" type="submit"/>
-        </div>
+        {% include 'ok-cancel.html' %}
     </form>
     <a class="offset-by-four four columns button"
        href="{% url 'discussion_delete' activity.slug page.index response.pk %}">Delete</a>

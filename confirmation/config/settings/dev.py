@@ -5,6 +5,8 @@ import os
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#ALLOWED_HOSTS = ['localhost:8000'] # added temporarily for when DEBUG = False
+
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 

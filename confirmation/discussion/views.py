@@ -40,7 +40,7 @@ class DiscussionEditView(ResponseMixin, View):
         return render(request, 'discussion/discussion_edit.html', context)
 
     def post(self, request, activity_slug=None, page_index=None, response_pk=None):
-        if request.POST['button'] == 'Edit':
+        if request.POST['button'] == 'OK':
             response = Response.objects.get(pk=response_pk)
             response.essay = request.POST['entry']
             response.save()

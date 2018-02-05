@@ -9,9 +9,6 @@
     <form class="row separator" action="{% url 'edit' activity.slug page.index %}" method="post">
         {% csrf_token %}
         <textarea class="u-full-width text-field" name="essay" autofocus>{{ response.essay }}</textarea>
-        <div class="offset-by-three six columns">
-            <input class="button-primary u-pull-left" value="Submit" type="submit"/>
-            <input class="button u-pull-right" value="Cancel" type="submit"/>
-        </div>
+        {% include 'ok-cancel.html' %}
     </form>
 {% endblock %}
