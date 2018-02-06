@@ -1539,7 +1539,7 @@ giveen:
 To create and test this requires another change to the information in the database so that I have all three
 possibilities represented.
 
-..index:: Problems; database migration
+.. index:: Problems; database migration
 
 Database Changes
 ++++++++++++++++
@@ -1548,6 +1548,33 @@ In the process of getting the Edit function of the third type of page to work I 
 the multi_choice field in the Response model to PositiveSmallIntegerField. After doing the ``makemigrations`` the
 ``migrate`` did not work complaining about how "" was an improper thing to be putting into an integer field. I had to
 use the admin to delete ALL of my existing responses in the database to get ``migrate`` to work.
+
+Later I tried that on my office computer and coldn't get into Responses in the admin program. It complained something
+about "column activity_page.discussion_type does not exist..." I will try to do loaddata from the most recent fixture...
+
+That didn't work either, and with a similar error message. Something seems to be wrong with the discussion_type field on
+this computer. Let's see if I can get into the other models in the admin...
+
+Activity: Yes
+Choice: Yes (but it only has one set of choices)
+Image: Yes
+Page: No: "column activity_page.discussion_type does not exist"
+
+Perhaps I need to use PGAdmin to see what's going on...
+
+Once I finally got into PgAdmin4 I could see there was no discussion_type field in the activity_page table. Perhaps I
+forgot to include one of the migrations in git...
+
+Nope, it's there, ``0017_auto_20180201_1636.py`` from when I was at home last Thursday.
+
+Perhaps I need to delete the whole database on this machine and then recreate it with ``migrate`` and ``loaddata``.
+
+That almost worked. The only problem was that I don't have an up-to-date datadump from the auth.user app. I'll have
+to create one tonight on the rectory computer.
+
+Time for a commit and push...
+
+
 
 Editing and Deleting Multi-Choice Responses
 +++++++++++++++++++++++++++++++++++++++++++
