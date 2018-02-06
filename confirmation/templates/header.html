@@ -12,15 +12,23 @@
             <div class="ten columns">
                 <h2 class="logo">St. Basil Confirmation Activities</h2>
             </div>
-            <div class="u-pull-right">
+            <div class="u-pull-left welcome">
+                {% if user.is_authenticated %}
+                    <div class="welcome">Welcome {{ user.first_name }}!</div>
+                {% endif %}
+            </div>
+            <div class="u-pull-left welcome">
                 {% if user.is_authenticated %}
                     <a class="link" href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
                 {% endif %}
             </div>
-            <div class="u-pull-right">
-                {% if user.is_authenticated %}
-                    <div class="welcome">Welcome {{ user.first_name }}</div>
-                {% endif %}
+            <div class="dropdown u-pull-right">
+                <button class="dropbtn">Help</button>
+                <div class="dropdown-content">
+                    <a href="#">Finding Scriptures</a>
+                    <a href="#">Using the Website</a>
+                    <a href="#">About</a>
+                </div>
             </div>
         </header>
     </div><!-- container -->
