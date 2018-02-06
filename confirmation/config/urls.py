@@ -17,9 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
+from .views import HelpView
+
 urlpatterns = [
     path('', RedirectView.as_view(url='user/login/')),
     path('user/', include('user.urls'), name='dj-auth'),
+    path('help/<page_name>/', HelpView.as_view(), name="scripture"),
     path('activity/', include('activity.urls')),
     path('admin/', admin.site.urls),
     path('discussion/', include('discussion.urls')),
