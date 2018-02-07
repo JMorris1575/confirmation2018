@@ -1,1 +1,6 @@
-{% include page_file_name %}
+{% extends parent_template|default:"base.html" %}
+{% load static %}
+
+{% block content %}
+    {% include page_file_name %}
+{% endblock %}
