@@ -32,20 +32,33 @@
                 {% if responses %}
                     {% for response in responses %}
                         <div class="row">
-                            <div class="three columns discussion-name">
-                                {{ forloop.counter }}.
-                                {% if page.discussion_type == 'OP' %}
-                                    <div class="u-pull-right">
-                                        {{ response.user.first_name }} {{ response.user.last_name }}:
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="nine columns discussion-response">
-                                {{ response.essay }}
-                                {% if response.user == user %}
-                                    <a href="{% url 'discussion_edit' activity.slug page.index response.pk %}">Edit</a>
-                                {% endif %}
-                            </div>
+                            {% if page.discussion_type == 'OP' %}
+                                <div class="three columns discussion-name">
+                                    {{ forloop.counter }}.
+                                        <div class="u-pull-right">
+                                            {{ response.user.first_name }} {{ response.user.last_name }}:
+                                        </div>
+                                </div>
+                                <div class="nine columns discussion-response">
+                                    {{ response.essay }}
+                                    {% if response.user == user %}
+                                        <a href="{% url 'discussion_edit' activity.slug page.index response.pk %}">
+                                            Edit
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div class="twelve columns discussion-response">
+                                    {{ forloop.counter }}. {{ response.essay }}
+                                    {% if page.discussion_type != 'AN' %}
+                                        {% if response.user == user %}
+                                            <a href="{% url 'discussion_edit' activity.slug page.index response.pk %}">
+                                                Edit
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 {% endif %}

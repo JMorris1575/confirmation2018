@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from activity.models import Activity, Page, Response, Choice
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import User
 from config.mixins import ResponseMixin
 
 
@@ -23,7 +23,7 @@ class DiscussionView(ResponseMixin, View):
         if page.discussion_type == 'OP' or page.discussion_type == 'SA':
             user = request.user
         else:
-            user = AnonymousUser
+            user = User.objects.get(username='Unknown')
         if len(entry) != 0:
             response = Response(user=user, activity=activity, page=page,
                                 essay=entry, completed=True)

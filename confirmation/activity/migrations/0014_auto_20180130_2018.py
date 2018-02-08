@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='response',
-            name='true_false',
+            name='true_false.html',
             field=models.BooleanField(default=False),
         ),
     ]

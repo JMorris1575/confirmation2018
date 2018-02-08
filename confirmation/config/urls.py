@@ -23,7 +23,7 @@ from .views import HelpView
 urlpatterns = [
     path('', RedirectView.as_view(url='user/login/')),
     path('user/', include('user.urls'), name='dj-auth'),
-    path('help/<page_name>/', login_required(HelpView.as_view()), name="scripture"),
+    path('help/', include('help.urls')),
     path('activity/', include('activity.urls')),
     path('admin/', admin.site.urls),
     path('discussion/', include('discussion.urls')),

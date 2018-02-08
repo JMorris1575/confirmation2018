@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'activity.apps.ActivityConfig',
     'discussion.apps.DiscussionConfig',
+    'help.apps.HelpConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

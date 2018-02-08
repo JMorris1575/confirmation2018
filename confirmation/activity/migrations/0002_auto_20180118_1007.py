@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                 ('last_edited', models.DateTimeField(auto_now=True)),
                 ('essay', models.TextField(blank=True)),
                 ('multi_choice', models.CharField(blank=True, max_length=1)),
-                ('true_false', models.BooleanField()),
+                ('true_false.html', models.BooleanField()),
                 ('correct', models.BooleanField()),
             ],
         ),

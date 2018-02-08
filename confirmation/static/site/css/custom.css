@@ -8,6 +8,11 @@ header {
         font-family: 'Gloria Hallelujah', cursive;
 }
 
+th.pad-override,
+td.pad-override {
+    padding-left: 15px;
+}
+
 .activity-text {
     font-family: 'Arial', sans;
     font-size: 1.2em;

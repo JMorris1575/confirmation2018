@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='response',
-            name='true_false',
+            name='true_false.html',
             field=models.NullBooleanField(),
         ),
     ]

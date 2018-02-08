@@ -72,6 +72,7 @@ class SummaryView(View):
 class PageView(ResponseMixin, View):
 
     def get(self, request, activity_slug, page_index):
+        print('PageView.get request.COOKIES = ', request.COOKIES)
         activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)

@@ -1878,15 +1878,85 @@ Implementing the Edit Link for Discussion Entries
 
 I can probably follow the style of the PageEditView here.
 
+Implementing Semi-confidential Discussions
+++++++++++++++++++++++++++++++++++++++++++
+
+I think the view is already done but I have to change the way the template displays discussion entries depending on the
+type of discussion. If it is an 'OP' discussion it should display the name, otherwise not. I made sure that the Edit
+links will not show up for 'AN' discussions because if an Anonymous user does happen upon the site somehow, he or she
+would be able to edit all of those entries!
+
+Here is the pertinent part of ``base_discussion.html``::
+
+    {% for response in responses %}
+        <div class="row">
+            {% if page.discussion_type == 'OP' %}
+                <div class="three columns discussion-name">
+                    {{ forloop.counter }}.
+                        <div class="u-pull-right">
+                            {{ response.user.first_name }} {{ response.user.last_name }}:
+                        </div>
+                </div>
+                <div class="nine columns discussion-response">
+                    {{ response.essay }}
+                    {% if response.user == user %}
+                        <a href="{% url 'discussion_edit' activity.slug page.index response.pk %}">
+                            Edit
+                        </a>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="twelve columns discussion-response">
+                    {{ forloop.counter }}. {{ response.essay }}
+                    {% if page.discussion_type != 'AN' %}
+                        {% if response.user == user %}
+                            <a href="{% url 'discussion_edit' activity.slug page.index response.pk %}">
+                                Edit
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+Now to see if it works.
+
+To test it I will first change the type of "The Message of the Story" discussion to 'SA' and see if the names still
+print...
+
+They do not. Also, Edit links appear next to the appropriate entries.
+
+Now to try 'AN' type discussions. I will have to make an entry to see how it gets recorded...
+
+The discussion page does not show any Edit links. Good!  However, I cannot use the AnonymousUser to save the response
+since it is not a User instance. I suppose that means I will have to create my own AnonymousUser. Maybe I will call it
+'Unknown.'
+
+I did that, giving it a password of 'unknown1234554321nwonknu' (notice the mirror reversal). I gave it a first name of
+'Unknown' so it would display in the admin app but did not give it a LastName or an e-mail address.  I unchecked
+'Active.' When I create things that list all the users I will have to find a way not to list Mr./Ms. Unknown.
+
+Now it was able to accept and display my test entry and, in the admin, it displayed as being created by 'Unknown.' Yay!
+I have deleted it and will go back to having "The Message of the Story" be an 'OP' discussion.
+
+Plans
+-----
+
+*   Make it possible to have multiple, linked, help pages (with the menu selection opening to an index--help app?).
+*   Implement Quizzes
+*   Create and implement e-mail app
+*   Start working on activity creation pages
+*   At some point, deploy to webfaction
+
 .. index:: Quizzes
 
 Idea for Quizzes
 ----------------
 
-The next thing up is to implement multiple-choice pages but it occurred to me that it might be nice to be able to
-collect multiple-choice questions into a single entity, called a quiz?, instead of putting them into activities one by
-one. Then why not allow a mix of questions: multiple-choice, essay, True/False, and maybe even implement matching type
-questions.
+The next thing up is to implement multiple-choice pages. (I started this section well before getting around to
+implementing it.) It occurred to me, though, that it might be nice to be able to collect multiple-choice questions
+into a single entity, called a quiz(?), instead of putting them into activities one by one. Then why not allow a mix of
+questions: multiple-choice, essay, True/False, and maybe even implement matching type questions?
 
 I think this could be done by creating another model called Quiz, and maybe learn how to get the admin to call the
 plural "Quizzes." I would have to add an optional field to each page type to refer to the quiz it belongs to and then
@@ -1894,9 +1964,94 @@ put a quiz into the activity instead of the individual pages. I could also devel
 quizzes. I'm thinking it could display the questions and their answers as they proceed through the quiz and then, after
 they submit the whole thing, I can give them instant results, and prevent them from changing their answers.
 
-I decided to delay the implementation of this feature until after the basic site is done.
+I first decided to delay the implementation of this feature until after the basic site is done, perhaps because I
+couldn't figure out how the view would work, but now I think I have. The PageView, when it came to quiz questions, could
+load up the list of questions and then CALL it's own ``get`` method with all the proper parameters instead of returning
+a request right away. I may have to study exactly what is in a request to make it work properly since it wouldn't do to
+keep calling the same page over and over again. I suspect I should do that first.
 
-I also decided to put this section outside the page implementation section.
+Studying the Request
+********************
 
+I can put a print statement into the PageView and then visit any page to see what is included in a request...
 
+Well, that didn't work. Simply printing a request did not list, for instance, the .user component. What other components
+might there be? I'll have to look into the Django documentation...
+
+As I did, finding out that the request object contains a lot of information, and information that mostly can't be
+changed besides, it also occurred to me that my plan of calling the ``get`` method from within the ``get`` method will
+not work. It's not because a method can't recursively call itself, it can, the problem is that when the ``get`` method
+determines, say, that the desired page is a multi-choice page it will do a ``return render`` and try to go back to the
+calling method (itself) which, I suppose, could used the returned response to display the right page somehow but where
+would it go after that? If the user submits the filled out form it will go to the ``post`` method and I don't see how it
+would ever get back to the loop that was looping through the quiz questions.
+
+That's the problem, it seems to me, how to get back to the loop that is counting through the quiz questions. Perhaps
+there is something I can add to the url, like a %next% or some such thing.
+
+.. index error pages
+
+By the way, I found something about error handlers at https://docs.djangoproject.com/en/2.0/topics/http/urls/ that
+might be of use when I'm trying to get my own error pages to display -- such as ``404.html``.
+
+The same page spoke of Passing extra options to view functions (would it work for view classes?) that perhaps I can
+figure out how to use. But not right now. Maybe I could implement quizzes something like the summary page. Upon clicking
+the button in the Activity's summary page the user would get to a list of quiz questions which may or may not have to be
+completed in order. Perhaps it could somehow send back to the summary page (with a model method?) how much the user has
+completed so far.
+
+In any case, perhaps I was right to delay the quiz feature until later. It is important, I think, to have something up
+and running soon.
+
+A Possible Help App
+-------------------
+
+But it would be good to make the help system more than one page. Here is a possible outline:
+
+#.  Getting into the Confirmation Website
+#.  The Welcome Page
+#.  Activity Summary Pages
+#.  Written Response Pages
+#.  Multiple Choice Pages
+#.  True/False Pages
+#.  Discussion Pages
+
+Starting the Help App
+*********************
+
+Should be easy: ``python manage.py startapp help``...
+
+It was easy! Now to add it to the INSTALLED_APPS...
+
+That was easy too! Now to add all the files to git. (By the way, the files ``startapp`` created are: __init.py__,
+admin.py, apps.py, models.py, tests.py and views.py. There is no urls.py. I may need to read up on the latest approach
+to urls which I noticed at https://docs.djangoproject.com/en/2.0/topics/http/urls/ was different than what I've been
+doing.
+
+I remembered to include the __init__.py file under the migrations folder in git too.
+
+New Approach to urls.py?
+************************
+
+In the section on *Including other URLconfs*, the documentation mentioned above used this kind of location for the
+urls::
+
+    # In settings/urls/main.py
+
+    # In foo/urls/blog.py
+
+so I was wondering whether having a urls folder and an <appname>.py file inside it was now the recommended place to have
+URLconfs. If so, why?
+
+I didn't find anything in that part of the documentation so I thought I'd look at the current version of the tutorial
+pages...
+
+The first page of the tutorial had the usual scheme of having a urls.py file in the app directory so I will continue
+with that practice for now. I should probably re-do the tutorial, however, to notice anything that has changed and, most
+especially, to do the later parts.
+
+Getting to the Views
+********************
+
+I need to create a help/urls.py file, give it some URLconfs and add a path in my config/urls.py file to get to it.
 
