@@ -17,8 +17,8 @@ class Activity(models.Model):
     slug = models.SlugField(max_length=20, unique=True)
     overview = models.CharField(max_length=512, blank=True)
     image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, blank=True)
-    publish_date = models.DateField()
-    closing_date = models.DateField()
+    publish_date = models.DateField(null=True)
+    closing_date = models.DateField(null=True)
     visible = models.BooleanField(default=False)
 
     def __str__(self):

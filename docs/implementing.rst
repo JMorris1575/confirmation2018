@@ -2055,3 +2055,192 @@ Getting to the Views
 
 I need to create a help/urls.py file, give it some URLconfs and add a path in my config/urls.py file to get to it.
 
+That worked fine, once I had the right syntax in my ``path()`` statements. I got it to work with new models in the help
+app, and new templates in the help app.
+
+.. index:: Problems: migrations again!
+
+Weird Problem with Makemigrations
+*********************************
+
+But, while adding the new templates I accidentally created a file named ``true_false`` instead of ``true_false.html``
+and tried to rename it. PyCharm did one of its refactor things and, somehow, my ``true_false`` field in the Response
+model got changed to ``true_false.html`` not what I intended at all. Unfortunately, now when I try a ``makemigrations``
+it asks if I've changed it and, whether I respond 'y' or 'N' it seems to make a migration file that can't be used by
+``migrate``. I've tried deleting just those files but then the question comes up again. I have backed up all of the
+files in the confirmation2018 project and I am going to delete ALL of the migrations files except for
+``0001_initial.py`` in each app.
+
+I checked with PgAdmin4 -- after updating it in a strange way that leaves it as a separate program on my Start Menu
+instead of being listed under PostgreSQL10 as it was before (Home Computer) -- but the activity_response table had NOT
+been changed. So this delete migration files trick might work. It will be like I have created all the models fresh...I
+hope...
+
+It didn't seem to work. I got "django.db.utils/ProgrammingError: relation "activity_choice" already exists" meaning, I
+think, that the database already has a table for the Choice model. I will try to create a new database ``conf18-1`` to
+see if I can use that...
+
+O.K. That worked. Of course I had to change the DATABASE_NAME setting in conf_secrets.json. I will also have to run a
+loaddata on my most recent fixture...
+
+That didn't work because I had not created my four groups: Candidate, Team, Supervisor and Administrator. I have now
+created them, in that order, and will try loaddata again...
+
+It worked! Or at least it seemed to. I will have to check the users to see that they are in the right groups and have
+the right permissions...
+
+Yep! Everything seems to be set up properly. There are no entries in the help app, of course. I will have to recreate
+those.
+
+Synchronizing My Computers After the Migrations Problem
+*******************************************************
+
+Here are the steps I think I will need to follow:
+
+*   Do a git pull
+*   Use PgAdmin4 to create a new conf18-1 database
+*   Adjust conf-secrets.json accordingly
+*   Do a migrate
+*   Create a superuser (yourself)
+*   Create four groups: Candidate, Team, Supervisor and Administrator in that order
+*   Load data from the latest fixture
+
+Continuing With the help App
+****************************
+
+I added the category of 'usage' to the HelpCategory model (which needs something to tell it how to properly pluralize)
+and added welcome, summary, written_response, multi_choice, true_false and discussion, in that order, to the HelpPage
+model. The system can locate each help page from the index but I have yet to implement the ability to make Next and
+Previous links or buttons or figure out a way the user can go back to the last page he or she visited (aside from using
+the browser's Back button of course -- perhaps that is not a necessary feature.)
+
+After some difficulty, and some additional entries in the HelpCategory model, I was able to get it all to work. Here are
+some example files:
+
+**help/urls.py**::
+
+    from django.urls import path, include
+    from django.views.generic import RedirectView
+    from django.contrib.auth.decorators import login_required
+
+    from .views import HelpView
+
+    urlpatterns = [
+        path('', RedirectView.as_view(url='help/index/')),
+        path('<category_name>/', HelpView.as_view(), name='help_page'),
+        path('<category_name>/<int:page_number>/', HelpView.as_view(), name='numbered_help_page'),
+    ]
+
+**help/views.py**::
+
+    from django.shortcuts import render, redirect
+    from django.views import View
+    from .models import HelpCategory, HelpPage
+
+
+    class HelpView(View):
+        template_name = 'help/help.html'
+
+        def get(self, request, category_name, page_number=None):
+            category = HelpCategory.objects.get(name=category_name)
+            if not page_number:
+                context = {'page_file_name': 'help/' + category_name + '.html',
+                           'category': category_name, 'previous': None, 'next': None}
+            else:
+                help_page = HelpPage.objects.get(category=category, page=page_number)
+                page_count = len(HelpPage.objects.filter(category=category))
+                page_number = help_page.page
+                previous_page_num = page_number - 1
+                if previous_page_num <= 0:
+                    previous = None
+                else:
+                    previous = previous_page_num
+                next_page_num = page_number + 1
+                if next_page_num > page_count:
+                    next_page = None
+                else:
+                    next_page = next_page_num
+                context = {'page_file_name': 'help/' + help_page.page_name + '.html',
+                           'category': category_name, 'previous': previous, 'next': next_page}
+            return render(request, self.template_name, context)
+
+**help/templates/help.html**::
+
+    {% extends parent_template|default:"base.html" %}
+    {% load static %}
+
+    {% block content %}
+        <div class="container">
+            {% include page_file_name %}
+            <div class="twelve columns">
+                {% if previous %}
+                    <a class="u-pull-left" href="{% url 'numbered_help_page' category previous %}">Previous</a>
+                {% endif %}
+                {% if next %}
+                    <a class="u-pull-right" href="{% url 'numbered_help_page' category next %}">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endblock %}
+
+**help/templates/index.html**::
+
+    {% load static %}
+
+    <div class="container">
+        <h1>Help Index</h1>
+        <h2>Here is a list of the help topics available:</h2>
+        <ul>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 1 %}">The Welcome Page</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 2 %}">The Acitivity Summary Page</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 3 %}">Written Response Pages</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 4 %}">Multiple Choice Pages</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 5 %}">True/False Pages</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 6 %}">Discussion Pages</a>
+            </li>
+        </ul>
+    </div>
+
+**help/templates/summary.html** (unfinished)::
+
+    {% load static %}
+
+        <h1>The Activity Summary Page</h1>
+
+It seems like a crazy system to me: if a url is given with no page number it goes one place, with a page number it goes
+another.
+
+I don't know what will happen in testing, when I try to get into pages improperly. Hopefully the correct html error page
+will eventually show up but I don't want to mess with that now.
+
+I can fill out the various help page stubs as I get around to it but hopefully before putting it all online.
+
+Changes to Help Models
+**********************
+
+I need to learn how to get the admin to properly pluralize the HelpCategory model to "Help categories." Also the
+HelpPage model needs to be unique for category and page_number, which, by the way, reminds me that the field named
+"page" should be called "page_number." First I will make the changes in the models, then do a makemigrations and
+finally a migrate. I may end up having to change some things in help/views.py if PyCharm's refactoring doesn't
+do it. Here goes nothing...
+
+
+
+Building an E-mail System
+-------------------------
+
+Once I get an e-mail system I've got version 0.5 ready for deployment. I plan to present it to Sylvia first, and get her
+ideas, then, after some fixes, open it up to the team members for their comments. Then it will be time to develop some
+actual content. Maybe I will have an easier way to do that by that time. Finally, it will be time to present it to the
+candidates and see what happens.

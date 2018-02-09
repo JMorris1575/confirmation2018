@@ -2,5 +2,15 @@
 {% load static %}
 
 {% block content %}
-    {% include page_file_name %}
+    <div class="container">
+        {% include page_file_name %}
+        <div class="twelve columns">
+            {% if previous %}
+                <a class="u-pull-left" href="{% url 'numbered_help_page' category previous %}">Previous</a>
+            {% endif %}
+            {% if next %}
+                <a class="u-pull-right" href="{% url 'numbered_help_page' category next %}">Next</a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

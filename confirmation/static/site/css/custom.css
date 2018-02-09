@@ -50,9 +50,9 @@ td.pad-override {
     border-color: transparent;
 }
 
- .button.button-primary:hover,
-  button.button-primary:hover,
-  input[type="submit"].button-primary:hover,
+.button.button-primary:hover,
+ button.button-primary:hover,
+ input[type="submit"].button-primary:hover,
 .button.button-primary:focus,
  button.button-primary:focus,
  input[type="submit"].button-primary:focus {
@@ -103,7 +103,7 @@ td.pad-override {
     font-size: 0.8em;
 }
 
-/* borrowed from https//www.w3schools.com/howto/howto_css_dropdown.asp */
+/* adapted from https//www.w3schools.com/howto/howto_css_dropdown.asp */
 
 .dropbtn {
     font-family: 'Arial', sans;
@@ -150,6 +150,8 @@ td.pad-override {
     color: red;
 }
 
+/* End of adapted section */
+
 .page-image {
     float: right;
 }
@@ -163,11 +165,12 @@ td.pad-override {
 .info-box {
     font-family: 'Arial', sans;
     font-size: 1.2em;
-    color: #d40000;
+    color: #ffdd55;
+    background-color: #d40000;
     padding: 10px 50px 10px 50px;
     margin-top: 20px;
     margin-bottom: 20px;
-    border-color: black;
+    border-color: #d40000;
     border-width: 1px;
     border-style: solid;
     border-radius: 5px;
