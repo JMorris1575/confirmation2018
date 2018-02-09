@@ -18,7 +18,8 @@ class HelpPage(models.Model):
     name = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.page_name
+        return str(self.category) + ": " + str(self.number) + '. ' + self.name
 
     class Meta():
         unique_together = (("category", "number"))
+        ordering = ['category', 'number']
