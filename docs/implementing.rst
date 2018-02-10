@@ -2308,8 +2308,13 @@ URL Scheme
 **********
 
 If it all comes down to one page, the url scheme is easy: ``/email/`` gets you to the e-mail page, but only if you are
-an administrator. I still haven't learned how to do that but I think it would be in the view.
+a Supervisor. I still haven't learned how to do that but I think it would be in the view.
 
 Ceating and Implementing the E-mail App
 ---------------------------------------
 
+The Menu Link
+*************
+
+Adding the menu link to the header should be easy, and this is where I should be able to learn how to restrict viewing
+that link to Supervisors and Administrators.
