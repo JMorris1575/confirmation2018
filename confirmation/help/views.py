@@ -12,9 +12,9 @@ class HelpView(View):
             context = {'page_file_name': 'help/' + category_name + '.html',
                        'category': category_name, 'previous': None, 'next': None}
         else:
-            help_page = HelpPage.objects.get(category=category, page=page_number)
+            help_page = HelpPage.objects.get(category=category, number=page_number)
             page_count = len(HelpPage.objects.filter(category=category))
-            page_number = help_page.page
+            page_number = help_page.number
             previous_page_num = page_number - 1
             if previous_page_num <= 0:
                 previous = None
@@ -25,6 +25,6 @@ class HelpView(View):
                 next_page = None
             else:
                 next_page = next_page_num
-            context = {'page_file_name': 'help/' + help_page.page_name + '.html',
+            context = {'page_file_name': 'help/' + help_page.name + '.html',
                        'category': category_name, 'previous': previous, 'next': next_page}
         return render(request, self.template_name, context)

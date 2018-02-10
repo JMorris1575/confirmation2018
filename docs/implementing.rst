@@ -1989,7 +1989,7 @@ would ever get back to the loop that was looping through the quiz questions.
 That's the problem, it seems to me, how to get back to the loop that is counting through the quiz questions. Perhaps
 there is something I can add to the url, like a %next% or some such thing.
 
-.. index error pages
+.. index:: error pages
 
 By the way, I found something about error handlers at https://docs.djangoproject.com/en/2.0/topics/http/urls/ that
 might be of use when I'm trying to get my own error pages to display -- such as ``404.html``.
@@ -2100,10 +2100,15 @@ Here are the steps I think I will need to follow:
 *   Do a git pull
 *   Use PgAdmin4 to create a new conf18-1 database
 *   Adjust conf-secrets.json accordingly
-*   Do a migrate
+*   Do a migrate (the proper migration files have been pulled in)
 *   Create a superuser (yourself)
 *   Create four groups: Candidate, Team, Supervisor and Administrator in that order
 *   Load data from the latest fixture
+
+.. _update_fields:
+
+It worked fine on the Rectory Computer but I discovered that the help/views.py file needed to be updated to the current
+field names.
 
 Continuing With the help App
 ****************************
@@ -2235,12 +2240,76 @@ HelpPage model needs to be unique for category and page_number, which, by the wa
 finally a migrate. I may end up having to change some things in help/views.py if PyCharm's refactoring doesn't
 do it. Here goes nothing...
 
+I discovered when I synced the Rectory computer that I hadn't updated help/views.py. (:ref:`See above<update_fields>`)
 
-
-Building an E-mail System
--------------------------
+Plans
+-----
 
 Once I get an e-mail system I've got version 0.5 ready for deployment. I plan to present it to Sylvia first, and get her
 ideas, then, after some fixes, open it up to the team members for their comments. Then it will be time to develop some
 actual content. Maybe I will have an easier way to do that by that time. Finally, it will be time to present it to the
 candidates and see what happens.
+
+Building an E-mail System
+-------------------------
+
+Here are the steps I imagine myself taking:
+
+#.  Study django documentation to figure out how to get "practice" e-mail on the local system
+#.  Think about how you want to use the e-mail system
+#.  Plan the pages you will want/need
+#.  Work out a url scheme
+#.  Create and implement an e-mail app
+
+E-mail on the Local System
+**************************
+
+Things I learned:
+
+*   https://docs.djangoproject.com/en/2.0/topics/email/ is the page with the e-mail information I want
+*   the line ``from django.core.mail import send_mail`` will need to be in the views.py file (if I use it)
+*   ``send_mail()`` is used to send the mail
+*   ``subject``, ``message``, ``from_email`` and ``recipient_list`` are required parameters
+*   there is also a ``send_mass_mail()`` option - both sending methods reveal all of the To: email addresses
+*   ``mail_admins()`` might be useful for getting feedback from users - but I might not want to
+*   bcc can only be done by creating **EmailMessage** instances directly
+*   To send "e-mails" to stdout use ``EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'``
+*   That line is already present in my ``config/settings/dev.py`` file since it came from the Christmas website
+
+Thinking About E-mail
+*********************
+
+I will want to send mass e-mails, such as the invitation e-mail when the system is finally on line. I will want to have
+a system like I used for the Christmas website to use my own "template language" for such things as <name>, <username>
+and <password>. I will want the option to send individual or small group e-mails.
+
+In these things what I have in mind is exactly like the Chrismas website. Is there anything more? Would it be possible
+to e-mail Team feedback on the site? Perhaps, but it makes more sense to have the comments visible there instead so that
+everyone can see what everyone has said. (Names or no names? That is the question.)
+
+I think I'll stick to the same plan I used for the Christmas website but improve the looks and the functionality of the
+corresponding web pages.
+
+Planning the E-mail Pages
+*************************
+
+Perhaps I could have the possibility of composing mass e-mails, complete with "template variables" right in the
+application. That would require a model to keep the e-mails for later editing should I so desire. That would require
+a name for the e-mail being saved too.
+
+Actually, I think I've already done that in the Christmas website on the individual/sub-group e-mail page, though I
+don't think it got saved nor could it handle variables. That sounds like I may only need one page both to compose the
+e-mail and select the recipients - including a "select all" option.
+
+I think I should be able to list all the candidates alphabetically in columns. Maybe have team members listed
+separately.
+
+URL Scheme
+**********
+
+If it all comes down to one page, the url scheme is easy: ``/email/`` gets you to the e-mail page, but only if you are
+an administrator. I still haven't learned how to do that but I think it would be in the view.
+
+Ceating and Implementing the E-mail App
+---------------------------------------
+
