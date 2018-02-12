@@ -14,6 +14,7 @@ Welcome to Confirmation Website's documentation!
    startup
    planning
    implementing
+   team_sections
 
 
 Indices and tables

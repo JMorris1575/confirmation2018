@@ -26,6 +26,7 @@ class Activity(models.Model):
 
     class Meta:
         ordering = ['index']
+        verbose_name_plural = 'activities'
 
 
 class Page(models.Model):

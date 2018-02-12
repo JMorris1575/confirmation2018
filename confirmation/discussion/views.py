@@ -2,12 +2,12 @@ from django.shortcuts import render, redirect
 from django.views import View
 from activity.models import Activity, Page, Response, Choice
 from django.contrib.auth.models import User
-from config.mixins import ResponseMixin
+from config.mixins import PageMixin
 
 
 # Create your views here.
 
-class DiscussionView(ResponseMixin, View):
+class DiscussionView(PageMixin, View):
     template_name = 'discussion/discussion.html'
 
     def get(self, request, activity_slug=None, page_index=None):
@@ -31,7 +31,7 @@ class DiscussionView(ResponseMixin, View):
         return redirect('discussion', activity_slug, page_index)
 
 
-class DiscussionEditView(ResponseMixin, View):
+class DiscussionEditView(PageMixin, View):
 
     def get(self, request, activity_slug=None, page_index=None, response_pk=None):
         activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
@@ -47,7 +47,7 @@ class DiscussionEditView(ResponseMixin, View):
         return redirect('discussion', activity_slug, page_index)
 
 
-class DiscussionDeleteView(ResponseMixin, View):
+class DiscussionDeleteView(PageMixin, View):
 
     def get(self, request, activity_slug=None, page_index=None, response_pk=None):
         activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)

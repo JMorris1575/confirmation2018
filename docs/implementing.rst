@@ -1431,7 +1431,7 @@ JSONResponseMixin example, however, that seems to just supply a couple of method
 
 *Django Unleashed* seemed to concur so I created the following mixin::
 
-    class ResponseMixin:
+    class PageMixin:
 
         """
         This mixin gets single responses from the Response model depending on the user, activity and page
@@ -1485,7 +1485,7 @@ Implementing the Multiple-Choice Page
 *************************************
 
 This ought to be fairly easy both because I have recently done something like this in the trivia app in christmas17 and
-because much of the groundwork, such as the ``navigation.html`` page, the ResponseMixin and the changes in the
+because much of the groundwork, such as the ``navigation.html`` page, the PageMixin and the changes in the
 ``base_activity.html`` file, has already been set in place. Here is what I think I should do:
 
 *   Check to make sure questions and choices have already been created
@@ -1763,8 +1763,8 @@ File->Settings->Project<project name>->Project Structure and marking the ``confi
 by selecting it and then clicking the blue src folder above.
 
 I thought of using a mixin for this view just like I did in the ``activity`` app, and it was working too! I copied the
-ResponseMixin class from ``activity/views.py`` to a ``mixins.py`` file in ``config``. Then importing that file in
-``discussion/views.py`` I could use it to create the DiscussionView. However, ResponseMixin was designed to return a
+PageMixin class from ``activity/views.py`` to a ``mixins.py`` file in ``config``. Then importing that file in
+``discussion/views.py`` I could use it to create the DiscussionView. However, PageMixin was designed to return a
 single response and I'm going to have several responses for each discussion question, and, as I'm planning it now, there
 is only going to be one DiscussionView. I can get what I need within the view itself without violating the DRY
 principle. (For now I'm leaving ``mixins.py`` in the ``config`` folder just in case I find it useful later.
@@ -1785,7 +1785,7 @@ Yep, he can!
 To fix this I think I will have to change the get method of the PageView to include some kind of test and, if the test
 fails sends the user back to the summary page for that activity.
 
-Refactoring ResponseMixin
+Refactoring PageMixin
 +++++++++++++++++++++++++
 
 I had been testing the Discussion Page as Diego, who has made no responses yet. When I switched to myself I got an
@@ -1795,10 +1795,10 @@ PageView in the activity app and PageView was presuming no more than one respons
 My solution is klunky, but it seems to be working for the Discussion page anyway. I will have to test entry, editing
 and deleting on all of the different page types however since this change affects all of them.
 
-Also, I used the option of creating the ResponseMixin in ``config/mixins.py`` so it can be used by all apps, currently
-the activity app and the discussion app. Here is the ResponseMixin class::
+Also, I used the option of creating the PageMixin in ``config/mixins.py`` so it can be used by all apps, currently
+the activity app and the discussion app. Here is the PageMixin class::
 
-    class ResponseMixin:
+    class PageMixin:
 
         """
         This mixin gets a response or QuerySet of responses with the corresponding activity and page
@@ -1817,7 +1817,7 @@ the activity app and the discussion app. Here is the ResponseMixin class::
 
 This required a different approach in the views. Here is what I did in the get method of PageView::
 
-    class PageView(ResponseMixin, View):
+    class PageView(PageMixin, View):
 
         def get(self, request, activity_slug, page_index):
             activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
@@ -1842,7 +1842,7 @@ Testing After the Refactor
 
 I will sign in as Diego and try to do everything possible with each page. Here is a table of tests
 
-.. csv-table:: **Create, Edit and Delete Tests for Each Page Type After Refactoring ResponseMixin**
+.. csv-table:: **Create, Edit and Delete Tests for Each Page Type After Refactoring PageMixin**
     :header: Page, Display, Create, Review, Edit, Delete
     :widths: auto
 
@@ -1857,7 +1857,7 @@ I will sign in as Diego and try to do everything possible with each page. Here i
 
 Notes:
 
-#.  Somehow, in ResponseMixin I used ``response = responses[0]`` instead of ``single_response = responses[0]``
+#.  Somehow, in PageMixin I used ``response = responses[0]`` instead of ``single_response = responses[0]``
     I think I'd like to use response throughout anyway.
 #.  After completing page 1 Diego could not get to page 2. I think ``allowed`` must be returning False.
     It was. I was checking if the current page was completed not the previous page setting ``page=page_index-1`` did
@@ -2319,6 +2319,9 @@ The Menu Link
 Adding the menu link to the header should be easy, and this is where I should be able to learn how to restrict viewing
 that link to Supervisors and Administrators.
 
+Appearance of the Menu Link
++++++++++++++++++++++++++++
+
 Adding the link was easy. Getting it to look right is another matter. I think my implementation of the dropdown menu
 button may be interfering with the display of this E-mail link I am trying to add. I probably just need a better set
 of css rules. Here is what I would like the header to look like with a possible div/css scheme to make it so::
@@ -2339,3 +2342,59 @@ of css rules. Here is what I would like the header to look like with a possible 
     |  |                  | | +---------------------------------------------------------------------------------+   | |
     |  +------------------+ +---------------------------------------------------------------------------------------+ |
     +-----------------------------------------------------------------------------------------------------------------+
+
+Applying Groups
++++++++++++++++
+
+From what I've been able to learn so far, mostly from *Django Unleashed* **Chapter 20.3.2 Groups in the Shell**, here
+is my current idea of how to deal with this:
+
+In the views, create a context list variable called 'group_names' that contains all of the groups the request.user
+belongs to. This can be found with something like the following::
+
+    from django.contrib.auth.models import Group
+
+    group_names = []
+    for group in Group.objects.filter(user=request.user):
+        group_names.append(group.name)
+
+Include ``group_names`` in the context variable and then, in the templates access it with something like the following::
+
+    {% if '<the necessary group name>' in group_names %}
+        <display what they have access to>
+
+I may end up using a Mixin or some global method to which all the views will have access instead of placing it in each
+view, but I think this should work. I'll try it first for the E-mail link on the welcome page...
+
+Well, that wasn't too hard to implement in the activity app. I ended up putting a ``get_group_names`` method into the
+``PageMixin`` class in ``config/mixins.py`` which I have renamed from ``ResponseMixin``. I had Refactor/Rename change
+the name in the documentation too so references to if above should all say ``PageMixin`` now.
+
+Since neither the ``WelcomeView`` nor the ``SummaryView`` used ``PageMixin`` I had to include::
+
+    group_names = PageMixin.get_group_names(self, request.user)
+
+before adding it to the context.
+
+I haven't checked out ALL the activity pages yet, like those for editing and deleting, but I suspect they will all work.
+
+I still need to change the view in the help app...
+
+The only glitch I ran into is that, since the help pages do not require authentication, when I logged out while on a
+help page I got an error something like: Anonymous User is not Iterable (presumably because ``get_group_names`` tries
+to filter the Groups for the AnonymousUser, though I didn't look carefully enough at the message to be sure.
+
+I added the following to the HelpView class::
+
+    if request.user.is_authenticated:
+        group_names = PageMixin.get_group_names(self, request.user)
+    else:
+        group_names = None
+
+and all seems well.
+
+Now to create and develop the e-mail app, and later to change the looks of certain views for Team members and above.
+
+Creating the e-mail App
+***********************
+

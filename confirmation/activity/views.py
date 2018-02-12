@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views import View
+from django.contrib.auth.models import Group
 from .models import Activity, Page, Response, Choice
-from config.mixins import ResponseMixin
+from config.mixins import PageMixin
 
 import datetime
 
@@ -28,7 +29,8 @@ class WelcomeView(View):
             else:
                 msg = 'Not Yet Available'
             data.append((activity, msg))
-        return render(request, self.template_name, {'data': data})
+        group_names = PageMixin.get_group_names(self, request.user)
+        return render(request, self.template_name, {'data': data, 'group_names':group_names})
 
     def post(self, request):
         return render(request, self.template_name)
@@ -49,11 +51,13 @@ class SummaryView(View):
             else:
                 data.append((page, changing_msg))   # The first time we get here changing_msg='Up next...'
                 changing_msg = 'Pending'            # after that, changing_msg='Pending' for the rest of the pages
+        group_names = PageMixin.get_group_names(self, request.user)
         return render(request, self.template_name, {'activity': activity,
-                                                    'data': data})
+                                                    'data': data,
+                                                    'group_names': group_names})
 
 
-# class ResponseMixin:
+# class PageMixin:
 #
 #     """
 #     This mixin gets single responses from the Response model depending on the user, activity and page
@@ -69,10 +73,9 @@ class SummaryView(View):
 #         return activity, page, response
 
 
-class PageView(ResponseMixin, View):
+class PageView(PageMixin, View):
 
     def get(self, request, activity_slug, page_index):
-        print('PageView.get request.COOKIES = ', request.COOKIES)
         activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)
@@ -136,7 +139,7 @@ class PageView(ResponseMixin, View):
         return redirect('page', activity_slug, page_index )
 
 
-class PageEditView(ResponseMixin, View):
+class PageEditView(PageMixin, View):
 
     def get(self, request, activity_slug=None, page_index=None):
         activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
@@ -170,7 +173,7 @@ class PageEditView(ResponseMixin, View):
         return redirect('page', activity_slug, page_index)
 
 
-class PageDeleteView(ResponseMixin, View):
+class PageDeleteView(PageMixin, View):
 
     def get(self, request, activity_slug=None, page_index=None):
         activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)

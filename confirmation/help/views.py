@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import HelpCategory, HelpPage
+from config.mixins import PageMixin
 
 
 class HelpView(View):
@@ -8,9 +9,14 @@ class HelpView(View):
 
     def get(self, request, category_name, page_number=None):
         category = HelpCategory.objects.get(name=category_name)
+        if request.user.is_authenticated:
+            group_names = PageMixin.get_group_names(self, request.user)
+        else:
+            group_names = None
         if not page_number:
             context = {'page_file_name': 'help/' + category_name + '.html',
-                       'category': category_name, 'previous': None, 'next': None}
+                       'category': category_name, 'previous': None, 'next': None,
+                       'group_names': group_names}
         else:
             help_page = HelpPage.objects.get(category=category, number=page_number)
             page_count = len(HelpPage.objects.filter(category=category))
@@ -26,5 +32,6 @@ class HelpView(View):
             else:
                 next_page = next_page_num
             context = {'page_file_name': 'help/' + help_page.name + '.html',
-                       'category': category_name, 'previous': previous, 'next': next_page}
+                       'category': category_name, 'previous': previous, 'next': next_page,
+                       'group_names': group_names}
         return render(request, self.template_name, context)

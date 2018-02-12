@@ -28,9 +28,12 @@
                         <a href="/help/index/">Using the Website</a>
                     </div>
                 </div>
-                <div class="dropdown u-pull=right">
-                    <button class="menu-button" href="#">E-mail</button>
-                </div>
+                {% if 'Supervisor' in group_names %}
+                    <div class="dropdown u-pull=right">
+                        <button class="menu-button" href="#">E-mail</button>
+                    </div>
+                {% endif %}
+
             </div>
         </div>
     </header>
