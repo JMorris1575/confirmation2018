@@ -2318,3 +2318,24 @@ The Menu Link
 
 Adding the menu link to the header should be easy, and this is where I should be able to learn how to restrict viewing
 that link to Supervisors and Administrators.
+
+Adding the link was easy. Getting it to look right is another matter. I think my implementation of the dropdown menu
+button may be interfering with the display of this E-mail link I am trying to add. I probably just need a better set
+of css rules. Here is what I would like the header to look like with a possible div/css scheme to make it so::
+
+    +-----------------------------------------------------------------------------------------------------------------+
+    | container row                                                                                                   |
+    |  +------------------+ +---------------------------------------------------------------------------------------+ |
+    |  | two columns      | | ten columns                                                                           | |
+    |  |                  | | +---------------------------------------------------------------------------------+   | |
+    |  | (logo)           | | | banner                                                                          |   | |
+    |  |                  | | |                                                                                 |   | |
+    |  |                  | | +---------------------------------------------------------------------------------+   | |
+    |  |                  | | +---------------------------------------------------------------------------------+   | |
+    |  |                  | | | navigation                                                                      |   | |
+    |  |                  | | | +--------------------------------+ +------------------------------------------+ |   | |
+    |  |                  | | | | welcome                        | | menu                                     | |   | |
+    |  |                  | | | +--------------------------------+ +------------------------------------------+ |   | |
+    |  |                  | | +---------------------------------------------------------------------------------+   | |
+    |  +------------------+ +---------------------------------------------------------------------------------------+ |
+    +-----------------------------------------------------------------------------------------------------------------+

@@ -4,10 +4,6 @@ footer {
     background-color: #d40000;
 }
 
-header {
-        font-family: 'Gloria Hallelujah', cursive;
-}
-
 th.pad-override,
 td.pad-override {
     padding-left: 15px;
@@ -17,6 +13,10 @@ td.pad-override {
     font-family: 'Arial', sans;
     font-size: 1.2em;
     color: #2eb873;
+}
+
+.banner {
+        font-family: 'Gloria Hallelujah', cursive;
 }
 
 .border {
@@ -248,4 +248,8 @@ td.pad-override {
     font-size: 1.2em;
     padding-left: 5px;
     margin-right: 5px;
+}
+
+.welcome a:hover {
+    color: yellow;
 }
