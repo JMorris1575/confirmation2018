@@ -6,6 +6,20 @@
 
 {% block page-content %}
 
-<h1>This page will allow you to send e-mails.</h1>
+<h2>This page will allow you to send e-mails.</h2>
+<div class="offset-by-two eight columns activity-text shadowed">
+    <h5>Supervisors:</h5>
+    {% for user in supervisors %}
+        <p>{{ user.first_name }} {{ user.last_name }}</p>
+    {% endfor %}
+    <h5>Team:</h5>
+    {% for user in team_members %}
+        <p>{{ user.first_name }} {{ user.last_name }}</p>
+    {% endfor %}
+    <h5>Candidates:</h5>
+    {% for user in candidates %}
+        <p>{{ user.first_name }} {{ user.last_name }}</p>
+    {% endfor %}
+</div>
 
 {% endblock %}

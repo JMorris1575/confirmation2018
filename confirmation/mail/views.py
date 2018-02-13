@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+from django.contrib.auth.models import User, Group
 from config.mixins import PageMixin
 
 # Create your views here.
@@ -13,4 +14,12 @@ class EmailView(View):
             group_names = PageMixin.get_group_names(self, request.user)
         else:
             group_names = None
-        return render(request, self.template_name, context={'group_names':group_names})
+        supervisors = Group.objects.get(name="Supervisor").user_set.all()
+        team_members = Group.objects.get(name="Team").user_set.all()
+        candidates = Group.objects.get(name="Candidate").user_set.all()
+        context = {'group_names': group_names,
+                   'supervisors': supervisors,
+                   'team_members': team_members,
+                   'candidates': candidates}
+
+        return render(request, self.template_name, context)
