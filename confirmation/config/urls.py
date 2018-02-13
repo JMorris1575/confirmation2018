@@ -27,6 +27,7 @@ urlpatterns = [
     path('activity/', include('activity.urls')),
     path('admin/', admin.site.urls),
     path('discussion/', include('discussion.urls')),
+    path('email/', include('mail.urls')),
 ]
 
 admin.site.site_header = 'St. Basil Confirmation 2018 Admin'

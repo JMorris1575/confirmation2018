@@ -1,0 +1,9 @@
+{% extends parent_template|default:"base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        {% block page-content %}
+        {% endblock %}
+    </div>
+{% endblock %}

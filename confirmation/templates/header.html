@@ -30,7 +30,9 @@
                 </div>
                 {% if 'Supervisor' in group_names %}
                     <div class="dropdown u-pull=right">
-                        <button class="menu-button" href="#">E-mail</button>
+                        <a href="{% url 'send_email' %}">
+                            <button class="menu-button">E-mail</button>
+                        </a>
                     </div>
                 {% endif %}
 
