@@ -6,20 +6,41 @@
 
 {% block page-content %}
 
-<h2>This page will allow you to send e-mails.</h2>
 <div class="offset-by-two eight columns activity-text shadowed">
-    <h5>Supervisors:</h5>
-    {% for user in supervisors %}
-        <p>{{ user.first_name }} {{ user.last_name }}</p>
-    {% endfor %}
-    <h5>Team:</h5>
-    {% for user in team_members %}
-        <p>{{ user.first_name }} {{ user.last_name }}</p>
-    {% endfor %}
-    <h5>Candidates:</h5>
-    {% for user in candidates %}
-        <p>{{ user.first_name }} {{ user.last_name }}</p>
-    {% endfor %}
+    <div class="row">
+        <div class="offset-by-one ten columns inset-info">
+            Click the button in each category to select all of the members of that category.
+        </div>
+    </div>
+    <div>
+        <button>Supervisors:</button>
+    </div>
+    <ul class="separator">
+        {% for member in supervisors %}
+            <li class="indented-list">
+                <input type="checkbox" name="recipient" value="{{ member }}"/>
+                {{ member.last_name }}, {{ member.first_name }}
+            </li>
+        {% endfor %}
+    </ul>
+    <button>Team:</button>
+    <ul class="separator">
+        {% for member in team_members %}
+            <li class="indented-list">
+                <input type="checkbox" name="recipient" value="{{ member }}"/>
+                {{ member.last_name }}, {{ member.first_name }}
+            </li>
+        {% endfor %}
+    </ul>
+    <button>Candidates:</button>
+    <ul>
+        {% for member in candidates %}
+            <li class="indented-list">
+                <input type="checkbox" name="recipient" value="{{ member }}"/>
+                {{ member.last_name }}, {{ member.first_name }}
+            </li>
+        {% endfor %}
+    </ul>
 </div>
 
 {% endblock %}

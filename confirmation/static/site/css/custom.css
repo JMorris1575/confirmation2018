@@ -163,6 +163,14 @@ td.pad-override {
     color: #a0a0a0;
 }
 
+.indented-list {
+    list-style-type: none;
+    color: #2eb873;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 20px;
+}
+
 .info-box {
     font-family: 'Arial', sans;
     font-size: 1.2em;
@@ -174,11 +182,21 @@ td.pad-override {
     border-color: #d40000;
     border-width: 1px;
     border-style: solid;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .info-text {
     margin-bottom: 0;
+}
+
+.inset-info {
+    font-family: 'Arial', sans;
+    font-size: 0.8em;
+    color: black;
+    border: 1px solid black;
+    margin: 10px;
+    margin-bottom: 25px;
+    padding: 10px;
 }
 
 .link {
