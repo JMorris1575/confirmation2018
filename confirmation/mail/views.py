@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User, Group
+from django.core.mail import send_mail
+
 from config.mixins import PageMixin
 
 # Create your views here.
@@ -21,5 +23,12 @@ class EmailView(View):
                    'supervisors': supervisors,
                    'team_members': team_members,
                    'candidates': candidates}
-
         return render(request, self.template_name, context)
+
+    def post(self, request):
+        recipients = request.POST.getlist('recipients')
+        for recipient in recipients:
+            member = User.objects.get(username=recipient)
+            send_mail('test e-mail', "Hi there! This is a test e-mail.", 'FrJamesMorris@gmail.com', [member.email], fail_silently=False,)
+
+        return redirect('send_email')

@@ -7,40 +7,46 @@
 {% block page-content %}
 
 <div class="offset-by-two eight columns activity-text shadowed">
-    <div class="row">
-        <div class="offset-by-one ten columns inset-info">
-            Click the button in each category to select all of the members of that category.
+    <form action="{% url 'send_email' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="offset-by-one ten columns inset-info">
+                Click the button in each category to select all of the members of that category.
+            </div>
         </div>
-    </div>
-    <div>
-        <button>Supervisors:</button>
-    </div>
-    <ul class="separator">
-        {% for member in supervisors %}
-            <li class="indented-list">
-                <input type="checkbox" name="recipient" value="{{ member }}"/>
-                {{ member.last_name }}, {{ member.first_name }}
-            </li>
-        {% endfor %}
-    </ul>
-    <button>Team:</button>
-    <ul class="separator">
-        {% for member in team_members %}
-            <li class="indented-list">
-                <input type="checkbox" name="recipient" value="{{ member }}"/>
-                {{ member.last_name }}, {{ member.first_name }}
-            </li>
-        {% endfor %}
-    </ul>
-    <button>Candidates:</button>
-    <ul>
-        {% for member in candidates %}
-            <li class="indented-list">
-                <input type="checkbox" name="recipient" value="{{ member }}"/>
-                {{ member.last_name }}, {{ member.first_name }}
-            </li>
-        {% endfor %}
-    </ul>
+        <div>
+            <button>Supervisors:</button>
+        </div>
+        <ul class="separator">
+            {% for member in supervisors %}
+                <li class="indented-list">
+                    <input type="checkbox" name="recipients" value="{{ member }}"/>
+                    {{ member.last_name }}, {{ member.first_name }}
+                </li>
+            {% endfor %}
+        </ul>
+        <button>Team:</button>
+        <ul class="separator">
+            {% for member in team_members %}
+                <li class="indented-list">
+                    <input type="checkbox" name="recipients" value="{{ member }}"/>
+                    {{ member.last_name }}, {{ member.first_name }}
+                </li>
+            {% endfor %}
+        </ul>
+        <button>Candidates:</button>
+        <ul class="separator">
+            {% for member in candidates %}
+                <li class="indented-list">
+                    <input type="checkbox" name="recipients" value="{{ member }}"/>
+                    {{ member.last_name }}, {{ member.first_name }}
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="row">
+            <input class="offset-by-four four columns button-primary" value="Send" type="submit"/>
+        </div>
+    </form>
 </div>
 
 {% endblock %}
