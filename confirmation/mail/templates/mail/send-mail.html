@@ -4,6 +4,28 @@
     {{ block.super }}Send E-mails
 {% endblock %}
 
+{% block head %}
+
+    <script>
+        $(document).ready(function() {
+            $('#select_all').click(function() {
+                $(':checkbox').each(function() {
+                    if ($(this).prop('checked')) {
+                        $(this).prop('checked', false);
+                    } else {
+                        $(this).prop('checked', true);
+                        alert($(this).val());
+                    }
+                }); // end checkbox each
+            }); // end select_all click
+            $(':submit').click(function() {
+                alert('Submit button clicked!!!')
+            }); // end submit click
+        }); // end ready
+    </script>
+
+{% endblock %}
+
 {% block page-content %}
 
 <div class="offset-by-two eight columns email-text shadowed">
@@ -15,7 +37,7 @@
                     Click the buttons to select all of the members of that category or click
                     'Select All' to select everyone.
                 </p>
-                <button class="u-pull-left five columns">Select All</button>
+                <button class="u-pull-left five columns" id="select_all">Select All</button>
             </div>
         </div>
         <div class="row">
