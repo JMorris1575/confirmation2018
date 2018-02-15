@@ -6,16 +6,20 @@
 
 {% block page-content %}
 
-<div class="offset-by-two eight columns activity-text shadowed">
+<div class="offset-by-two eight columns email-text shadowed">
     <form action="{% url 'send_email' %}" method="post">
         {% csrf_token %}
         <div class="row">
             <div class="offset-by-one ten columns inset-info">
-                Click the button in each category to select all of the members of that category.
+                <p>
+                    Click the buttons to select all of the members of that category or click
+                    'Select All' to select everyone.
+                </p>
+                <button class="u-pull-left five columns">Select All</button>
             </div>
         </div>
-        <div>
-            <button>Supervisors:</button>
+        <div class="row">
+            <button class="four columns">All Supervisors</button>
         </div>
         <ul class="separator">
             {% for member in supervisors %}
@@ -25,7 +29,9 @@
                 </li>
             {% endfor %}
         </ul>
-        <button>Team:</button>
+        <div class="row">
+            <button class="four columns">All Team Members</button>
+        </div>
         <ul class="separator">
             {% for member in team_members %}
                 <li class="indented-list">
@@ -34,7 +40,9 @@
                 </li>
             {% endfor %}
         </ul>
-        <button>Candidates:</button>
+        <div class="row">
+            <button class="four columns">All Candidates</button>
+        </div>
         <ul class="separator">
             {% for member in candidates %}
                 <li class="indented-list">
@@ -44,7 +52,8 @@
             {% endfor %}
         </ul>
         <div class="row">
-            <input class="offset-by-four four columns button-primary" value="Send" type="submit"/>
+            <input class="offset-by-two three columns button-primary" value="Send" type="submit"/>
+            <a class="offset-by-two three columns button" href="{% url 'welcome' %}">Cancel</a>
         </div>
     </form>
 </div>

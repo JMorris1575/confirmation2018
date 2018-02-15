@@ -15,6 +15,12 @@ td.pad-override {
     color: #2eb873;
 }
 
+.email-text {
+    font-family: 'Arial', sans;
+    font-size: 1.0em;
+    color: #2eb873;
+}
+
 .banner {
         font-family: 'Gloria Hallelujah', cursive;
 }
