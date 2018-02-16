@@ -9,6 +9,17 @@ td.pad-override {
     padding-left: 15px;
 }
 
+#subject {
+    height: 25px;
+    color: black;
+}
+
+#message {
+    height: 150px;
+    color: black;
+    resize: none;
+}
+
 .activity-text {
     font-family: 'Arial', sans;
     font-size: 1.2em;
@@ -258,6 +269,11 @@ td.pad-override {
 .separator {
     padding-bottom: 10px;
     border-bottom: 1px solid black;
+}
+
+.small-font {
+    font-family: 'Arial', sans;
+    font-size: 0.8em;
 }
 
 .table-list {

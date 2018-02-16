@@ -377,6 +377,10 @@ Now I need to finish the e-mail form by adding a ``<textarea>`` element.
 Sizing Input Areas
 ++++++++++++++++++
 
+This might be a good time to use the id of the textarea and ``<input type="text"...>`` tag...
+
+
+
 
 
 Translating Template Tags in E-mails

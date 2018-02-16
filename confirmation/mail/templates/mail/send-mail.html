@@ -104,12 +104,21 @@
             {% endfor %}
         </ul>
         <div class="row">
-            <label class="u-pull-left two columns" for="subject">Subject: </label>
-            <input class="ten columns" type="text" id="subject" name="subject" rows="1" cols="40"></inputtextarea>
-        </div>
-        <div class="row">
-            <label for="message">Enter the text of the e-mail below:</label>
-            <textarea class="twelve columns" id="message" name="message"></textarea>
+            <div class="eight columns small-font">
+                <label class="u-pull-left" for="subject">Subject:</label>
+                <input class="eleven columns" type="text" id="subject" name="subject"></inputtextarea>
+            </div>
+            <div class="eight columns small-font">
+                <label for="message">Enter the text of the e-mail below:</label>
+                <textarea type="text" class="twelve columns" id="message" name="message"></textarea>
+            </div>
+            <div class="three columns border">
+                <p class="small-font">
+                    Tags:<br>
+                    [name] = first and last name<br>
+                    [password] = password
+                </p>
+            </div>
         </div>
         <div class="row">
             <input class="offset-by-two three columns button-primary" value="Send" type="submit"/>
