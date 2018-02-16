@@ -18,6 +18,7 @@ td.pad-override {
     height: 150px;
     color: black;
     resize: none;
+    margin-left: 0;
 }
 
 .activity-text {
