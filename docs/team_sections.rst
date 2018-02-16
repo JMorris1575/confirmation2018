@@ -317,3 +317,40 @@ It seems these could both be handled by learning how to get jquery to add a css 
 I could use it to both change its appearance and determine whether all the boxes in a group are to be checked or
 unchecked. Perhaps I will do that next.
 
+Button Improvements
++++++++++++++++++++
+
+I did manage my two improvements but I'm not happy with them yet. I did learn how to create a named function in
+JavaScript and used it as shown below::
+
+    function toggleSelected(button) {
+        // toggles the 'selected' class in the given button, returns true if selected, false if not selected
+        if ($(button).hasClass('selected')) {
+            $(button).removeClass('selected');
+            return false;
+        } else {
+            $(button).addClass('selected');
+            return true;
+        }; // end if
+    }; // end toggleSelected
+
+That required a change to each of the individual button codes as well. Here is the code for the supervisor button for
+an example::
+
+    $('#select_supervisors').click(function() {
+        selected = toggleSelected(this);
+        $('.supervisor').each(function() {
+            $(this).prop('checked', selected); // sets the checkbox to status of button
+        }); // end supervisor each
+    }); // end select_supervisors click
+
+But it is still awkward to use. If I click "Select All" and then click "Supervisors" nothing appears to happen because
+the "Supervisors" button was "off" and then clicked to "on" so the supervisor checkboxes that were already checked did
+not change their appearance. I think it would be better to turn on all of the sub-group buttons when "Select All" is
+clicked, which shouldn't be too difficult. I'll have to decide what to do, if anything, to the "Select All" button when
+a sub-group button is clicked.
+
+Controlling the Buttons
++++++++++++++++++++++++
+
+This should not be difficult since the variable ``selected`` is already available.

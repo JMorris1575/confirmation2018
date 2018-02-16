@@ -22,6 +22,13 @@
         $(document).ready(function() {
             $('#select_all').click(function() {
                 var selected = toggleSelected(this); // toggles 'selected' class and returns true if it is set
+                $('.sub-group').each(function() {
+                    if (selected) {
+                        $(this).addClass('selected');
+                    } else {
+                        $(this).removeClass('selected');
+                    }
+                });
                 $(':checkbox').each(function() {
                     $(this).prop('checked', selected); // sets the checkbox to status of button
                 }); // end checkbox each
@@ -64,7 +71,7 @@
             </div>
         </div>
         <div class="row">
-            <button class="four columns" type="button" id="select_supervisors">Supervisors</button>
+            <button class="four columns sub-group" type="button" id="select_supervisors">Supervisors</button>
         </div>
         <ul class="separator">
             {% for member in supervisors %}
@@ -75,7 +82,7 @@
             {% endfor %}
         </ul>
         <div class="row">
-            <button class="four columns" type="button" id="select_team">Team Members</button>
+            <button class="four columns sub-group" type="button" id="select_team">Team Members</button>
         </div>
         <ul class="separator">
             {% for member in team_members %}
@@ -86,7 +93,7 @@
             {% endfor %}
         </ul>
         <div class="row">
-            <button class="four columns" type="button" id="select_candidates">Candidates</button>
+            <button class="four columns sub-group" type="button" id="select_candidates">Candidates</button>
         </div>
         <ul class="separator">
             {% for member in candidates %}
