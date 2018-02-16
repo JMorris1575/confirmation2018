@@ -373,3 +373,12 @@ This should not be difficult since the variable ``selected`` is already availabl
     }); // end select_all click
 
 Now I need to finish the e-mail form by adding a ``<textarea>`` element.
+
+Sizing Input Areas
+++++++++++++++++++
+
+
+
+Translating Template Tags in E-mails
+++++++++++++++++++++++++++++++++++++
+
