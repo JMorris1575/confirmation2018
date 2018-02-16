@@ -213,3 +213,107 @@ While creating the patterns above I happened to think about whether one Supervis
 e-mail template created by another. I decided that, yes, they should be able to. They need to work together on these
 things.
 
+Selecting Groups of Users
+*************************
+
+I added some <button> elements to select all users, supervisors, team members and/or candidates. I installed jquery by
+adding the lines::
+
+    <script
+          src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+          crossorigin="anonymous">
+    </script>
+
+to ``base.html`` after the css section.
+
+I wrote a jquery script for the Select All button as follows::
+
+    {% block head %}
+
+        <script>
+            $(document).ready(function() {
+                $('#select_all').click(function() {
+                    $(':checkbox').each(function() {
+                        if ($(this).prop('checked')) {
+                            $(this).prop('checked', false);
+                        } else {
+                            $(this).prop('checked', true);
+                        }
+                    }); // end checkbox each
+                }); // end select_all click
+            }); // end ready
+        </script>
+
+    {% endblock %}
+
+And, in the html part of the code::
+
+    <button class="u-pull-left five columns" id="select_all">Select All</button>
+
+to be able to select that button.
+
+When I tried it, it seemed to select all of the boxes well enough but it also submitted the form! Not what I wanted.
+Using Firefox's Debugger console I eventually learned that <button> elements have a default type of 'submit' and that
+was causing the problem. When I added ``type="button"`` that fixed the problem.
+
+To add buttons for the individual groups I had to add a class to each
+``<input ... type="checkbox" class="*group*"...>``. I tried to use ``id="*group*`` at first but that only returned one
+element to my jquery code.
+
+Here is the final version of the jquery code::
+
+    {% block head %}
+
+        <script>
+            $(document).ready(function() {
+                $('#select_all').click(function() {
+                    $(':checkbox').each(function() {
+                        if ($(this).prop('checked')) {
+                            $(this).prop('checked', false);
+                        } else {
+                            $(this).prop('checked', true);
+                        }
+                    }); // end checkbox each
+                }); // end select_all click
+                $('#select_supervisors').click(function() {
+                    $('.supervisor').each(function() {
+                        if ($(this).prop('checked')) {
+                            $(this).prop('checked', false);
+                        } else {
+                            $(this).prop('checked', true);
+                        }
+                    }); // end supervisor each
+                }); // end select_supervisors click
+                $('#select_team').click(function() {
+                    $('.team').each(function() {
+                        if ($(this).prop('checked')) {
+                            $(this).prop('checked', false);
+                        } else {
+                            $(this).prop('checked', true);
+                        }
+                    }); // end team each
+                }); // end select_team click
+                $('#select_candidates').click(function() {
+                    $('.candidate').each(function() {
+                        if ($(this).prop('checked')) {
+                            $(this).prop('checked', false);
+                        } else {
+                            $(this).prop('checked', true);
+                        }
+                    }); // end candidate each
+                }); // end select_candidates click
+            }); // end ready
+        </script>
+
+    {% endblock %}
+
+Two improvements:
+
+*   The buttons should change their looks when they are "on" from when they are "off."
+*   When some boxes of a group are checked already, they should be either all checked or all unchecked, not just toggled
+
+It seems these could both be handled by learning how to get jquery to add a css class to the button's description. Then
+I could use it to both change its appearance and determine whether all the boxes in a group are to be checked or
+unchecked. Perhaps I will do that next.
+

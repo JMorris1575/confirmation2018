@@ -7,20 +7,43 @@
 {% block head %}
 
     <script>
+
+        function toggleSelected(button) {
+            // toggles the 'selected' class in the given button, returns true if selected, false if not selected
+            if ($(button).hasClass('selected')) {
+                $(button).removeClass('selected');
+                return false;
+            } else {
+                $(button).addClass('selected');
+                return true;
+            }; // end if
+        }; // end toggleSelected
+
         $(document).ready(function() {
             $('#select_all').click(function() {
+                var selected = toggleSelected(this); // toggles 'selected' class and returns true if it is set
                 $(':checkbox').each(function() {
-                    if ($(this).prop('checked')) {
-                        $(this).prop('checked', false);
-                    } else {
-                        $(this).prop('checked', true);
-                        alert($(this).val());
-                    }
+                    $(this).prop('checked', selected); // sets the checkbox to status of button
                 }); // end checkbox each
             }); // end select_all click
-            $(':submit').click(function() {
-                alert('Submit button clicked!!!')
-            }); // end submit click
+            $('#select_supervisors').click(function() {
+                selected = toggleSelected(this);
+                $('.supervisor').each(function() {
+                    $(this).prop('checked', selected); // sets the checkbox to status of button
+                }); // end supervisor each
+            }); // end select_supervisors click
+            $('#select_team').click(function() {
+                selected = toggleSelected(this);
+                $('.team').each(function() {
+                    $(this).prop('checked', selected); // sets the checkbox to status of button
+                }); // end team each
+            }); // end select_team click
+            $('#select_candidates').click(function() {
+                selected = toggleSelected(this);
+                $('.candidate').each(function() {
+                    $(this).prop('checked', selected); // sets the checkbox to status of button
+                }); // end candidate each
+            }); // end select_candidates click
         }); // end ready
     </script>
 
@@ -37,38 +60,38 @@
                     Click the buttons to select all of the members of that category or click
                     'Select All' to select everyone.
                 </p>
-                <button class="u-pull-left five columns" id="select_all">Select All</button>
+                <button class="u-pull-left five columns" type="button" id="select_all">Select All</button>
             </div>
         </div>
         <div class="row">
-            <button class="four columns">All Supervisors</button>
+            <button class="four columns" type="button" id="select_supervisors">Supervisors</button>
         </div>
         <ul class="separator">
             {% for member in supervisors %}
                 <li class="indented-list">
-                    <input type="checkbox" name="recipients" value="{{ member }}"/>
+                    <input type="checkbox" class="supervisor" name="recipients" value="{{ member }}"/>
                     {{ member.last_name }}, {{ member.first_name }}
                 </li>
             {% endfor %}
         </ul>
         <div class="row">
-            <button class="four columns">All Team Members</button>
+            <button class="four columns" type="button" id="select_team">Team Members</button>
         </div>
         <ul class="separator">
             {% for member in team_members %}
                 <li class="indented-list">
-                    <input type="checkbox" name="recipients" value="{{ member }}"/>
+                    <input type="checkbox" class="team" name="recipients" value="{{ member }}"/>
                     {{ member.last_name }}, {{ member.first_name }}
                 </li>
             {% endfor %}
         </ul>
         <div class="row">
-            <button class="four columns">All Candidates</button>
+            <button class="four columns" type="button" id="select_candidates">Candidates</button>
         </div>
         <ul class="separator">
             {% for member in candidates %}
                 <li class="indented-list">
-                    <input type="checkbox" name="recipients" value="{{ member }}"/>
+                    <input type="checkbox" type="button" class="candidate" name="recipients" value="{{ member }}"/>
                     {{ member.last_name }}, {{ member.first_name }}
                 </li>
             {% endfor %}
