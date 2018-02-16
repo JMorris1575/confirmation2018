@@ -27,8 +27,12 @@ class EmailView(View):
 
     def post(self, request):
         recipients = request.POST.getlist('recipients')
+        subject_template = request.POST['subject']
+        subject = subject_template      # until you write a conversion method
+        message_template = request.POST['message']
+        message = message_template      # until you write a conversion method
         for recipient in recipients:
             member = User.objects.get(username=recipient)
-            send_mail('test e-mail', "Hi there! This is a test e-mail.", 'FrJamesMorris@gmail.com', [member.email], fail_silently=False,)
+            send_mail(subject, message, 'FrJamesMorris@gmail.com', [member.email], fail_silently=False,)
 
         return redirect('send_email')

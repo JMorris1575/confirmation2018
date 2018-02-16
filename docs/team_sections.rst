@@ -216,6 +216,9 @@ things.
 Selecting Groups of Users
 *************************
 
+Adding Button Elements and Installing jquery
+++++++++++++++++++++++++++++++++++++++++++++
+
 I added some <button> elements to select all users, supervisors, team members and/or candidates. I installed jquery by
 adding the lines::
 
@@ -353,4 +356,20 @@ a sub-group button is clicked.
 Controlling the Buttons
 +++++++++++++++++++++++
 
-This should not be difficult since the variable ``selected`` is already available.
+This should not be difficult since the variable ``selected`` is already available. Here is the code I ended up with::
+
+    $('#select_all').click(function() {
+        var selected = toggleSelected(this); // toggles 'selected' class and returns true if it is set
+        $('.sub-group').each(function() {
+            if (selected) {
+                $(this).addClass('selected');
+            } else {
+                $(this).removeClass('selected');
+            }
+        });
+        $(':checkbox').each(function() {
+            $(this).prop('checked', selected); // sets the checkbox to status of button
+        }); // end checkbox each
+    }); // end select_all click
+
+Now I need to finish the e-mail form by adding a ``<textarea>`` element.

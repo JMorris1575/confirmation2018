@@ -1,3 +1,31 @@
 {% load static %}
 
     <h1>The Activity Summary Page</h1>
+    <div class="row">
+        <div class="u-pull-left nine columns">
+            <p>
+                Each activity has a summary page that gives, you guessed it, a summary of the activity and lists the things
+                there are to do for that activity. Next to the name of each section is the status of that section. It will
+                say "Completed" if it has already been completed, "Up Next..." if it is the one that can be done now, and
+                "Pending" if it cannot yet be reached. You must complete the earlier sections before you can get to the
+                later ones.
+            </p>
+            <p>
+                Next to the status indicators is a column for buttons. The button next to the "Up Next..." section will say
+                "DO IT...". Click that button to begin that part of the activity.
+            </p>
+            <p>
+                If you have completed a section the button will say "REVIEW IT...". Clicking that button allows you to go
+                back and see what you answered in previous sections and possibly edit or delete your entry. This depends on
+                the nature of that section. Sometimes you're just stuck with your answers. If you do delete your entry,
+                however, you will have to re-do that section before going on. If you have already completed a later section
+                you will not be able to delete an earlier response.
+            </p>
+        </div>
+        <img class="three columns" src="{% static 'images/illustrations/Clipboard-check-300px.png' %}" />
+    </div>
+    <p>
+        At the bottom of the whole list is a "RETURN TO WELCOME PAGE" button that sends you back to the welcome
+        page. Of course, you could just click the Holy Spirit image at the upper left corner of the page but it's
+        good to have more than one way of doing things.
+    </p>

@@ -104,6 +104,14 @@
             {% endfor %}
         </ul>
         <div class="row">
+            <label class="u-pull-left two columns" for="subject">Subject: </label>
+            <input class="ten columns" type="text" id="subject" name="subject" rows="1" cols="40"></inputtextarea>
+        </div>
+        <div class="row">
+            <label for="message">Enter the text of the e-mail below:</label>
+            <textarea class="twelve columns" id="message" name="message"></textarea>
+        </div>
+        <div class="row">
             <input class="offset-by-two three columns button-primary" value="Send" type="submit"/>
             <a class="offset-by-two three columns button" href="{% url 'welcome' %}">Cancel</a>
         </div>
