@@ -64,7 +64,7 @@ class PageView(PageMixin, View):
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)
         if page.page_type == 'IN':
-            self.template_name = 'activity/instructions.html'
+            self.template_name = 'activity/instruction.html'
         elif page.page_type == 'ES':
             self.template_name = 'activity/essay.html'
         elif page.page_type == 'MC':
