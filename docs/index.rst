@@ -15,6 +15,7 @@ Welcome to Confirmation Website's documentation!
    planning
    implementing
    team_sections
+   deployment
 
 
 Indices and tables

@@ -612,4 +612,4 @@ partners on this activity can see the current state of the activity and other pa
 
 Once an activity is open for general comments, should I maintain two copies of it, one that was published for all the
 team to see and one, the updated version, that only the partners can see? That sounds difficult, and perhaps a waste
-of database space unless the extra copies are deleted when they are no longer needed. 
+of database space unless the extra copies are deleted when they are no longer needed.
