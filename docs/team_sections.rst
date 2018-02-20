@@ -561,3 +561,55 @@ just call it Comment or DevComment.
 The other will probably change as I get more deeply into the creation of this part of the website. What shall I call it?
 How about Developer? Fields in this model would connect to an Activity, a User, and something to indicate the rights
 this user has over the activity. I will have to think more about this.
+
+Perhaps one of the members of the group working on the activity can be called the Leader, and the others Partners. Or
+perhaps I don't have to distinguish between leaders and partners since it is only Supervisors and Administrators who can
+publish an activity. Leaders, if there are any, can click a button that will automatically notify Supervisors and
+Administrators that an activity is ready for final review and publication. I think I could use some more narratives...
+
+Additional Narrative Walk-throughs
+++++++++++++++++++++++++++++++++++
+
+Fred has an idea for an activity and goes to the Development part of the website and clicks on 'Add Activity.' He names
+the activity, enters its description and selects an images from those available to use as its icon. He adds several
+pages to the activity and receives feedback from other team members. When he is satisfied with the activity as a whole
+he clicks on the 'Submit Activity to Supervisors' in hopes of getting it onto the website.
+
+Sylvia likes Fred's activity and decides it will fit well with what she has planned for the April segment and sets the
+publication date for the beginning of April and the ending date for the beginning of June.
+
+Simon and Kathy want to work together on an activity and Simon goes to the Development part of the website and clicks on
+'Add Activity.' He names Kathy as his partner and then leaves the website because something came up he had to tend to.
+
+Later, Kathy wants to begin work on the activity and goes to the Development section of the website and sees, on the
+Activity List page a new activity named 'Unnamed Activity' listed in a table next to Simon's name as the initiator and
+the date that it was begun. She enters into that activity, gives it a name and a slug and starts work on the first page
+of the activity when she is called away.
+
+Later, Simon comes to the Development section of the website and finds the activity he started now has a name and has
+been begun by Kathy. The website gives he and Kathy a way to communicate with one another before they open their work up
+for comments from the whole group. He comments on Kathy's work and makes some changes to it and then adds some pages
+himself.
+
+When Kathy sees his pages she likes them but thinks they need to be in a different order. She comments accordingly and
+makes those changes.
+
+For the most part Simon likes the changes Kathy has made but had a particular reason for one part of the actvity being
+in the position that it was. He explains that to Kathy and puts that page back into the proper place in the sequence.
+
+Finally, both Simon and Kathy are satisfied with the activity and open it up to comments from the group. Some of the
+feedback they get inspires new thoughts and they make some changes to the activity.
+
+Once they are both ready, Kathy submits the activity to the supervisors.
+
+Reflections on the Additional Walk-throughs
++++++++++++++++++++++++++++++++++++++++++++
+
+I may need two models for comments, one for general comments and one for parnter comments. Perhaps TeamComment and
+PartnerComment can be the names of the models. There will have to be enough detail in both so that the Activity and
+Page can be determined that the comment applies to and there will have to be some means of assuring that only
+partners on this activity can see the current state of the activity and other partner's comments.
+
+Once an activity is open for general comments, should I maintain two copies of it, one that was published for all the
+team to see and one, the updated version, that only the partners can see? That sounds difficult, and perhaps a waste
+of database space unless the extra copies are deleted when they are no longer needed. 
