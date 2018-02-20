@@ -605,7 +605,7 @@ Once they are both ready, Kathy submits the activity to the supervisors.
 Reflections on the Additional Walk-throughs
 +++++++++++++++++++++++++++++++++++++++++++
 
-I may need two models for comments, one for general comments and one for parnter comments. Perhaps TeamComment and
+I may need two models for comments, one for general comments and one for partner comments. Perhaps TeamComment and
 PartnerComment can be the names of the models. There will have to be enough detail in both so that the Activity and
 Page can be determined that the comment applies to and there will have to be some means of assuring that only
 partners on this activity can see the current state of the activity and other partner's comments.
@@ -613,3 +613,51 @@ partners on this activity can see the current state of the activity and other pa
 Once an activity is open for general comments, should I maintain two copies of it, one that was published for all the
 team to see and one, the updated version, that only the partners can see? That sounds difficult, and perhaps a waste
 of database space unless the extra copies are deleted when they are no longer needed.
+
+I can see that "Developer" may not be the best name for the model to accompany activity development. It will have to
+contain some information on what state the developing activity is currently in: visible to all or only to those working
+on it. Should a "published" field be in this model or in the original Activity model?
+
+I'm thinking a one to many field from this model to the users who are working on it is necessary but I'm having trouble
+picturing how to do that. In multiple-choice questions there is a Choice model that indicates to which model it belongs.
+I don't know how to do that with users. Do I need another Partner model with users and their roles and the activity they
+are working on? That might work.
+
+Initial Model Design
+++++++++++++++++++++
+
+So, so far it seems that I may need the following models in addition to the already existing Activity model:
+
+*   Developer (a model to connect activities [or developing activities?] with those who are working on them)
+*   PartnerComment (a model to contain comments partners make while developing an activity)
+*   TeamComment (a model to contain comments the whole team makes after the new activity is opened for discussion)
+*   DevelopingActivity (a model to keep track of the status of the developing activity)
+
+Perhaps the following models will work:
+
+.. csv-table:: **DevelopingActivity Model**
+    :header: Field Name, Field Type, Attributes, Comments
+    :widths: auto
+
+    activity, ForeignKey, Activity; on_delete=models.CASCADE, the activity being worked on
+    initiator, ForeignKey, User; on_delete=models.CASCADE, the team member initiating this activity
+    status, CharField, max_length=15; choices=Developing; Reviewing; Publishing; Published, status of the activity
+
+.. csv-table:: **Developer Model**
+    :header: Field Name, Field Type, Attributes, Comments
+    :widths: auto
+
+    activity, ForeignKey, DevelopingActivity; on_delete=models.CASCADE, the developing activity
+    partner, ForeignKey, User; on_delete=models.CASCADE, user partnering with the initiator of this activity
+    full_partner, Boolean, default=False, indicates whether this user has full rights to edit, publish, etc.
+
+.. csv-table:: **Comment**
+    :header: Field Name, Field Type, Attributes, Comments
+    :widths: auto
+
+    activity, ForeignKey, DevelopingActivity; on_delete=models.CASCADE, the developing activity
+    user, ForeignKey, User; on_delete=models.CASCADE, the user making the comment
+    text, TextField, blank?; null?; either?, the text of the comment
+    type, CharField, max_length=15; choices=General; Partner, type of comment for display
+
+
