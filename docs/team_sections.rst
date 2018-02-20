@@ -515,3 +515,49 @@ Comments' button that appears on the summary page.
 When all is ready a Supervisor or Administrator can set the dates for its appearance and Publish the activity to the
 candidates.
 
+The Development App
+*******************
+
+It seems that this will require another app, perhaps called "development" that will provide a model for comments on
+each developing activity as well as a model for the team member(s) responsible for its development. It can have its own
+templates, which can probably borrow extensively from what is already available in the activity app, and views that will
+manage what goes into and comes out of those templates.
+
+Since the development app should only be available to team members and higher that may simplify the access control.
+Perhaps it can all be done in the ``development`` views.
+
+Here is what I think I will need to do:
+
+*   Plan the URL scheme
+*   Plan the Models
+*   Create the app and include it in the settings
+*   Create the models and register them in admin.py
+*   Add a 'Development' link to the header menu visible only to Team members and above
+*   Work on the Activity List Page (it should include ways to edit existing activities)
+*   Work on the development summary page
+*   Work on the creation page(s) for each page type
+
+Planning the URL Scheme
++++++++++++++++++++++++
+
+Here are my initial thoughts:
+
+.. csv-table:: **Development App URL Scheme**
+    :header: URL, View, name, notes
+    :widths: auto
+
+    develop/, RedirectView, , the base url for the app-redirects to develop/activities/
+    develop/activities/, DevActivityListView, dev_activity_list, goes to the list of activities that can be edited
+    develop/activities/<activity>/, DevActivitySummaryView, dev_activity_summary, goes to the development summary page
+    develop/activities/<activity>/<page>/, DevActivityPageView, dev_activity_page, goes to the page development page
+
+Planning the Models
++++++++++++++++++++
+
+Right now I'm thinking of two models, one to hold comments on the developing activities, the other to contain working
+information about who has publishing/editing rights over each of the developing activityies. The first should be easy,
+just call it Comment or DevComment.
+
+The other will probably change as I get more deeply into the creation of this part of the website. What shall I call it?
+How about Developer? Fields in this model would connect to an Activity, a User, and something to indicate the rights
+this user has over the activity. I will have to think more about this.
