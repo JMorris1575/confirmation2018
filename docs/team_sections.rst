@@ -379,10 +379,139 @@ Sizing Input Areas
 
 This might be a good time to use the id of the textarea and ``<input type="text"...>`` tag...
 
+Here is the current html code for the subject line and text area::
 
-
-
+    <div class="row">
+        <div class="nine columns small-font">
+            <div>
+                <label class="u-pull-left" for="subject">Subject:</label>
+                <input class="u-full-width" type="text" id="subject" name="subject"></inputtextarea>
+            </div>
+            <div>
+                <label for="message">Enter the text of the e-mail below:</label>
+                <textarea type="text" class="u-full-width" id="message" name="message"></textarea>
+            </div>
+        </div>
+        <div class="three columns border">
+            <p class="small-font">
+                The following tags in the subject line or message will be converted as shown:
+            </p>
+            <p class="small-font">
+                [first] = first name<br>
+                [last] = last name<br>
+                [full] = full name<br>
+                [user] = username<br>
+                [pwrd] = password
+            </p>
+        </div>
+    </div>
 
 Translating Template Tags in E-mails
 ++++++++++++++++++++++++++++++++++++
+
+Borrowing from the Christmas website and improving things a bit, here is the code I came up with for the view::
+
+    def convert_tags(subject, message, user):
+        """
+        Converts the following tags in the message or subject line of an e-mail to their equivalent for the given user:
+        [first] = first name
+        [last] = last name
+        [full] = full name
+        [user] = username
+        [pwrd] = password
+        :param subject: string containing the subject line to be sent
+        :param message: string containing the message to be sent
+        :param user: User object containing data for the given user
+        :return: a subject string and message string with all the tags filled in
+        """
+        user_info = {'[first]':user.first_name,
+                     '[last]': user.last_name,
+                     '[full]': user.get_full_name(),
+                     '[user]': user.username,
+                     '[pwrd]': get_secret(user.username.upper())}
+        for tag in user_info.keys():
+            subject = subject.replace(tag, user_info[tag])
+            message = message.replace(tag, user_info[tag])
+
+        return subject, message
+
+
+    class EmailView(View):
+        template_name = 'mail/send-mail.html'
+
+        def get(self, request):
+            if request.user.is_authenticated:
+                group_names = PageMixin.get_group_names(self, request.user)
+            else:
+                group_names = None
+            supervisors = Group.objects.get(name="Supervisor").user_set.all().order_by('last_name')
+            team_members = Group.objects.get(name="Team").user_set.all().order_by('last_name')
+            candidates = Group.objects.get(name="Candidate").user_set.all().order_by('last_name')
+            context = {'group_names': group_names,
+                       'supervisors': supervisors,
+                       'team_members': team_members,
+                       'candidates': candidates}
+            return render(request, self.template_name, context)
+
+        def post(self, request):
+            recipients = request.POST.getlist('recipients')
+            subject_template = request.POST['subject']
+            message_template = request.POST['message']
+            for recipient in recipients:
+                member = User.objects.get(username=recipient)
+                subject, message = convert_tags(subject_template, message_template, member)
+                send_mail(subject, message, 'FrJamesMorris@gmail.com', [member.email], fail_silently=False,)
+
+            return redirect('send_email')
+
+Overview of Desired Team Interaction
+------------------------------------
+
+To enlist the aid of the team members in the creation of the activities, they should be able to see the activities that
+are under development and make comments and suggestions about them, both appearance and content. I think only
+Supervisors and Administrators should be able to change the content however. Perhaps only the one who is working on it,
+though that would require a new field in the Activity Model as to who is developing the activity. If I do that, however,
+I may be able to open up activity creation to any team member, though the final say as to whether and what should go to
+Supervisors and Administrators. It would be great if I could do that but it will require a very simple and intuitive
+page or set of pages for the development of activities, and an easy way of viewing how they will appear to the
+candidates.
+
+I suspect a lot of javascript will be needed to make it interactive and simple -- as I found when trying to develop
+pages to add multiple choice questions to the trivia app in Christmas17.
+
+Narrative Walk-through
+**********************
+
+Fr. Jim wants to add an activity to the Confirmation website and so logs in to the website and clicks the 'Development'
+link that appears to Administrators, Supervisors and Team members. There he is taken to a list of activities currently
+under development with the developer's name listed next to each one.
+
+Seeing [somehow] that Sylvia has recently edited an activity she is working on, he decides to check it out and clicks
+on the corresponding button.
+
+He is taken to a page, similar to the Summary page, which lists the current parts of the activity, and provides buttons
+for viewing each one. Some of the buttons are highlighted indicating that Fr. Jim has not viewed them since the last
+edits were made by Sylvia. He clicks on one of them.
+
+The current form of the candidate page appears with an extra section at the bottom containing comments team members have
+made during the page's development. This comment section actually appears on all of the pages of this section, including
+the Summary page. Jim views the page, makes some comments, and then goes back to the Activity Development page to start
+the activity he came here to start.
+
+There is an 'Add Activity' button there and he clicks it. He comes to a page that allows him to enter the pertinent
+information about the activity, such as it's name, description, and icon image. Some information, such as that it will
+be invisible until published, is filled in with default values. This page has a 'Publish' button visible only to
+Supervisors and Administrators, and an 'Add Page' button visible only to the person (or persons?) developing the
+activity.
+
+Fr. Jim clicks the 'Add Page' button and comes to a generic page that allows him to do that. A combo box near the top
+allows him to select the kind of page this will be and the selection he makes on that page determine the subsequent
+choices he can make. As he enters data, the image of the page as it will appear to candidates develops on the screen.
+Once he is happy with it, or just when he wants to quit, he can click the 'Save' button on the page.
+
+Thus Jim builds up the activity, page by page and, when he is ready, can present it to the group with a 'Open for
+Comments' button that appears on the summary page.
+
+When all is ready a Supervisor or Administrator can set the dates for its appearance and Publish the activity to the
+candidates.
 
