@@ -29,7 +29,7 @@ class WelcomeView(View):
             else:
                 msg = 'Not Yet Available'
             data.append((activity, msg))
-        group_names = PageMixin.get_group_names(self, request.user)
+        group_names = PageMixin.get_group_names(request.user)
         return render(request, self.template_name, {'data': data, 'group_names':group_names})
 
     def post(self, request):
@@ -51,7 +51,7 @@ class SummaryView(View):
             else:
                 data.append((page, changing_msg))   # The first time we get here changing_msg='Up next...'
                 changing_msg = 'Pending'            # after that, changing_msg='Pending' for the rest of the pages
-        group_names = PageMixin.get_group_names(self, request.user)
+        group_names = PageMixin.get_group_names(request.user)
         return render(request, self.template_name, {'activity': activity,
                                                     'data': data,
                                                     'group_names': group_names})

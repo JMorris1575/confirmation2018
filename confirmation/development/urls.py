@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .views import DevActivitiesListView
 
 urlpatterns = [
-    path('/', RedirectView.as_view(url='development/activities/')),
-    path('/activities/', DevActivitiesListView.as_view(), name='dev_activity_list')
+    path('', RedirectView.as_view(url='development/activities/')),
+    path('activities/', DevActivitiesListView.as_view(), name='dev_activity_list')
     
 ]

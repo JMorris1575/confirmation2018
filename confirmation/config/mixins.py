@@ -9,7 +9,7 @@ class PageMixin:
     from the user, activity_slug and page_index
     """
 
-    def get_group_names(self, user):
+    def get_group_names(user):
         """
         returns a list of all the names of the groups to which user belongs
         :param user: instance of the User model, probably from request.user

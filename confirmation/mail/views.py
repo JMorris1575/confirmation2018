@@ -38,7 +38,7 @@ class EmailView(View):
 
     def get(self, request):
         if request.user.is_authenticated:
-            group_names = PageMixin.get_group_names(self, request.user)
+            group_names = PageMixin.get_group_names(request.user)
         else:
             group_names = None
         supervisors = Group.objects.get(name="Supervisor").user_set.all().order_by('last_name')

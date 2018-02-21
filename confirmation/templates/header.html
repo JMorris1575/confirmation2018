@@ -23,7 +23,7 @@
             </div>
             <div class="menu u-pull-right">
                 <div class="dropdown u-pull-right">
-                    <button class="menu-button">Help</button>
+                    <div class="menu-button">Help</div>
                     <div class="dropdown-content">
                         <a href="/help/scripture/">Finding Scriptures</a>
                         <a href="/help/index/">Using the Website</a>
@@ -31,9 +31,12 @@
                 </div>
                 {% if 'Supervisor' in group_names %}
                     <div class="dropdown u-pull=right">
-                        <a href="{% url 'send_email' %}">
-                            <button class="menu-button">E-mail</button>
-                        </a>
+                        <a class="menu-button" href="{% url 'send_email' %}">E-mail</a>
+                    </div>
+                {% endif %}
+                {% if 'Administrator' in group_names or 'Supervisor' in group_names or 'Team' in group_names %}
+                    <div class="dropdown u-pull-right">
+                        <a class="menu-button" href="{% url 'dev_activity_list' %}">Development</a>
                     </div>
                 {% endif %}
 

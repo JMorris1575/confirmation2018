@@ -39,4 +39,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return 'Comment by ' + self.user.first_name + ' ' + self.user.last_name
-    
+
+    class Meta:
+        ordering = ['pk']

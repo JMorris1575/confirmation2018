@@ -671,11 +671,30 @@ That's done. Now to create a plan:
 
 *   add the development app to INSTALLED_APPS in ``config/settings/base.py`` [X]
 *   create urls in both ``config/urls.py`` and ``development/urls.py`` [X]
-*   create the new models in development/models.py
-*   register the new models in the admin program
+*   create the new models in development/models.py [X]
+*   register the new models in the admin program [X]
+*   makemigrations, migrate, add migrations to git [X]
 *   create the activity list page
 *   create the activity summary page
 *   one by one, create the individual page types
 
+Creating the Activity List Page
++++++++++++++++++++++++++++++++
+
+Here is what I think I have to do:
+
+*   create the ``development/base_development.html`` page stub [X]
+*   create a ``development/activity_list.html`` page stub [X]
+*   add a 'Development' menu item to the header visible only to Team and above
+*   fill out the ``activity_list.html`` page
+*   make it look good
 
 
+
+Creating the Activity Summary Page
+++++++++++++++++++++++++++++++++++
+
+
+
+Creating the Individual Page Building Page
+++++++++++++++++++++++++++++++++++++++++++
