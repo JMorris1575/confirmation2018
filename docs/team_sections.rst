@@ -671,7 +671,7 @@ That's done. Now to create a plan:
 
 *   add the development app to INSTALLED_APPS in ``config/settings/base.py`` [X]
 *   create urls in both ``config/urls.py`` and ``development/urls.py`` [X]
-*   create the new models in development/models.py 
+*   create the new models in development/models.py
 *   register the new models in the admin program
 *   create the activity list page
 *   create the activity summary page
