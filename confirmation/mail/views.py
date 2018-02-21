@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User, Group
 from django.core.mail import send_mail
+from django.core.exceptions import PermissionDenied
 
-from config.mixins import PageMixin
+from config.utilities import get_group_names
 from config.settings.base import get_secret
 
 # Create your views here.
@@ -38,17 +39,20 @@ class EmailView(View):
 
     def get(self, request):
         if request.user.is_authenticated:
-            group_names = PageMixin.get_group_names(request.user)
+            group_names = get_group_names(request.user)
         else:
             group_names = None
-        supervisors = Group.objects.get(name="Supervisor").user_set.all().order_by('last_name')
-        team_members = Group.objects.get(name="Team").user_set.all().order_by('last_name')
-        candidates = Group.objects.get(name="Candidate").user_set.all().order_by('last_name')
-        context = {'group_names': group_names,
-                   'supervisors': supervisors,
-                   'team_members': team_members,
-                   'candidates': candidates}
-        return render(request, self.template_name, context)
+        if 'Administrator' in group_names or 'Supervisor' in group_names:
+            supervisors = Group.objects.get(name="Supervisor").user_set.all().order_by('last_name')
+            team_members = Group.objects.get(name="Team").user_set.all().order_by('last_name')
+            candidates = Group.objects.get(name="Candidate").user_set.all().order_by('last_name')
+            context = {'group_names': group_names,
+                       'supervisors': supervisors,
+                       'team_members': team_members,
+                       'candidates': candidates}
+            return render(request, self.template_name, context)
+        else:
+            raise PermissionDenied
 
     def post(self, request):
         recipients = request.POST.getlist('recipients')

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from activity.models import Activity, Page, Response, Choice
 from django.contrib.auth.models import User
-from config.mixins import PageMixin
+from config.utilities import PageMixin
 
 
 # Create your views here.

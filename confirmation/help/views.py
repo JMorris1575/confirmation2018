@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import HelpCategory, HelpPage
-from config.mixins import PageMixin
+from config.utilities import get_group_names
 
 
 class HelpView(View):
@@ -10,7 +10,7 @@ class HelpView(View):
     def get(self, request, category_name, page_number=None):
         category = HelpCategory.objects.get(name=category_name)
         if request.user.is_authenticated:
-            group_names = PageMixin.get_group_names(request.user)
+            group_names = get_group_names(request.user)
         else:
             group_names = None
         if not page_number:

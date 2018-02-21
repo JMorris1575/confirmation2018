@@ -250,6 +250,10 @@ td.pad-override {
     text-decoration: none;
 }
 
+.padded {
+    padding: 20px;
+}
+
 .page-text {
     margin-top: 10px;
     padding-top: 10px;

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import Group
 from .models import Activity, Page, Response, Choice
-from config.mixins import PageMixin
+from config.utilities import get_group_names, get_response_info
 
 import datetime
 
@@ -29,7 +29,7 @@ class WelcomeView(View):
             else:
                 msg = 'Not Yet Available'
             data.append((activity, msg))
-        group_names = PageMixin.get_group_names(request.user)
+        group_names = get_group_names(request.user)
         return render(request, self.template_name, {'data': data, 'group_names':group_names})
 
     def post(self, request):
@@ -51,16 +51,16 @@ class SummaryView(View):
             else:
                 data.append((page, changing_msg))   # The first time we get here changing_msg='Up next...'
                 changing_msg = 'Pending'            # after that, changing_msg='Pending' for the rest of the pages
-        group_names = PageMixin.get_group_names(request.user)
+        group_names = get_group_names(request.user)
         return render(request, self.template_name, {'activity': activity,
                                                     'data': data,
                                                     'group_names': group_names})
 
 
-class PageView(PageMixin, View):
+class PageView(View):
 
     def get(self, request, activity_slug, page_index):
-        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)
         if page.page_type == 'IN':
@@ -123,10 +123,10 @@ class PageView(PageMixin, View):
         return redirect('page', activity_slug, page_index )
 
 
-class PageEditView(PageMixin, View):
+class PageEditView(View):
 
     def get(self, request, activity_slug=None, page_index=None):
-        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         if page.page_type == 'ES':
             self.template_name = 'activity/essay_edit.html'
         elif page.page_type == 'MC':
@@ -157,10 +157,10 @@ class PageEditView(PageMixin, View):
         return redirect('page', activity_slug, page_index)
 
 
-class PageDeleteView(PageMixin, View):
+class PageDeleteView(View):
 
     def get(self, request, activity_slug=None, page_index=None):
-        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         if page.page_type == 'ES':
             self.template_name = 'activity/essay_delete.html'
         if page.page_type == 'MC':
@@ -170,7 +170,7 @@ class PageDeleteView(PageMixin, View):
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):
-        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         if request.POST['button'] == 'Delete':
             response = responses[0]
             response.delete()

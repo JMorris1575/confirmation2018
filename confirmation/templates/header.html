@@ -26,6 +26,9 @@
                     <div class="menu-button">Help</div>
                     <div class="dropdown-content">
                         <a href="/help/scripture/">Finding Scriptures</a>
+                        {% if 'Administrator' in group_names or 'Supervisor' in group_names or 'Team' in group_names %}
+                            <a href="#">Development</a>
+                        {% endif %}
                         <a href="/help/index/">Using the Website</a>
                     </div>
                 </div>
