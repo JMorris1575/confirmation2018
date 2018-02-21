@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'discussion.apps.DiscussionConfig',
     'help.apps.HelpConfig',
     'mail.apps.MailConfig',
+    'development.apps.DevelopmentConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

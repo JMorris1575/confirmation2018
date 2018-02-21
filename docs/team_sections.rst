@@ -515,8 +515,8 @@ Comments' button that appears on the summary page.
 When all is ready a Supervisor or Administrator can set the dates for its appearance and Publish the activity to the
 candidates.
 
-The Development App
-*******************
+Planning the Development App
+****************************
 
 It seems that this will require another app, perhaps called "development" that will provide a model for comments on
 each developing activity as well as a model for the team member(s) responsible for its development. It can have its own
@@ -659,5 +659,23 @@ Perhaps the following models will work:
     user, ForeignKey, User; on_delete=models.CASCADE, the user making the comment
     text, TextField, blank?; null?; either?, the text of the comment
     type, CharField, max_length=15; choices=General; Partner, type of comment for display
+
+Building the Development App
+****************************
+
+``python manage.py startapp development`` should do the trick...
+
+It did, now to add all the files it created to git...
+
+That's done. Now to create a plan:
+
+*   add the development app to INSTALLED_APPS in ``config/settings/base.py`` [X]
+*   create urls in both ``config/urls.py`` and ``development/urls.py`` [X]
+*   create the new models in development/models.py 
+*   register the new models in the admin program
+*   create the activity list page
+*   create the activity summary page
+*   one by one, create the individual page types
+
 
 
