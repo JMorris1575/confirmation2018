@@ -713,6 +713,21 @@ return a list of partners.
 
 Before I can implement this I will have to fake a couple of entries for the already existing activities...
 
+That was easy and I have got a good start on the ``activity_list.html`` page. I've decided it makes no sense to list the
+activities in separate groups. Including a Status column should be sufficient.
+
+To save space I was thinking to make the activity's name into the link to that activity's summary page but it would be
+easier, I think, to use a small button for that. The button would only appear for developing activities for the
+initiator and partners for that activity. I think a model method called 'is_developer' might work for this.
+
+But what should be the text on the button? For some, clicking the button will only allow them to make comments on the
+developing (or complete) activity. For the developers of that activity it allows them to edit it. Is there a word that
+covers both possibilities, or should the text just be different in different cases: Review for non-developers, Edit for
+developers? That seems easier to me. The above mentioned model method: ``is_developer`` should be all it takes to
+distinquish.
+
+I will also have to invent another css class called ``small-button`` to get the button to fit into the table and
+override any button formatting by skeleton.css.
 
 
 Creating the Activity Summary Page

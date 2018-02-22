@@ -6,13 +6,17 @@ from activity.models import Activity
 
 
 class DevelopingActivity(models.Model):
+    DEVELOPING = 'DV'
+    REVIEWING = 'RV'
+    READY = 'RD'
+    PUBLISHED = 'PB'
+    STATUS_CHOICES = [(DEVELOPING, 'Developing'),
+                      (REVIEWING, 'Reviewing'),
+                      (READY, 'Ready'),
+                      (PUBLISHED, 'Published')]
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     initiator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    status = models.CharField(max_length=15,
-                              choices=[('DV', 'Developing'),
-                                       ('RV', 'Reviewing'),
-                                       ('RD', 'Ready'),
-                                       ('PB', 'Published')])
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES)
 
     def __str__(self):
         return self.activity.name
@@ -25,7 +29,17 @@ class DevelopingActivity(models.Model):
         return partners
 
     def get_dates(self):
-        return str(self.activity.publish_date) + ' to ' + str(self.activity.closing_date)
+        publish = self.activity.publish_date.strftime('%b %d, %Y')
+        close = self.activity.closing_date.strftime('%b %d, %Y')
+        return publish + ' to ' + close
+
+    def get_status(self):
+        status_code = self.status
+        for choice in self.STATUS_CHOICES:
+            if choice[0] == status_code:
+                return choice[1]
+        return 'None'
+
 
     class Meta:
         verbose_name_plural = 'developing activities'
