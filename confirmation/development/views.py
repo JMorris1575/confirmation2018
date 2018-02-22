@@ -19,3 +19,17 @@ class DevActivitiesListView(View):
             return render(request, self.template_name, {'group_names': group_names, 'activities': activities})
         else:
             raise PermissionDenied
+
+
+class DevSummaryView(View):
+    template_name = 'development/dev_summary.html'
+
+    def get(self, request, activity_slug):
+        group_names = get_group_names(request.user)
+        if 'Administrator' in group_names or 'Supervisor' in group_names or 'Team' in group_names:
+            activity = DevelopingActivity.objects.get(activity__slug=activity_slug)
+            return render(request, self.template_name, {'group_names': group_names, 'activity': activity})
+        else:
+            raise PermissionDenied
+
+

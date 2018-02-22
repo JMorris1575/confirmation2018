@@ -548,7 +548,7 @@ Here are my initial thoughts:
 
     develop/, RedirectView, , the base url for the app-redirects to develop/activities/
     develop/activities/, DevActivityListView, dev_activity_list, goes to the list of activities that can be edited
-    develop/activities/<activity>/, DevActivitySummaryView, dev_activity_summary, goes to the development summary page
+    develop/activities/<activity_slug>/summary/, DevSummaryView, dev_summary, goes to the development summary page
     develop/activities/<activity>/<page>/, DevActivityPageView, dev_activity_page, goes to the page development page
 
 Planning the Models
@@ -729,11 +729,14 @@ distinquish.
 I will also have to invent another css class called ``small-button`` to get the button to fit into the table and
 override any button formatting by skeleton.css.
 
+The ``small-button`` class wasn't needed since I ended up using links instead of buttons, they look as good and take up
+less space.
 
 Creating the Activity Summary Page
 ++++++++++++++++++++++++++++++++++
 
-
+The links on the list page should lead to the summary page for that activity so I will add to ``development/urls.py``,
+then create stubs for ``DevSummaryView`` and ``dev_summary.html``.
 
 Creating the Individual Page Building Page
 ++++++++++++++++++++++++++++++++++++++++++

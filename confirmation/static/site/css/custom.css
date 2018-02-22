@@ -286,6 +286,14 @@ td.pad-override {
     border-bottom: 1px solid black;
 }
 
+.small-button {
+    width: 60px;
+    height: 30px;
+    padding: 5px;
+    margin: 5px;
+    line-height: 20px;
+}
+
 .small-font {
     font-family: 'Arial', sans;
     font-size: 0.8em;

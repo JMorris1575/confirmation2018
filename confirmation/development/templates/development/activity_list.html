@@ -2,16 +2,17 @@
 
 {% block content %}
     <div class="container">
-        <div class="offset-by-two eight columns shadowed">
+        <div class="offset-by-one ten columns shadowed">
             <div>
                 <table class="center-element">
-                    <caption><h4>Activities</h4></caption>
+                    <caption><h4>Activity Development</h4></caption>
                     <tr>
                         <thead>
                             <th>Activity Name</th>
                             <th>Initiator</th>
                             <th>Partners</th>
                             <th>Status</th>
+                            <th></th>
                         </thead>
                     </tr>
                     {% for activity in activities %}
@@ -27,9 +28,24 @@
                                     {{ partner.name }}
                                 {% endfor %}
                             </td>
-                            <td>
-                                {{ activity.get_status }}
-                            </td>
+                            {% with status=activity.get_status %}
+                                <td>
+                                    {{ status }}
+                                </td>
+                                {% if status == 'Reviewing' or status == 'Published' %}
+                                    <td>
+                                        <a href="url 'develop/{{ activity.activity.slug }}/summary/'">Review</a>
+                                    </td>
+                                {% else %}
+                                    {% if user in activity.get_partners or user == activity.initiator %}
+                                        <td>
+                                            <a href="url 'develop/{{ activity.activity.slug }}/summary/'">Edit</a>
+                                        </td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endwith %}
                         </tr>
                     {% endfor %}
                 </table>

@@ -2,10 +2,11 @@ from django.urls import path
 from django.views.generic import RedirectView
 from django.contrib.auth.decorators import login_required
 
-from .views import DevActivitiesListView
+from .views import DevActivitiesListView, DevSummaryView
 
 urlpatterns = [
     path('', RedirectView.as_view(url='development/activities/')),
-    path('activities/', DevActivitiesListView.as_view(), name='dev_activity_list')
+    path('activities/', DevActivitiesListView.as_view(), name='dev_activity_list'),
+    path('<slug:<activity_slug>/summary/', DevSummaryView.as_view(), name='dev_summary'),
     
 ]
