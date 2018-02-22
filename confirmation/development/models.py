@@ -17,6 +17,16 @@ class DevelopingActivity(models.Model):
     def __str__(self):
         return self.activity.name
 
+    def get_initiator(self):
+        return self.initiator.first_name + ' ' + self.initiator.last_name
+
+    def get_partners(self):
+        partners = Developer.objects.filter(activity=self)
+        return partners
+
+    def get_dates(self):
+        return str(self.activity.publish_date) + ' to ' + str(self.activity.closing_date)
+
     class Meta:
         verbose_name_plural = 'developing activities'
 
@@ -27,7 +37,10 @@ class Developer(models.Model):
     full_partner = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.initiator.first_name + ' ' + self.initiator.last_name + ': ' + activity.name
+        return self.activity.activity.name + ' partner: ' + self.partner.first_name + ' ' + self.partner.last_name
+
+    def name(self):
+        return self.partner.first_name + ' ' + self.partner.last_name
 
 
 class Comment(models.Model):

@@ -685,9 +685,33 @@ Here is what I think I have to do:
 
 *   create the ``development/base_development.html`` page stub [X]
 *   create a ``development/activity_list.html`` page stub [X]
-*   add a 'Development' menu item to the header visible only to Team and above
+*   add a 'Development' menu item to the header visible only to Team and above [X]
 *   fill out the ``activity_list.html`` page
 *   make it look good
+
+Filling Out the Activity List Page
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are two kinds of activities that need to be listed, maybe three:
+
+#.  Published Activities
+#.  Activities being Reviewed
+#.  Activities being worked on but not yet to the point of being reviewed.
+
+The first two categories should be visible to everybody while the last should only be visible to the team members
+working on them, Administrators and Supervisors.
+
+Each should be displayed in its own section and in a table indicating:
+
+*   The activity name
+*   The initiator
+*   A list of partners
+*   Perhaps a button to enter the activity development page for that activity (or the name can be the link?)
+
+It seems that the view must send the DevelopingActivity entry and that model should have a ``get_partners`` method to
+return a list of partners.
+
+Before I can implement this I will have to fake a couple of entries for the already existing activities...
 
 
 

@@ -2,6 +2,39 @@
 
 {% block content %}
     <div class="container">
-        <h3>This will be the activity list page.</h3>
+        <div class="offset-by-two eight columns shadowed">
+            <div>
+                <table>
+                    <caption>Published Activities</caption>
+                    <tr>
+                        <thead>
+                            <th>Activity Name</th>
+                            <th>Initiator</th>
+                            <th>Partners</th>
+                            <th>Dates</th>
+                            <th> - </th>
+                        </thead>
+                    </tr>
+                    {% for activity in activities %}
+                        <tr>
+                            <td>
+                                {{ activity }}
+                            </td>
+                            <td>
+                                {{ activity.get_initiator }}
+                            </td>
+                            <td>
+                                {% for partner in activity.get_partners %}
+                                    {{ partner.name }}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {{ activity.get_dates }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}
