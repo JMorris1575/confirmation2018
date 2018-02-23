@@ -738,5 +738,33 @@ Creating the Activity Summary Page
 The links on the list page should lead to the summary page for that activity so I will add to ``development/urls.py``,
 then create stubs for ``DevSummaryView`` and ``dev_summary.html``.
 
+After some confusion about how to get to the summary view I finally just typed out the url in ``activity_list.html`` as
+follows::
+
+    <a href="/develop/{{ activity.activity.slug }}/">Review</a>
+
+Now to actually get something useful on the page.
+
+It seems that copying, or including, the ``acivity/summary.html`` page and then adding a means to comment on it is
+something I can do, though I'm sure there will be a learning curve. My first step is to look at ``base.html`` to see
+how to included other html files like ``header.html`` and ``footer.html``...
+
+That seems simple enough, simply type {% include 'activity/summary.html` %}. But will it be complicated by the files
+the summary page extends? I'm about to find out...
+
+Yes, it does cause complications. I got the header and footer all over again, and the image doesn't show, probably
+because DevelopingActivity does not have the image directly available. This is going to take some thought...
+
+At first it seemed that creating core html pages for each of the pages would be the way to go but that was quickly
+getting very complicated. Most notably, clicking on one of the navigation buttons would take me back to the activity
+versions of the pages and I would have to keep getting back to the development version. Ugh!
+
+Perhaps a better approach would be to add some kind of flag in the activity versions of the files to indicate whether
+the developer options should be visible or not. Again, I'll have to think some about this...
+
+I've opted, for now, to recreate the pages in the development app but make the changes necessary to keep the links
+going to the right places. I just copy/pasted most of ``summary.html`` into ``dev_summary.html`` to see how it will
+work.
+
 Creating the Individual Page Building Page
 ++++++++++++++++++++++++++++++++++++++++++

@@ -25,7 +25,10 @@ class DevelopingActivity(models.Model):
         return self.initiator.first_name + ' ' + self.initiator.last_name
 
     def get_partners(self):
-        partners = Developer.objects.filter(activity=self)
+        developers = Developer.objects.filter(activity=self)
+        partners = []
+        for developer in developers:
+            partners.append(developer.partner)
         return partners
 
     def get_dates(self):
@@ -39,6 +42,12 @@ class DevelopingActivity(models.Model):
             if choice[0] == status_code:
                 return choice[1]
         return 'None'
+
+    def can_edit(self, user):
+        if user == self.initiator or user in self.get_partners():
+            return True
+        else:
+            return False
 
 
     class Meta:

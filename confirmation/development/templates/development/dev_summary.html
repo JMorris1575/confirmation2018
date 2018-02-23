@@ -1,5 +1,51 @@
 {% extends 'development/base_development.html' %}
+{% load static %}
 
 {% block content %}
-    <h2>This will be the Development Activity Summary Page</h2>
+        <div class="container">
+        <div class="offset-by-two eight columns activity-text shadowed">
+            <div class="row">
+                <div class="twelve columns heading">
+                    {{ activity }}
+                </div>
+            </div>
+            <div class="page-text row">
+                <p class="eight columns">
+                    {{ activity.overview }}
+                </p>
+                <div class="four columns">
+                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                </div>
+            </div>
+            <div class="row">
+                {% if pages %}
+                    <div class="heading twelve columns">
+                        Things to Do:
+                    </div>
+                    <table class="u-full-width">
+                        {% for page in pages %}
+                        <tr>
+                            <td>
+                                <p class="table-list">
+                                    {{ page }}
+                                </p>
+                            </td>
+                            <td>
+                                <a class="button u-full-width"
+                                   href="/develop/{{ activity.slug }}/{{ page.index }}/">
+                                    Review
+                                    {% if can_edit %}/ Edit{% endif %}
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+                <a class="button offset-by-three six columns" href="/develop/activities/">
+                    Return to Activity List Page
+                </a>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

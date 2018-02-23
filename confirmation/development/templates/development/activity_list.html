@@ -5,7 +5,7 @@
         <div class="offset-by-one ten columns shadowed">
             <div>
                 <table class="center-element">
-                    <caption><h4>Activity Development</h4></caption>
+                    <caption><h4>Activity List</h4></caption>
                     <tr>
                         <thead>
                             <th>Activity Name</th>
@@ -15,31 +15,31 @@
                             <th></th>
                         </thead>
                     </tr>
-                    {% for activity in activities %}
+                    {% for dev_activity in dev_activities %}
                         <tr>
                             <td>
-                                {{ activity }}
+                                {{ dev_activity }}
                             </td>
                             <td>
-                                {{ activity.get_initiator }}
+                                {{ dev_activity.get_initiator }}
                             </td>
                             <td>
-                                {% for partner in activity.get_partners %}
-                                    {{ partner.name }}
+                                {% for partner in dev_activity.get_partners %}
+                                    {{ partner.first_name }} {{ partner.last_name }}
                                 {% endfor %}
                             </td>
-                            {% with status=activity.get_status %}
+                            {% with status=dev_activity.get_status %}
                                 <td>
                                     {{ status }}
                                 </td>
                                 {% if status == 'Reviewing' or status == 'Published' %}
                                     <td>
-                                        <a href="url 'develop/{{ activity.activity.slug }}/summary/'">Review</a>
+                                        <a href="/develop/{{ dev_activity.activity.slug }}/">Review</a>
                                     </td>
                                 {% else %}
-                                    {% if user in activity.get_partners or user == activity.initiator %}
+                                    {% if user in dev_activity.get_partners or user == dev_activity.initiator %}
                                         <td>
-                                            <a href="url 'develop/{{ activity.activity.slug }}/summary/'">Edit</a>
+                                            <a href="/develop/{{ dev_activity.activity.slug }}/">Edit</a>
                                         </td>
                                     {% else %}
                                         <td></td>

@@ -6,7 +6,7 @@ from .views import DevActivitiesListView, DevSummaryView
 
 urlpatterns = [
     path('', RedirectView.as_view(url='development/activities/')),
-    path('activities/', DevActivitiesListView.as_view(), name='dev_activity_list'),
-    path('<slug:<activity_slug>/summary/', DevSummaryView.as_view(), name='dev_summary'),
+    path('activities/', login_required(DevActivitiesListView.as_view()), name='dev_activity_list'),
+    path('<slug:activity_slug>/', login_required(DevSummaryView.as_view()), name='dev_summary'),
     
 ]
