@@ -32,9 +32,6 @@ class WelcomeView(View):
         group_names = get_group_names(request.user)
         return render(request, self.template_name, {'data': data, 'group_names':group_names})
 
-    def post(self, request):
-        return render(request, self.template_name)
-
 
 class SummaryView(View):
     template_name = 'activity/summary.html'
@@ -60,6 +57,8 @@ class SummaryView(View):
 class PageView(View):
 
     def get(self, request, activity_slug, page_index):
+        print('activity/PageView get: request.path = ', request.path)
+        print('activity/PageView get: request.path_info = ', request.path_info)
         activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)
@@ -78,6 +77,7 @@ class PageView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):
+        print('activity/PageView post: request = ', request)
         activity = Activity.objects.get(slug=activity_slug)
         page = Page.objects.get(activity=activity.pk, index=page_index)
         if page.page_type == 'IN':

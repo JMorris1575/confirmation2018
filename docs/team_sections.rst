@@ -768,3 +768,70 @@ work.
 
 Creating the Individual Page Building Page
 ++++++++++++++++++++++++++++++++++++++++++
+
+Rethinking the Approach to Development
+--------------------------------------
+
+What I'm trying to do is too complicated, both from the programming point of view and from the user interface point of
+view. Team members, and my testers among the candidates, should be able to make comments on the actual activity pages
+as they will be displayed to the rest of the users. A comment box at the bottom, or perhaps a sidebar, should be all
+that is needed. This will be visible only to those with the proper credentials. Perhaps, somewhere --
+config/utilities.py maybe -- I can make an is_advisor routine to help with this.
+
+By the way, if I am going to have candidate testers I will probably want to create a new group called Testers for that
+purpose. I could include Team, Supervisors and Administrators in the Testers group.
+
+Anyway, this would allow the development app to concentrate on creating the activities. But how would the builders be
+able to see what they will look like in the final version? Will I have to recreate each of the activity pages? Can there
+be a side-by-side approach, building the final form of the page as the developer fills in a form at the side? This could
+still be complicated to program but I have suspected the development pages were going to be complicated from the start.
+
+I think I will concentate first on my testers. The sooner I get something online the better!
+
+Narrative Walk-through for a Tester
+***********************************
+
+Sally has been invited, and has agreed, to be one of the candidates testing the website before it is ready for anyone
+else. She goes to the website using her special temporary identity as a Tester.
+
+She sees the Welcome page as it appears to everyone else but also sees a box at the bottom for comments. This box may
+already have a comment from Fr. Jim about what he is especially interested in knowing about the page -- its overall
+appearance, color scheme, whether it is obvious what a person is supposed to do when they get to the page, etc. She
+makes her comments in a text area by the side of the comment box and clicking on a button that says "Submit Comment."
+It immediately appears in the comment box and includes an "Edit" link at the end of it along with any previous comments
+she may have made.
+
+If she clicks on the "Edit" link she goes to another page where she can edit or delete the comment. [OR that comment
+appears in the editing box along with buttons that say "Submit Edited Comment", "Cancel", or "Delete Comment."]
+
+So it is on all of the pages of the website, including the help pages.
+
+Thoughts After Writing the Narrative Walk-through
+*************************************************
+
+I can focus my efforts on creating an html page to be included in all of the websites pages. Perhaps I can put the
+``{% include %}`` tag into ``base.html``. Perhaps I can call it ``tester_comments.html``. If the ``{% include %} tag
+appears AFTER the footer, it will help separate the comments from the rest of the page.
+
+This would require each view to send a flag as to whether the user is a tester to be checked at the beginning of
+``tester_comments.html``.
+
+It would also require a Comment model in some app. I suppose I can keep it in the development app since that is what it
+is for but I may need an improved means of determining which page each comment belongs to: activity pages?, help pages?,
+what? I wonder if there is a URL field I can use for this purpose...
+
+There IS such a thing as a ``models.URLField`` it is a subclass of CharField with a ``max_length`` that defaults to
+200. Somehow, when a comment is added, the url of the page it is sent from would be saved in this field and then, when
+comments are displayed, only comments from that url, which is probably in the request someplace, will be supplied. This
+only has to be done for Testers.
+
+I will experiment now to find out what information is in the request for the welcome page...
+
+Yes, it is, and the best way to access it is through the ``.path_info`` attribute. I might have tried to use ``.path``
+but the Django Documents warned that some webservers include a WSGIScriptAlias in the ``.path`` but strip that off of
+the ``.path_info`` attribute. Using ``.path_info`` makes for a better transition from development servers to the final
+deployment servers.
+
+Thus it should be fairly easy to match comments to the pages they belong on regardless of what kind of page they are. I
+will have to make the Tester section look sufficiently different from the rest of it to clearly indicate that it won't
+belong on the final webpages as seen by the candidates.

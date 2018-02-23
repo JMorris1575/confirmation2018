@@ -8,7 +8,6 @@
     <form action="{% url 'page' activity.slug page.index %}" method="post">
         {% csrf_token %}
         {% if not response %}
-            <p>Hello!</p>
             <input class="offset-by-three six columns button"
                    type="submit"
                    value="Finished"
