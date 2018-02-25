@@ -51,6 +51,12 @@
 
         {% include "footer.html" %}
 
+        {% if tester %}
+            {% if request.session.critiques_visible %}
+                {% include "consultants/critique_area.html" %}
+            {% endif %}
+        {% endif %}
+
     </body>
 
 </html>

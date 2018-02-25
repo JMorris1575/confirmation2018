@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import Group
 from .models import Activity, Page, Response, Choice
-from config.utilities import get_group_names, get_response_info
+from config.utilities import get_group_names, get_response_info, is_tester, get_critiques
 
 import datetime
 
@@ -30,7 +30,11 @@ class WelcomeView(View):
                 msg = 'Not Yet Available'
             data.append((activity, msg))
         group_names = get_group_names(request.user)
-        return render(request, self.template_name, {'data': data, 'group_names':group_names})
+        return render(request, self.template_name,
+                      {'data': data,
+                       'group_names': group_names,
+                       'critiques': get_critiques(request.path_info),
+                       'tester': is_tester(request.user)})
 
 
 class SummaryView(View):
@@ -51,14 +55,14 @@ class SummaryView(View):
         group_names = get_group_names(request.user)
         return render(request, self.template_name, {'activity': activity,
                                                     'data': data,
-                                                    'group_names': group_names})
+                                                    'group_names': group_names,
+                                                    'critiques': get_critiques(request.path_info),
+                                                    'tester': is_tester(request.user)})
 
 
 class PageView(View):
 
     def get(self, request, activity_slug, page_index):
-        print('activity/PageView get: request.path = ', request.path)
-        print('activity/PageView get: request.path_info = ', request.path_info)
         activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)
@@ -74,10 +78,11 @@ class PageView(View):
             self.template_name = 'activity/true-false.html'
         elif page.page_type == 'DS':
             return redirect('discussion', activity_slug, page_index)
+        context['critiques'] = get_critiques(request.path_info)
+        context['tester'] = is_tester(request.user)
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):
-        print('activity/PageView post: request = ', request)
         activity = Activity.objects.get(slug=activity_slug)
         page = Page.objects.get(activity=activity.pk, index=page_index)
         if page.page_type == 'IN':

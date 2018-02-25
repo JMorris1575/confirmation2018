@@ -29,6 +29,7 @@ urlpatterns = [
     path('discussion/', include('discussion.urls')),
     path('email/', include('mail.urls')),
     path('develop/', include('development.urls')),
+    path('suggestions/', include('consultants.urls')),
 ]
 
 admin.site.site_header = 'St. Basil Confirmation 2018 Admin'

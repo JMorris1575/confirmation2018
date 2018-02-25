@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'help.apps.HelpConfig',
     'mail.apps.MailConfig',
     'development.apps.DevelopmentConfig',
+    'consultants.apps.ConsultantsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

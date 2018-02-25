@@ -13,6 +13,12 @@ td.pad-override {
     padding-left: 15px;
 }
 
+#critique-area {
+    font-family: Courier, mono;
+    color: #444444;
+    background-color: #eeeeee;
+}
+
 #subject {
     height: 25px;
     color: black;
@@ -29,6 +35,11 @@ td.pad-override {
     font-family: 'Arial', sans;
     font-size: 1.2em;
     color: #2eb873;
+}
+
+.author {
+    font-weight: bold;
+    text-align: right;
 }
 
 .email-text {
@@ -116,6 +127,10 @@ td.pad-override {
 .heading {
     font-weight: bold;
     font-size: 1.5em;
+}
+
+.inset {
+    margin: 10px;
 }
 
 .sub-heading {

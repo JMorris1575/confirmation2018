@@ -651,6 +651,8 @@ Perhaps the following models will work:
     partner, ForeignKey, User; on_delete=models.CASCADE, user partnering with the initiator of this activity
     full_partner, Boolean, default=False, indicates whether this user has full rights to edit, publish, etc.
 
+|
+
 .. csv-table:: **Comment**
     :header: Field Name, Field Type, Attributes, Comments
     :widths: auto
@@ -809,8 +811,8 @@ So it is on all of the pages of the website, including the help pages.
 Thoughts After Writing the Narrative Walk-through
 *************************************************
 
-I can focus my efforts on creating an html page to be included in all of the websites pages. Perhaps I can put the
-``{% include %}`` tag into ``base.html``. Perhaps I can call it ``tester_comments.html``. If the ``{% include %} tag
+I can focus my efforts on creating an html page to include in all of the website's pages. I can put the
+``{% include %}`` tag into ``base.html``. Perhaps I can call it ``tester_comments.html``. If the ``{% include %}`` tag
 appears AFTER the footer, it will help separate the comments from the rest of the page.
 
 This would require each view to send a flag as to whether the user is a tester to be checked at the beginning of
@@ -835,3 +837,136 @@ deployment servers.
 Thus it should be fairly easy to match comments to the pages they belong on regardless of what kind of page they are. I
 will have to make the Tester section look sufficiently different from the rest of it to clearly indicate that it won't
 belong on the final webpages as seen by the candidates.
+
+Starting to Implement Tester Comments
+-------------------------------------
+
+I've decided to create a new app to hold the Comment model but I need to decide on some good names. First, the app name.
+
+Brainsorming Names
+******************
+
+Here is some brainstorming on app names:
+
+tester_comments, comments, tester, reviewers, suggestions, overseers, managers, commenters, opinions, advisors
+
+I put "tester" into WordPerfect and checked for synonyms and finally came up with "consultants."
+
+I think I like advisors (or advisor) the best of those. Should it be singular or plural?
+
+Now for model names:
+
+Comment, Advice, Suggestion, Remark
+
+I think I like Remark of those choices.
+
+Again, using WordPerfect, I came up with Critique for the model name.
+
+Starting the App
+****************
+
+``python manage.py startapp consultants`` should do it...
+
+It did, and I added all the files it created to git.
+
+I forgot, at first, to register the new app in INCLUDED_APPS and with the admin program. I noticed when I tried to do a
+``makemigrations`` and it reported "No changes detected."
+
+Model Design
+************
+
+I suspect the model design can be much the same as for the Christmas website except it needs to include the URLField to
+identify which page each critique goes with.
+
+Here is the first attempt at a design:
+
+.. csv-table:: **Critique Model Field Design**
+    :header: Name, Type, Attributes, Comments
+    :widths: auto
+
+    url, URLField, max_length=100, the page to which this Critique applies
+    user, ForeignKey, settings.AUTH_USER_MODEL; on_delete=models.CASCADE, the user making this statement
+    text, TextField, none, the critique itself
+
+I am going to need to include a date field to record the date the critique is first posted and use that to list the
+critiques in order of that date.
+
+Designing the html
+******************
+
+I've decided to call it ``critiqe_area.html`` and have it appear at the bottom of every page for testers only. I think
+it might be a good idea to implement some sort of toggle so the testers can turn it off and see the website without the
+area at the bottom of each page, but I haven't implemented that yet.
+
+The ``{% include %}`` statement at the end of ``base.html`` make it very easy to add this section to each page. I simply
+have to make sure the context includes::
+
+    ...
+    'critiques': get_critiques(request.path_info),
+    'tester': is_tester(request.user)``
+    ...
+
+and the template takes care of the rest.
+
+How to Get Back to the Same Page After Submitting a Comment
+***********************************************************
+
+That's my current problem. When a user clicks the Submit button to enter a comment, a post method somewhere will need
+to know the page it comes from, to save in the Critique model, and to use to get back to the same page. This seems to
+imply that something in the template should already know what the path is that got to it. I will try
+``{{ request.path_info }}`` to see if it displays anything...
+
+YES!!! It worked! That means I can send it to a view in the consultants app, save the comment, and redirect to the same
+page. Wonderful! How do I send it? I think I will try an <input> tag with type="hidden".
+
+That works beautifully. Now, it might be nice to be able to turn the critique section on and off...
+
+Toggling the Visibility of the Critique Section
+***********************************************
+
+There are two things I don't currently know how to do:
+
+#.  Set a variable for a particular user without using the database (perhaps sessions data?)
+#.  Get back to the page that sent the message in the first place.
+
+I wonder of javascript might be the solution to both problems. Does javascript have global variables that can be set
+when a website is first entered and then left alone until a user changes it? Where would that be done? What I know about
+javascript so far seems to indicate it is focused on only one page at a time. I will have to read more.
+
+No, I don't think that is going to work. Of course, I haven't learned, yet, to keep my javascript code in a separate
+file and maybe I could do it there, but the way I'm doing things now, every time the file containing my javascript code
+is loaded the global variables would get reset to their initial value.
+
+Using Django's sessions seems like a better approach. It does save the information in the database but I don't have to
+create a separate model for it, which is what I didn't want to do before. According to Django's website at:
+https://docs.djangoproject.com/en/2.0/topics/http/sessions/ I would need to add 'django.contrib.sessions' to my
+INSTALLED_APPS setting but it is already there.
+
+All I had to do was to create a ToggleCritiqueView as follows::
+
+    class ToggleCritiquesView(View):
+
+        def get(self, request):
+            if request.session.get('critiques_visible', True):
+                request.session['critiques_visible'] = False
+            else:
+                request.session['critiques_visible'] = True
+            return redirect('/activity/welcome/')
+
+(The redirect url is temporary until I can figure out how to get back to the same page I left.) Then I could use it
+in ``base.html`` as follows::
+
+    {% if tester %}
+        {% if request.session.critiques_visible %}
+            {% include "consultants/critique_area.html" %}
+        {% endif %}
+    {% endif %}
+
+I did, of course, have to modify my ``constultants/urls.py`` file as follows::
+
+    urlpatterns = [
+        path('', CritiqueView.as_view(), name='save_critique'),
+        path('suggestions/toggle_critiques', ToggleCritiquesView.as_view(), name='toggle_critiques'),
+    ]
+
+Now to tackle the problem of getting back to the page I came from after the toggle...

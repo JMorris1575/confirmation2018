@@ -1,0 +1,37 @@
+<div class="container">
+    <br>
+    <div class="offset-by-one ten columns" id="critique-area">
+        <div class="inset">
+            Help me improve the website by submitting your comments and suggestions in the space below. To view the
+            webpage as it will appear without this comment section, click the 'Critiques Off' link near the top of the
+            page.
+        </div>
+        <div class="inset row">
+            <form action="/suggestions/" method="post">
+                {% csrf_token %}
+                <label for="critique">Enter your comments and suggestions here:</label>
+                <input type="hidden" name="page_url" value="{{ request.path_info }}"/>
+                <textarea class="u-full-width text-field" name="critique" id="critique"autofocus></textarea>
+                <input class="offset-by-four four columns" value="Submit" type="submit"/>
+            </form>
+        </div>
+        {% if critiques %}
+            <h5 class="inset">Previous comments on this page:</h5>
+            <div class="border inset">
+                {% for critique in critiques %}
+                    <div class="row">
+                        <div class="three columns author">
+                            {{ critique.name }}:
+                        </div>
+                        <div class="nine columns">
+                            {{ critique.text }}
+                            {% if critique.user == user %}
+                                <a href="#"> Edit</a>
+                            {% endif %}
+                       </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>

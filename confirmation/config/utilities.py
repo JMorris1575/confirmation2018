@@ -1,5 +1,6 @@
 from django.contrib.auth.models import Group
 from activity.models import Activity, Page, Response
+from consultants.models import Critique
 
 
 def get_group_names(user):
@@ -22,6 +23,13 @@ def get_response_info(user=None, activity_slug=None, page_index=None):
         response = responses[0]
     context = {'activity':activity, 'page':page, 'response':response, 'group_names':get_group_names(user)}
     return activity, page, responses, context
+
+def is_tester(user):
+    groups = get_group_names(user)
+    return 'Tester' in groups
+
+def get_critiques(path):
+    return Critique.objects.filter(path=path)
 
 
 class PageMixin:

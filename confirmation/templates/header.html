@@ -42,7 +42,13 @@
                         <a class="menu-button" href="{% url 'dev_activity_list' %}">Development</a>
                     </div>
                 {% endif %}
-
+                {% if tester %}
+                    <div class="dropdown u-pull-right">
+                        <a class="menu-button" href="{% url 'toggle_critiques' %}">
+                            Toggle Critiques
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </header>
