@@ -30,6 +30,11 @@ class WelcomeView(View):
                 msg = 'Not Yet Available'
             data.append((activity, msg))
         group_names = get_group_names(request.user)
+        # set 'critiques_visible' to true if it is not set
+        try:
+            test = request.session['critiques_visible']
+        except KeyError:
+            request.session['critiques_visible'] = True
         return render(request, self.template_name,
                       {'data': data,
                        'group_names': group_names,

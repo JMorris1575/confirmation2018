@@ -5,5 +5,5 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('', CritiqueView.as_view(), name='save_critique'),
-    path('suggestions/toggle_critiques', ToggleCritiquesView.as_view(), name='toggle_critiques'),
+    path('toggle_critiques/', ToggleCritiquesView.as_view(), name='toggle_critiques'),
 ]
