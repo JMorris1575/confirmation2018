@@ -148,11 +148,12 @@ class PageEditView(View):
             response.true_false = not response.true_false
             response.save()
             return redirect('page', activity_slug, page_index)
-
+        context['critiques'] = get_critiques(request.path_info),
+        context['tester'] = is_tester(request.user)
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):
-        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         response = context['response']
         if request.POST['button'] == 'OK':            # if it's 'Cancel' skip right to the redirect
             if page.page_type == 'ES':
@@ -177,6 +178,8 @@ class PageDeleteView(View):
             self.template_name = 'activity/multi-choice-delete.html'
         if page.page_type == 'TF':
             self.template_name = 'activity/true-false-delete.html'
+        context['critiques'] = get_critiques(request.path_info),
+        context['tester'] = is_tester(request.user)
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):

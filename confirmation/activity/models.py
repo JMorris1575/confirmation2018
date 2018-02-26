@@ -113,8 +113,8 @@ class Page(models.Model):
             msg += "be able to see who made each comment. You will be able to edit your entries at any time."
         else:
             msg = "In an anonymous discussion your name is not recorded anywhere in the system and no one will be able "
-            msg += "to tell who made which comment. Because entries are not recorded with names, edits will not be "
-            msg += "possible. Keep in mind, however, nothing on the internet is completely anonymous. "
+            msg += "to tell who made which comment and edits will not be possible. Keep in mind, however, nothing on "
+            msg += "the internet is completely anonymous."
         return msg
 
 

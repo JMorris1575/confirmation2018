@@ -5,17 +5,22 @@
 {% endblock %}
 
 {% block page-content %}
-    <form class="row separator" action="{% url 'discussion' activity.slug page.index %}" method="post">
+    <form class="separator" action="{% url 'discussion' activity.slug page.index %}" method="post">
         {% csrf_token %}
-        <p class="u-full-width">
+        <p class="row u-full-width">
             {% if not responses %}
-                Start the discussion by typing your response in the box below then click the Submit button.
+                Start the discussion by typing your thoughts* in the box below then click the Submit button.
             {% else %}
-                Add to the discussion by typing your thoughts in the box below then click the Submit button.
+                Add to the discussion by typing your thoughts* in the box below then click the Submit button.
             {% endif %}
         </p>
-        <textarea class="u-full-width text-field" name="entry" autofocus></textarea>
-        <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+        <div class="row">
+            <textarea class="u-full-width text-field" name="entry" autofocus></textarea>
+            <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+        </div>
+        <div class="fine-print">
+            *Inappropriate comments will be deleted. Threatening comments will be reported.
+        </div>
     </form>
     {% include 'activity/navigation.html' %}
 

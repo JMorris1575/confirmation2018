@@ -18,9 +18,8 @@ class CritiqueView(View):
 class ToggleCritiquesView(View):
 
     def get(self, request):
-        print('consultants/views.py ToggleCirtiquesView: request.path_info = ', request.path_info)
         if request.session.get('critiques_visible', False):
             request.session['critiques_visible'] = False
         else:
             request.session['critiques_visible'] = True
-        return redirect('/activity/welcome/')
+        return redirect(request.META['QUERY_STRING'].replace('next=', ''))

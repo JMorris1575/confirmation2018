@@ -17,7 +17,7 @@
                 {% if user.is_authenticated %}
                     <div class="welcome">
                         Welcome {{ user.first_name }}!
-                        <a class="link" href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
+                        <a class="link" href="{% url 'logout' %}?next={{ request.path_info }}">Logout</a>
                     </div>
                 {% endif %}
             </div>
@@ -44,7 +44,9 @@
                 {% endif %}
                 {% if tester %}
                     <div class="dropdown u-pull-right">
-                        <a class="menu-button" href="{% url 'toggle_critiques' %}">Toggle Critiques</a>
+                        <a class="menu-button" href="{% url 'toggle_critiques' %}?next={{ request.path_info }}">
+                            Toggle Critiques
+                        </a>
                     </div>
                 {% endif %}
             </div>

@@ -116,6 +116,11 @@ td.pad-override {
     font-weight: bold;
 }
 
+.fine-print {
+    color: black;
+    font-size: .6em;
+}
+
 .formatted {
     white-space: pre-wrap;
 }

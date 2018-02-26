@@ -970,3 +970,37 @@ I did, of course, have to modify my ``constultants/urls.py`` file as follows::
     ]
 
 Now to tackle the problem of getting back to the page I came from after the toggle...
+
+It turned out to be not too difficult. A ``request`` has a META attribute which contains, among many other things, a
+QUERY_STRING header which returns whatever is sent after a question mark in a url. (See
+https://docs.djangoproject.com/en/2.0/ref/request-response/ .) Thus I was able to write this in my ``header.html``::
+
+    {% if tester %}
+        <div class="dropdown u-pull-right">
+            <a class="menu-button" href="{% url 'toggle_critiques' %}?next={{ request.path_info }}">
+                Toggle Critiques
+            </a>
+        </div>
+    {% endif %}
+
+and this in consultants/views.py::
+
+    class ToggleCritiquesView(View):
+
+        def get(self, request):
+            if request.session.get('critiques_visible', False):
+                request.session['critiques_visible'] = False
+            else:
+                request.session['critiques_visible'] = True
+            return redirect(request.META['QUERY_STRING'].replace('next=', ''))
+
+Final Preparation Before Initial Deployment
+-------------------------------------------
+
+I don't know if I've checked whether the display is correct for all discussion types or, for that matter, whether
+Anonymous discussions work at all. The idea is that for Semi-Anonymous discussions the names should be visible to team
+members but not to candidates. For anonymous discussions I will need to have a generic user.
+
+Looking at ``base_discussion.html`` I can see that there is not yet any provision for distingishing team members, and,
+by looking in the admin, I can see there is not yet any Generic user. Obviously there must not be any provision in
+``discussion/views.py`` for saving Anonymous responses under the Generic User either.

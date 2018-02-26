@@ -3,15 +3,15 @@
     <div class="" id="critique-area">
         <div class="inset">
             Help me improve the website by submitting your comments and suggestions in the space below. To view the
-            webpage as it will appear without this comment section, click the 'Critiques Off' link near the top of the
-            page.
+            webpage as it will appear without this comment section, click the 'Toggle Critiques' link near the top of the
+            page. Click it again to turn this section back on.
         </div>
         <div class="inset row">
             <form action="/suggestions/" method="post">
                 {% csrf_token %}
                 <label for="critique">Enter your comments and suggestions here:</label>
                 <input type="hidden" name="page_url" value="{{ request.path_info }}"/>
-                <textarea class="u-full-width text-field" name="critique" id="critique"autofocus></textarea>
+                <textarea class="u-full-width text-field" name="critique" id="critique"></textarea>
                 <input class="offset-by-four four columns" value="Submit" type="submit"/>
             </form>
         </div>
