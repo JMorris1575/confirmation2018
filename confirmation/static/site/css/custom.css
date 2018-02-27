@@ -333,6 +333,12 @@ td.pad-override {
     height: 100px;
 }
 
+.three-column-display {
+    -webkit-columns: 3;
+    -moz-columns: 3;
+    columns: 3;
+}
+
 .welcome {
     font-family: 'Arial', sans;
     color: #ffdd55;

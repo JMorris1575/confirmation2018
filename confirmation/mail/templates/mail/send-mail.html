@@ -51,6 +51,12 @@
                     $(this).prop('checked', selected); // sets the checkbox to status of button
                 }); // end candidate each
             }); // end select_candidates click
+            $('#select_testers').click(function() {
+                selected = toggleSelected(this);
+                $('.tester').each(function() {
+                    $(this).prop('checked', selected); // sets the checkbox to status of button
+                }); // end tester each
+            }); // end select_testers click
         }); // end ready
     </script>
 
@@ -74,7 +80,7 @@
         <div class="row">
             <button class="four columns sub-group" type="button" id="select_supervisors">Supervisors</button>
         </div>
-        <ul class="separator">
+        <ul class="three-column-display separator">
             {% for member in supervisors %}
                 <li class="indented-list">
                     <input type="checkbox" class="supervisor" name="recipients" value="{{ member }}"/>
@@ -85,7 +91,7 @@
         <div class="row">
             <button class="four columns sub-group" type="button" id="select_team">Team Members</button>
         </div>
-        <ul class="separator">
+        <ul class="three-column-display separator">
             {% for member in team_members %}
                 <li class="indented-list">
                     <input type="checkbox" class="team" name="recipients" value="{{ member }}"/>
@@ -96,7 +102,7 @@
         <div class="row">
             <button class="four columns sub-group" type="button" id="select_candidates">Candidates</button>
         </div>
-        <ul class="separator">
+        <ul class="three-column-display separator">
             {% for member in candidates %}
                 <li class="indented-list">
                     <input type="checkbox" type="button" class="candidate" name="recipients" value="{{ member }}"/>
@@ -107,7 +113,7 @@
         <div class="row">
             <button class="four columns sub-group" type="button" id="select_testers">Testers</button>
         </div>
-        <ul class="separator">
+        <ul class="three-column-display separator">
             {% for member in testers %}
                 <li class="indented-list">
                     <input type="checkbox" type="button" class="tester" name="recipients" value="{{ member }}"/>
