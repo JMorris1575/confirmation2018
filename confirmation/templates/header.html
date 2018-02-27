@@ -26,7 +26,7 @@
                     <div class="menu-button">Help</div>
                     <div class="dropdown-content">
                         <a href="/help/scripture/">Finding Scriptures</a>
-                        {% if 'Administrator' in group_names or 'Supervisor' in group_names or 'Team' in group_names %}
+                        {% if 'Team' in group_names %}
                             <a href="#">Development</a>
                         {% endif %}
                         <a href="/help/index/">Using the Website</a>
@@ -37,7 +37,7 @@
                         <a class="menu-button" href="{% url 'send_email' %}">E-mail</a>
                     </div>
                 {% endif %}
-                {% if 'Administrator' in group_names or 'Supervisor' in group_names or 'Team' in group_names %}
+                {% if 'Team' in group_names %}
                     <div class="dropdown u-pull-right">
                         <a class="menu-button" href="{% url 'dev_activity_list' %}">Development</a>
                     </div>

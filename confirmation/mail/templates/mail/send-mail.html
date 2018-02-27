@@ -22,6 +22,7 @@
         $(document).ready(function() {
             $('#select_all').click(function() {
                 var selected = toggleSelected(this); // toggles 'selected' class and returns true if it is set
+                $(this).blur(); // turns off the highlighting of the clicked button
                 $('.sub-group').each(function() {
                     if (selected) {
                         $(this).addClass('selected');
@@ -35,24 +36,28 @@
             }); // end select_all click
             $('#select_supervisors').click(function() {
                 selected = toggleSelected(this);
+                $(this).blur(); // turns off the highlighting of the clicked button
                 $('.supervisor').each(function() {
                     $(this).prop('checked', selected); // sets the checkbox to status of button
                 }); // end supervisor each
             }); // end select_supervisors click
             $('#select_team').click(function() {
                 selected = toggleSelected(this);
+                $(this).blur(); // turns off the highlighting of the clicked button
                 $('.team').each(function() {
                     $(this).prop('checked', selected); // sets the checkbox to status of button
                 }); // end team each
             }); // end select_team click
             $('#select_candidates').click(function() {
                 selected = toggleSelected(this);
+                $(this).blur(); // turns off the highlighting of the clicked button
                 $('.candidate').each(function() {
                     $(this).prop('checked', selected); // sets the checkbox to status of button
                 }); // end candidate each
             }); // end select_candidates click
             $('#select_testers').click(function() {
                 selected = toggleSelected(this);
+                $(this).blur(); // turns off the highlighting of the clicked button
                 $('.tester').each(function() {
                     $(this).prop('checked', selected); // sets the checkbox to status of button
                 }); // end tester each
