@@ -65,7 +65,8 @@
             <div class="offset-by-one ten columns inset-info">
                 <p>
                     Click the buttons to select all of the members of that category or click
-                    'Select All' to select everyone.
+                    'Select All' to select everyone. (Note: duplicates will be removed so selected
+                    users in more than one category will get only one copy of your e-mail.)
                 </p>
                 <button class="u-pull-left five columns" type="button" id="select_all">Select All</button>
             </div>
@@ -99,6 +100,17 @@
             {% for member in candidates %}
                 <li class="indented-list">
                     <input type="checkbox" type="button" class="candidate" name="recipients" value="{{ member }}"/>
+                    {{ member.last_name }}, {{ member.first_name }}
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="row">
+            <button class="four columns sub-group" type="button" id="select_testers">Testers</button>
+        </div>
+        <ul class="separator">
+            {% for member in testers %}
+                <li class="indented-list">
+                    <input type="checkbox" type="button" class="tester" name="recipients" value="{{ member }}"/>
                     {{ member.last_name }}, {{ member.first_name }}
                 </li>
             {% endfor %}

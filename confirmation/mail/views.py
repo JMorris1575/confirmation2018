@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 
 from config.utilities import get_group_names
 from config.settings.base import get_secret
+from config.utilities import get_group_names, get_response_info, is_tester, get_critiques
 
 # Create your views here.
 
@@ -46,16 +47,21 @@ class EmailView(View):
             supervisors = Group.objects.get(name="Supervisor").user_set.all().order_by('last_name')
             team_members = Group.objects.get(name="Team").user_set.all().order_by('last_name')
             candidates = Group.objects.get(name="Candidate").user_set.all().order_by('last_name')
+            testers = Group.objects.get(name="Tester").user_set.all().order_by('last_name')
             context = {'group_names': group_names,
                        'supervisors': supervisors,
                        'team_members': team_members,
-                       'candidates': candidates}
+                       'candidates': candidates,
+                       'testers': testers,
+                       'critiques': get_critiques(request.path_info),
+                       'tester': is_tester(request.user)
+            }
             return render(request, self.template_name, context)
         else:
             raise PermissionDenied
 
     def post(self, request):
-        recipients = request.POST.getlist('recipients')
+        recipients = list(set(request.POST.getlist('recipients')))
         subject_template = request.POST['subject']
         message_template = request.POST['message']
         for recipient in recipients:
