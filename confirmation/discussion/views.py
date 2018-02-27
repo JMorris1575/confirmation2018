@@ -20,7 +20,7 @@ class DiscussionView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):
-        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         entry = request.POST['entry'].strip()
         if page.discussion_type == 'OP' or page.discussion_type == 'SA':
             user = request.user

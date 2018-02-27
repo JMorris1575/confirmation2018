@@ -50,7 +50,10 @@
                             {% else %}
                                 <div class="twelve columns discussion-response">
                                     {{ forloop.counter }}. {{ response.essay }}
-                                    {% if page.discussion_type != 'AN' %}
+                                    {% if page.discussion_type == 'SA' %}
+                                        {% if 'Team' in group_names %}
+                                            (by: {{ response.user.first_name }} {{ response.user.last_name }})
+                                        {% endif %}
                                         {% if response.user == user %}
                                             <a href="{% url 'discussion_edit' activity.slug page.index response.pk %}">
                                                 Edit
