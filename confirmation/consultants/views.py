@@ -9,9 +9,10 @@ class CritiqueView(View):
 
     def post(self, request):
         page_url = request.POST['page_url']
-        critique = request.POST['critique']
-        critique = Critique(path=page_url, user=request.user, text=critique)
-        critique.save()
+        critique = request.POST['critique'].strip()
+        if critique:
+            critique = Critique(path=page_url, user=request.user, text=critique)
+            critique.save()
         return redirect(page_url)
 
 

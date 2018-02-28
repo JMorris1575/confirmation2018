@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import HelpCategory, HelpPage
-from config.utilities import get_group_names
-
+from config.utilities import get_group_names, is_tester, get_critiques
 
 class HelpView(View):
     template_name = 'help/help.html'
@@ -16,7 +15,8 @@ class HelpView(View):
         if not page_number:
             context = {'page_file_name': 'help/' + category_name + '.html',
                        'category': category_name, 'previous': None, 'next': None,
-                       'group_names': group_names}
+                       'group_names': group_names, 'critiques': get_critiques(request.path_info),
+                       'tester': is_tester(request.user)}
         else:
             help_page = HelpPage.objects.get(category=category, number=page_number)
             page_count = len(HelpPage.objects.filter(category=category))
@@ -33,5 +33,6 @@ class HelpView(View):
                 next_page = next_page_num
             context = {'page_file_name': 'help/' + help_page.name + '.html',
                        'category': category_name, 'previous': previous, 'next': next_page,
-                       'group_names': group_names}
+                       'group_names': group_names, 'critiques': get_critiques(request.path_info),
+                       'tester': is_tester(request.user)}
         return render(request, self.template_name, context)
