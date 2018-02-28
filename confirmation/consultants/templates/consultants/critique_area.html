@@ -26,7 +26,7 @@
                         <div class="nine columns">
                             {{ critique.text }}
                             {% if critique.user == user %}
-                                <a href="#"> Edit</a>
+                                <a href="{% url 'critique_edit' critique.pk %}"> Edit</a>
                             {% endif %}
                        </div>
                     </div>

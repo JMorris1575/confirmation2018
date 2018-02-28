@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 from .models import Critique
+from config.utilities import get_group_names, get_response_info, is_tester, get_critiques
 
 # Create your views here.
 
@@ -14,6 +15,17 @@ class CritiqueView(View):
             critique = Critique(path=page_url, user=request.user, text=critique)
             critique.save()
         return redirect(page_url)
+
+
+class EditCritiqueView(View):
+    template_name = 'consultants/edit-critique.html'
+
+    def get(self, request, pk=None):
+        critique = Critique.objects.get(pk=pk)
+        context = {'critique': critique,
+                   'critiques': get_critiques(request.path_info),
+                   'tester': is_tester(request.user)}
+        return render(request, self.template_name, context)
 
 
 class ToggleCritiquesView(View):
