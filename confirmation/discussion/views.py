@@ -54,15 +54,13 @@ class DiscussionEditView(View):
 class DiscussionDeleteView(View):
 
     def get(self, request, activity_slug=None, page_index=None, response_pk=None):
-        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         response = Response.objects.get(pk=response_pk)
         context['response'] = response
-        context['critiques'] = get_critiques(request.path_info),
-        context['tester'] = is_tester(request.user)
         return render(request, 'discussion/discussion_delete.html', context)
 
     def post(self, request, activity_slug=None, page_index=None, response_pk=None):
-        activity, page, responses, context = self.get_response_info(request.user, activity_slug, page_index)
+        activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         if request.POST['user-choice'] == 'Delete':
             response = responses.get(pk=response_pk)
             response.delete()

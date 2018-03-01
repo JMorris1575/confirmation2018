@@ -1,0 +1,35 @@
+{% extends 'consultants/base_consultants.html' %}
+
+{% block title %}
+    {{ block.super }}Delete Critique
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="offset-by-two eight columns">
+            <form class="row separator" action="{% url 'critique_delete' critique.pk %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="page_url" value="{{ page_url }}"/>
+                <div class="row">
+                    <div>
+                        Your statement:
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="response-display">
+                        {{ critique.text }}
+                    </div>
+                </div>
+                <p>
+                    Are you sure you want to delete this remark?
+                </p>
+                <div class="center-element offset-by-three six columns">
+                    <input class="u-pull-left five columns button" name="user-choice" value="Delete" type="submit"/>
+                    <input class="u-pull-right five columns button" name="user-choice" value="Cancel" type="submit"/>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+<h3>This will be the page to confirm deletion of critiques.</h3>

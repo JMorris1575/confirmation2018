@@ -1,1 +1,22 @@
-<h3>This will be the edit-critique.html page</h3>
+{% extends 'consultants/base_consultants.html' %}
+
+{% block title %}
+    {{ block.super }}Edit Suggestion
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="offset-by-two eight columns shadowed">
+            <p>Edit your statement in the space below, then click the Submit button,
+                or confirm that you want to delete it entirely by pressing the Delete button.</p>
+            <form class="row separator" action="{% url 'critique_edit' critique.pk %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="page_url" value="{{ page_url }}"/>
+                <textarea class="u-full-width text-field" name="entry" autofocus>{{ critique.text }}</textarea>
+                {% include 'ok-cancel.html' %}
+            </form>
+            <a class="offset-by-four four columns button"
+               href="{% url 'critique_delete' critique.pk %}?next={{ page_url }}">Delete</a>
+        </div>
+    </div>
+{% endblock %}

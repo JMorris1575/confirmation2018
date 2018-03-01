@@ -994,6 +994,75 @@ and this in consultants/views.py::
                 request.session['critiques_visible'] = True
             return redirect(request.META['QUERY_STRING'].replace('next=', ''))
 
+Editing and Deleting Critiques
+******************************
+
+That turned out to be an interesting process. Since the edit page and the delete page for critiques do not come
+directly from the page being commented on, I had to pass a ``page_url`` context from .html pages to views and back
+again. Taking a tip from what I did to toggle the appearance of the critiques section, I used the ``?next=``
+QUERY_STRING to pass the url from the ``critique_area.html`` page, and later the ``edit-critique.html`` page and
+picked it up in the ``get`` methods. Then I passed it in the context sent to the html page that ``get`` returned and
+picked it up in the ``post`` method. See the code segments below:
+
+**From critique_area.html**::
+
+    {% if critique.user == user %}
+        <a href="{% url 'critique_edit' critique.pk %}?next={{ request.path_info }}"> Edit</a>
+    {% endif %}
+
+**From consultants/views.py**::
+
+    class EditCritiqueView(View):
+        template_name = 'consultants/edit-critique.html'
+
+        def get(self, request, pk=None):
+            page_url = request.META['QUERY_STRING'].replace('next=', '')        # the page from which this came
+            critique = Critique.objects.get(pk=pk)
+            context = {'page_url': page_url,
+                       'critique': critique,
+                       'critiques': get_critiques(request.path_info),
+                       'tester': is_tester(request.user)}
+            return render(request, self.template_name, context)
+
+        def post(self, request, pk=None):
+            page_url = request.POST['page_url']     # page_url obtained from get method passed through edit-critique.html
+            if request.POST['button'] == 'OK':
+                critique = Critique.objects.get(pk=pk)
+                critique.text = request.POST['entry']
+                critique.save()
+            return redirect(page_url)
+
+**From edit-critique.html**::
+
+    <a class="offset-by-four four columns button"
+       href="{% url 'critique_delete' critique.pk %}?next={{ page_url }}">Delete</a>
+
+**From consultants/views.py**::
+
+    class DeleteCritiqueView(View):
+        template_name = 'consultants/delete_critique.html'
+
+        def get(self, request, pk=None):
+            page_url = request.META['QUERY_STRING'].replace('next=', '')        # handed through edit-critique.html
+            critique = Critique.objects.get(pk=pk)
+            context = {'page_url': page_url,
+                       'critique': critique,}
+            return render(request, self.template_name, context)
+
+        def post(self, request, pk=None):
+            page_url = request.POST['page_url']         # page_url as obtained from get method above
+            if request.POST['user-choice'] == 'Delete':
+                critique = Critique.objects.get(pk=pk)
+                critique.delete()
+
+            return redirect(page_url)
+
+At the end I realized that the delete pages could not have a critique area since, once the correpsonding entry is
+delete, it would throw an error. I supposed I could have done something with ``try... except`` but it would be
+complicated, perhaps involving the deletion of comments in the database for no-longer-existing pages.
+
+This was complicated enough!
+
 Final Preparation Before Initial Deployment
 -------------------------------------------
 
