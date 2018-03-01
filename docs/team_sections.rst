@@ -1073,3 +1073,14 @@ members but not to candidates. For anonymous discussions I will need to have a g
 Looking at ``base_discussion.html`` I can see that there is not yet any provision for distingishing team members, and,
 by looking in the admin, I can see there is not yet any Generic user. Obviously there must not be any provision in
 ``discussion/views.py`` for saving Anonymous responses under the Generic User either.
+
+.. note::
+
+    I got all that working but, apparently, without making any comments here about it. I called the generic user
+    Unknown User with a USERNAME of Unknown.
+
+    I've implemented the proper display for each type of discussion. I think it is all working and I can consider a
+    test deployment just for my testers.
+
+    Perhaps I should supply some improved content however, and maybe complete the help section.
+
