@@ -29,7 +29,7 @@
                     <div class="dropdown-content">
                         <a href="/help/scripture/">Finding Scriptures</a>
                         {% if 'Team' in group_names %}
-                            <a href="#">Team Pages</a>
+                            <a href="/help/team/">Team Pages</a>
                         {% endif %}
                         <a href="/help/index/">Using the Website</a>
                     </div>
@@ -41,7 +41,11 @@
                 {% endif %}
                 {% if 'Team' in group_names %}
                     <div class="dropdown u-pull-right">
-                        <a class="menu-button" href="{% url 'dev_activity_list' %}">Team Pages</a>
+                        <div class="menu-button">Team Pages</div>
+                        <div class="dropdown-content">
+                            <a href="{% url 'dev_activity_list' %}">Build Activities</a>
+                            <a href="#">Candidate Reports</a>
+                        </div>
                     </div>
                 {% endif %}
                 {% if tester %}

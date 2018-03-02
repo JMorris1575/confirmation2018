@@ -1217,3 +1217,7 @@ already available.
 I decided to change the name of the 'Development' link in the header menu to 'Team Pages'. That won't be hard at all!...
 
 By accident I changed the link in the help menu also, though I don't have any help pages to go to yet.
+
+I created a ``sorry.html`` page to use for sections I don't have ready yet, and made the "Team Pages" header menu button
+into a dropdown menu. The help -> Team Pages selection goes to the ``sorry.html`` page but the Team Pages -> Candidate
+Reports goes nowhere at the moment. I will need a url path and a view to make that work.
