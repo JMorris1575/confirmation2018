@@ -1,28 +1,37 @@
 {% load static %}
 
-<div class="container">
     <h2>Help Index</h2>
-    <ul>
-        <li>
-            <a href="{% url 'numbered_help_page' 'usage' 1 %}">The Welcome Page</a>
-        </li>
-        <li>
-            <a href="{% url 'numbered_help_page' 'usage' 2 %}">The Acitivity Summary Page</a>
-        </li>
-        <li>
-            <a href="{% url 'numbered_help_page' 'usage' 3 %}">Instruction Pages</a>
-        </li>
-        <li>
-            <a href="{% url 'numbered_help_page' 'usage' 4 %}">Written Response Pages</a>
-        </li>
-        <li>
-            <a href="{% url 'numbered_help_page' 'usage' 5 %}">Multiple Choice Pages</a>
-        </li>
-        <li>
-            <a href="{% url 'numbered_help_page' 'usage' 6 %}">True/False Pages</a>
-        </li>
-        <li>
-            <a href="{% url 'numbered_help_page' 'usage' 7 %}">Discussion Pages</a>
-        </li>
-    </ul>
-</div>
+    <div class="row">
+        <ul class="offset-by-one eleven columns">
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 1 %}">The Welcome Page</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 2 %}">The Acitivity Summary Page</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 3 %}">Instruction Pages</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 4 %}">Written Response Pages</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 5 %}">Multiple Choice Pages</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 6 %}">True/False Pages</a>
+            </li>
+            <li>
+                <a href="{% url 'numbered_help_page' 'usage' 7 %}">Discussion Pages</a>
+            </li>
+        </ul>
+        {% if 'Team' in group_names %}
+            <h5>Team Page Help:</h5>
+            <ul class="offset-by-one eleven columns">
+                <li>
+                    <a href="{% url 'numbered_help_page' 'team' 1 %}">The Candidate Page</a>
+                </li>
+            </ul>
+        {% endif %}
+    </div>
+

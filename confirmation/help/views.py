@@ -3,6 +3,7 @@ from django.views import View
 from .models import HelpCategory, HelpPage
 from config.utilities import get_group_names, is_tester, get_critiques
 
+
 class HelpView(View):
     template_name = 'help/help.html'
 

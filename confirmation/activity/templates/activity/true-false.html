@@ -34,7 +34,7 @@
             You answered {{ response.true_false }}
         </p>
         {% if page.reveal_answer %}
-            {% if response.correct %}
+            {% if response.is_correct %}
                 <p>That is correct!</p>
             {% else %}
                 <p>Sorry! That is not correct.</p>

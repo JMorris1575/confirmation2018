@@ -6,6 +6,6 @@ from .views import HelpView
 
 urlpatterns = [
     path('', RedirectView.as_view(url='help/index/')),
-    path('<category_name>/', HelpView.as_view(), name='help_page'),
+    path('<str:category_name>/', HelpView.as_view(), name='help_page'),
     path('<category_name>/<int:page_number>/', HelpView.as_view(), name='numbered_help_page'),
 ]

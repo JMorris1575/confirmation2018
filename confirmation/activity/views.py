@@ -50,13 +50,15 @@ class SummaryView(View):
         pages = Page.objects.filter(activity=activity.pk)
         responses = Response.objects.filter(user=request.user, activity=activity.pk)
         data = []
-        changing_msg = 'Up next...'
+        first_pass = True                          # this changes as soon as an incomplete page is found
         for page in pages:
-            if responses.filter(page=page.pk):
+            if responses.filter(page=page.pk) and first_pass:
                 data.append((page, 'Completed'))    # If user has a response, call the page complete
+            elif first_pass:
+                data.append((page, 'Up next...'))   # This is the next page to do
+                first_pass = False                  # after that, enter 'Pending' for the rest of the pages
             else:
-                data.append((page, changing_msg))   # The first time we get here changing_msg='Up next...'
-                changing_msg = 'Pending'            # after that, changing_msg='Pending' for the rest of the pages
+                data.append((page, 'Pending'))
         group_names = get_group_names(request.user)
         return render(request, self.template_name, {'activity': activity,
                                                     'data': data,
@@ -115,17 +117,18 @@ class PageView(View):
             response.save()
         elif page.page_type == 'TF':
             try:
-                user_response = request.POST['choice']
+                user_response_string = request.POST['choice']
             except KeyError:
                 self.template_name = 'activity/true-false.html'
                 context = {'activity':activity, 'page':page, 'response':None}
                 context['error_message'] = 'You must select either True or False.'
                 return render(request, self.template_name, context)
+            user_response = (user_response_string == 'True')
             response = Response(user=request.user, activity=activity,
                                 page=page, true_false=user_response,
                                 completed=True)
             if not page.opinion:
-                response.correct = page.tf_answer
+                response.correct = (user_response == page.tf_answer)
             response.save()
         elif page.page_type == 'DS':
             return redirect('discussion', activity_slug, page_index)
@@ -156,13 +159,11 @@ class PageEditView(View):
         activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         response = context['response']
         if request.POST['button'] == 'OK':            # if it's 'Cancel' skip right to the redirect
-            if page.page_type == 'ES':
+            if page.page_type == 'ES':                # note: the editing for TF pages takes place in the get method
                 response.essay = request.POST['essay'].strip()
                 response.save()
             elif page.page_type == 'MC':
-                print('PageEditView post: response.multi_choice before: ', response.multi_choice)
                 response.multi_choice = request.POST['choice']
-                print('PageEditView post: response.multi_choice after: ', response.multi_choice)
                 response.save()
 
         return redirect('page', activity_slug, page_index)

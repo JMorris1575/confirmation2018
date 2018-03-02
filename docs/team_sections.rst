@@ -1084,3 +1084,136 @@ by looking in the admin, I can see there is not yet any Generic user. Obviously 
 
     Perhaps I should supply some improved content however, and maybe complete the help section.
 
+Before going online I will have to:
+
+*   disable the development link or send it to a page explaining what it may do (or create a suggested activities page)
+*   Make sure every type of activity is represented under "Noah, the Real Story"
+*   Fill out "God, are you there?"
+*   Create an activity based on Chosen materials - perhaps one of the sets of challenges?
+*   Complete a help page for dicussions
+*   Put more information about the website on the login page for those who click in from the parish website
+
+Notes on Updating the Activities
+********************************
+
+While doing this I discovered a bug in the way true/false responses were recorded. A user's response was always
+recorded as the correct response. I've changed that to::
+
+    if not page.opinion:
+        response.correct = user_response == page.tf_answer
+
+I will check to see that it's working...
+
+No, it doesn't seem to be. Time to investigate...
+
+The problem was that user_response was coming from a line that said ``user_response = request.POST['choice']`` which
+returns a string. Thus ``user_response == page.tf_answer`` would always be false since an str would never match a
+boolean. Doing it this way made it work::
+
+    try:
+        user_response_string = request.POST['choice']
+    except KeyError:
+        self.template_name = 'activity/true-false.html'
+        context = {'activity':activity, 'page':page, 'response':None}
+        context['error_message'] = 'You must select either True or False.'
+        return render(request, self.template_name, context)
+    user_response = (user_response_string == 'True')
+    response = Response(user=request.user, activity=activity,
+                        page=page, true_false=user_response,
+                        completed=True)
+    if not page.opinion:
+        response.correct = (user_response == page.tf_answer)
+    response.save()
+
+But in the process of studying that I tried to delete an earlier response without deleting later ones to see what it
+would do to whether a page could be reached.
+
+I deleted page 3 from the Noah activity after having completed the first six. Clicking the 'Back' button would get me
+to page 5 but not to page 4. Instead it went to the summary page. On the summary page all of the completed exercises
+showed buttons that said "Review it..." except for number 3 which said "Do it...". However, I could not click "Review
+it..." in number four to get there. I just stayed on the summary page. (Actually it was going to
+``activity/noah/4/`` but got redirected to ``activity/noah/summary/``.
+
+Studying ``PageView`` and the ``allowed`` method in the ``Page`` model I see that it is because the ``allowed`` method
+only returns false if the PRECEDING page has not been done. It leaves all the others uninvestigated. I suppose the
+``allowed`` method needs to check them all and the summary page needs to stop adding buttons once it comes to an
+incomplete activity.
+
+Here are the changes I made:
+
+**activity/models.py PageModel.allowed**::
+
+    def allowed(self, user, activity_slug, page_index):
+        """
+        Returns True if the user is allowed to go to the page at /activity/<activity_slug>/<page_index>, having
+        completed the page just before this one
+        :return: boolean
+        """
+        if self.index == 1:
+            return True             # user is always allowed to go to the first page
+        else:
+            activity = Activity.objects.get(slug=activity_slug)
+            pages = Page.objects.filter(activity=activity)
+            result = True
+            for page in pages:
+                if page.index < page_index:
+                    responses = Response.objects.filter(user=user, activity=activity, page=page)
+                    if len(responses) == 0:
+                        result = False
+                        break
+            return result
+
+**activity/views.py PageView**::
+
+    def get(self, request, activity_slug):
+        activity = Activity.objects.get(slug=activity_slug)
+        pages = Page.objects.filter(activity=activity.pk)
+        responses = Response.objects.filter(user=request.user, activity=activity.pk)
+        data = []
+        first_pass = True                          # this changes as soon as an incomplete page is found
+        for page in pages:
+            if responses.filter(page=page.pk) and first_pass:
+                data.append((page, 'Completed'))    # If user has a response, call the page complete
+            elif first_pass:
+                data.append((page, 'Up next...'))   # This is the next page to do
+                first_pass = False                  # after that, enter 'Pending' for the rest of the pages
+            else:
+                data.append((page, 'Pending'))
+        group_names = get_group_names(request.user)
+        return render(request, self.template_name, {'activity': activity,
+                                                    'data': data,
+                                                    'group_names': group_names,
+                                                    'critiques': get_critiques(request.path_info),
+                                                    'tester': is_tester(request.user)})
+
+**activity/templates/activity/summary.html**::
+
+    <td>    <!-- Third Column -->
+        {% if progress == 'Pending' %}
+            ''
+        {% elif progress == 'Up next...' %}
+            <a class="button button u-full-width"
+               href="/activity/{{ activity.slug }}/{{ page.index }}/">
+                Do it...
+            </a>
+        {% else %}
+            <a class="button button u-full-width"
+               href="/activity/{{ activity.slug }}/{{ page.index }}/">
+                Review it...
+            </a>
+        {% endif %}
+    </td>
+
+This was probably unnecessary since I probably prevent users from deleting earlier pages after completing later ones.
+
+More Ideas
+----------
+
+But I have two big ideas perhaps to implement before going online. One is to create a 'Challenge' page to accomodate
+the Challenges of the Chosen program.  The other is to create a page where team members can see the progress of the
+candidates or perhaps just their candidates. The former would be easier to implement first. I think the information is
+already available.
+
+I decided to change the name of the 'Development' link in the header menu to 'Team Pages'. That won't be hard at all!...
+
+By accident I changed the link in the help menu also, though I don't have any help pages to go to yet.

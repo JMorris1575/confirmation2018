@@ -14,12 +14,14 @@
                 <h2>St. Basil Confirmation Activities</h2>
             </div>
             <div class="u-pull-left welcome">
-                {% if user.is_authenticated %}
-                    <div class="welcome">
-                        Welcome {{ user.first_name }}!
-                        <a class="link" href="{% url 'logout' %}?next={{ request.path_info }}">Logout</a>
-                    </div>
-                {% endif %}
+                <div class="welcome">
+                    {% if user.is_authenticated %}
+                            Welcome {{ user.first_name }}!
+                            <a class="link" href="{% url 'logout' %}?next={{ request.path_info }}">Logout</a>
+                    {% else %}
+                            <a class="link" href="{% url 'login' %}?next={{ request.path_info }}">Login</a>
+                    {% endif %}
+                </div>
             </div>
             <div class="menu u-pull-right">
                 <div class="dropdown u-pull-right">
@@ -27,7 +29,7 @@
                     <div class="dropdown-content">
                         <a href="/help/scripture/">Finding Scriptures</a>
                         {% if 'Team' in group_names %}
-                            <a href="#">Development</a>
+                            <a href="#">Team Pages</a>
                         {% endif %}
                         <a href="/help/index/">Using the Website</a>
                     </div>
@@ -39,7 +41,7 @@
                 {% endif %}
                 {% if 'Team' in group_names %}
                     <div class="dropdown u-pull-right">
-                        <a class="menu-button" href="{% url 'dev_activity_list' %}">Development</a>
+                        <a class="menu-button" href="{% url 'dev_activity_list' %}">Team Pages</a>
                     </div>
                 {% endif %}
                 {% if tester %}

@@ -1,4 +1,4 @@
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, AnonymousUser
 from activity.models import Activity, Page, Response
 from consultants.models import Critique
 
@@ -10,8 +10,9 @@ def get_group_names(user):
     :return: a list of strings, the names of the groups to which this user belongs
     """
     group_names = []
-    for group in Group.objects.filter(user=user):
-        group_names.append(group.name)
+    if not(user.is_anonymous):
+        for group in Group.objects.filter(user=user):
+            group_names.append(group.name)
     return group_names
 
 def get_response_info(user=None, activity_slug=None, page_index=None):

@@ -55,8 +55,10 @@
                                         {{ progress }}
                                     </p>
                                 </td>
-                                <td>
-                                    {% if progress == 'Up next...' %}
+                                <td>    <!-- Third Column -->
+                                    {% if progress == 'Pending' %}
+                                        ''
+                                    {% elif progress == 'Up next...' %}
                                         <a class="button button u-full-width"
                                            href="/activity/{{ activity.slug }}/{{ page.index }}/">
                                             Do it...

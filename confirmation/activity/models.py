@@ -37,7 +37,8 @@ class Page(models.Model):
                                           ('ES', 'Essay'),
                                           ('MC', 'MultipleChoice'),
                                           ('TF', 'True-False'),
-                                          ('DS', 'Discussion')])
+                                          ('DS', 'Discussion'),
+                                          ('CH', 'Challenge')])
     title = models.CharField(max_length=40)
     text = models.CharField(max_length=512)
     image = models.ForeignKey(Image, null=True, blank=True, on_delete=models.CASCADE)
@@ -51,7 +52,8 @@ class Page(models.Model):
                                        choices=[('OP', 'Open'),
                                                 ('SA', 'Semi-Anonymous'),
                                                 ('AN', 'Anonymous')],
-                                       null=True)
+                                       blank=True,
+                                       default='')
 
     class Meta:
         unique_together = ('activity', 'index')
@@ -73,11 +75,15 @@ class Page(models.Model):
             return True             # user is always allowed to go to the first page
         else:
             activity = Activity.objects.get(slug=activity_slug)
-            page = Page.objects.get(activity=activity, index=page_index-1)
-            responses = Response.objects.filter(user=user, activity=activity, page=page)
-            if len(responses) == 0:
-                return False        # user has not responded to previous page
-            return True             # user has responded to previous page
+            pages = Page.objects.filter(activity=activity)
+            result = True
+            for page in pages:
+                if page.index < page_index:
+                    responses = Response.objects.filter(user=user, activity=activity, page=page)
+                    if len(responses) == 0:
+                        result = False
+                        break
+            return result
 
     def previous(self):
         """
@@ -140,6 +146,9 @@ class Response(models.Model):
         else:
             possessive_ending = "'s"
         return name + possessive_ending + ' response to ' + str(self.activity) + ' ' + str(self.page)
+
+    def is_correct(self):
+        return self.correct
 
     def can_delete(self):
         """
