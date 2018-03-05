@@ -1221,3 +1221,20 @@ By accident I changed the link in the help menu also, though I don't have any he
 I created a ``sorry.html`` page to use for sections I don't have ready yet, and made the "Team Pages" header menu button
 into a dropdown menu. The help -> Team Pages selection goes to the ``sorry.html`` page but the Team Pages -> Candidate
 Reports goes nowhere at the moment. I will need a url path and a view to make that work.
+
+Narrative Walkthrough of Challenge Pages
+----------------------------------------
+
+When Diego clicks into the current Challenge page he sees abbreviated names of the three challenges from Chosen next to
+check boxes. He clicks the top box to choose that challenge and, immediately, a textarea appears below that line and
+above the next checkbox line. He types in whatever that challenge calls for. When he clicks 'Submit' it appears below
+the checkbox with an edit link.
+
+There is also, next to each challenge name, a link or button to view current contributions. Diego wants to see what
+others have entered for the same challenge he tried and so he clicks that link/button named "See All Entries." That
+takes him to a page that lists everyone's entries so far to that challenge. He sees his own response at the bottom,
+since he just entered it, and it has an 'Edit' link next to it in case he wants to edit it from this page. There is also
+a button at the bottom that will take him back to the challenge page. ("Return to Challenges").
+
+Later, a little later in the month, Diego returns to the Challenge page and decides to do another one. This is permitted
+and works out as described above.
