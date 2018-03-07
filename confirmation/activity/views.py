@@ -189,3 +189,13 @@ class PageDeleteView(View):
             return redirect('summary', activity_slug)
         else:
             return redirect('page', activity_slug, page_index)
+
+
+class ReportView(View):
+
+    template_name = 'activity/reports.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {'group_names': get_group_names(request.user),
+                                                    'critiques': get_critiques(request.path_info),
+                                                    'tester': is_tester(request.user)})

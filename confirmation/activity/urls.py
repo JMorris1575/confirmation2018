@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic import RedirectView
-from .views import WelcomeView, SummaryView, PageView, PageEditView, PageDeleteView
+from .views import WelcomeView, SummaryView, PageView, PageEditView, PageDeleteView, ReportView
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('<slug:activity_slug>/<int:page_index>/', login_required(PageView.as_view()), name='page'),
     path('<slug:activity_slug>/<int:page_index>/edit', login_required(PageEditView.as_view()), name='edit'),
     path('<slug:activity_slug>/<int:page_index>/delete', login_required(PageDeleteView.as_view()), name='delete'),
+    path('reports/', login_required(ReportView.as_view()), name='reports'),
 ]

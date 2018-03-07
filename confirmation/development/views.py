@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from django.core.exceptions import PermissionDenied
-from config.utilities import get_group_names
+from config.utilities import get_group_names, is_tester, get_critiques
 from .models import DevelopingActivity
 from activity.models import Activity, Page
 
@@ -11,14 +11,17 @@ from config.utilities import PageMixin
 
 
 class DevActivitiesListView(View):
-    template_name = 'development/activity_list.html'
-
+    #template_name = 'development/activity_list.html'
+    # temporary template_name:
+    template_name = 'development/ideas.html'
     def get(self, request):
         group_names = get_group_names(request.user)
         if 'Administrator' in group_names or 'Supervisor' in group_names or 'Team' in group_names:
             dev_activities = DevelopingActivity.objects.all()
             return render(request, self.template_name, {'group_names': group_names,
-                                                        'dev_activities': dev_activities})
+                                                        'dev_activities': dev_activities,
+                                                        'critiques': get_critiques(request.path_info),
+                                                        'tester': is_tester(request.user)})
         else:
             raise PermissionDenied
 
