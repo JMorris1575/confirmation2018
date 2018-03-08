@@ -67,6 +67,7 @@ class EmailView(View):
         for recipient in recipients:
             member = User.objects.get(username=recipient)
             subject, message = convert_tags(subject_template, message_template, member)
-            send_mail(subject, message, 'FrJamesMorris@gmail.com', [member.email], fail_silently=False,)
+            send_mail(subject, message, 'st_basil_confirmation@confirmation.jmorris.webfactional.com',
+                      [member.email], fail_silently=False,)
 
         return redirect('send_email')

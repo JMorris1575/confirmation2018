@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import Group
 from .models import Activity, Page, Response, Choice
-from config.utilities import get_group_names, get_response_info, is_tester, get_critiques
+from config.utilities import get_group_names, get_response_info, is_tester, get_critiques, get_welcome_report
 
 import datetime
 
@@ -39,7 +39,8 @@ class WelcomeView(View):
                       {'data': data,
                        'group_names': group_names,
                        'critiques': get_critiques(request.path_info),
-                       'tester': is_tester(request.user)})
+                       'tester': is_tester(request.user),
+                       'reports': get_welcome_report()})
 
 
 class SummaryView(View):

@@ -1222,6 +1222,41 @@ I created a ``sorry.html`` page to use for sections I don't have ready yet, and 
 into a dropdown menu. The help -> Team Pages selection goes to the ``sorry.html`` page but the Team Pages -> Candidate
 Reports goes nowhere at the moment. I will need a url path and a view to make that work.
 
+Candidate Reports
+-----------------
+
+After getting the website online, at least for Sylvia, I thought of a, hopefully, easy way to create a report for team
+members on how the candidates are answering the questions. A simple table at the bottom of each activity page, only
+visible to team members, and reporting on which candidates have responded and information about their response. This
+will not have to be done for discussion pages since it will either be visible to the team members anyway, or none of
+their business.
+
+Here is a table of what needs to be displayed on each of the other page types:
+
+.. csv-table:: **Candidate Reports to be Visible on Each Page Type**
+    :header: Page Type, Information to be Available
+    :widths: auto
+
+    Welcome, entire list of candidates with list of which numbered activities they have completed
+    Summary, entire list of candidates and percentage of completion
+    Instruction, when each candidate completes it
+    Essay,  each candidates response - at least part of it - perhaps a link to see the whole thing
+    Multi-Choice, each candidates response and; if applicable; whether it is right or wrong
+    True/False, each candidates response and; if applicable; whether it is right or wrong
+
+Separate html files could be made for each report for each page type and they can be included (with {% include %}) into
+each existing page IF the user is a team member. Each report should be alphabetized by last_name and then first_name.
+
+It seems a different context entry may be necessary in each case, but perhaps I can always call it 'report'. I will try
+to implement these reports on the Welcome Page first.
+
+Candidate Report on the Welcome Page
+************************************
+
+This report will need an entire list of candidates with a list of activity numbers for the activities each one has
+entered.
+
+
 Narrative Walkthrough of Challenge Pages
 ----------------------------------------
 

@@ -60,7 +60,7 @@ class Page(models.Model):
         ordering = ['activity', 'index']
 
     def __str__(self):
-        return str(self.index) + '. ' + str(self.title)
+        return self.activity.slug + ': ' + str(self.index) + '. ' + str(self.title)
 
     def get_absolute_url(self):
         return '/activity/' + self.activity.slug + '/' + str(self.index) + '/'
@@ -145,7 +145,7 @@ class Response(models.Model):
             possessive_ending = "'"
         else:
             possessive_ending = "'s"
-        return name + possessive_ending + ' response to ' + str(self.activity) + ' ' + str(self.page)
+        return name + possessive_ending + ' response to ' + str(self.page)
 
     def is_correct(self):
         return self.correct

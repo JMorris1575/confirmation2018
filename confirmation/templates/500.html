@@ -1,1 +1,22 @@
-<h2>This will be the 500.html page.</h2>
+{% extends 'base_error.html' %}
+{% load static %}
+
+{% block title %}
+    {{ block.super }}Internal Error
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row padded">
+            <div class="offset-by-one seven columns">
+                <img src="{% static '/images/PerplexedMaleMedium.png' %}">
+            </div>
+            <div class="four columns">
+                <h1>I really don't know what happened!</h1>
+                <h3>But it's probably some programming error that I made.</h3>
+                <h3>If you can make it happen again, let me know what you do to
+                    make it happen then maybe I can fix it.</h3>
+            </div>
+        </div>
+    </div>
+{% endblock %}

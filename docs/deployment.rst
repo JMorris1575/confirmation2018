@@ -12,3 +12,12 @@ FrJimMorris@SaintBasilCatholicChurch.org.
 
 Using ``ssh jmorris@jmorris@webfactional.com`` I checked out the website and it is ready to go when I am ready to
 deploy the website -- even if only for testing and comments.
+
+Challenges
+----------
+
+Remembering what I did so I can write it here
+
+Problems generated until I changed to a static only app on webfaction
+
+sending the database to webfaction
