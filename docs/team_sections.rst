@@ -1239,10 +1239,11 @@ Here is a table of what needs to be displayed on each of the other page types:
 
     Welcome, entire list of candidates with list of which numbered activities they have completed
     Summary, entire list of candidates and percentage of completion
-    Instruction, when each candidate completes it
-    Essay,  each candidates response - at least part of it - perhaps a link to see the whole thing
-    Multi-Choice, each candidates response and; if applicable; whether it is right or wrong
-    True/False, each candidates response and; if applicable; whether it is right or wrong
+    Instruction, the date and time when each participating candidate completes it
+    Essay,  each participating candidate's response - at least part of it - perhaps a link to see the whole thing
+    Multi-Choice, each participating candidate's response and; if applicable; whether it is right or wrong
+    True/False, each participating candidate's response and; if applicable; whether it is right or wrong
+    Challenge, each participating candidate's response
 
 Separate html files could be made for each report for each page type and they can be included (with {% include %}) into
 each existing page IF the user is a team member. Each report should be alphabetized by last_name and then first_name.
