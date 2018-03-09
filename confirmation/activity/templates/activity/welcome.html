@@ -43,7 +43,10 @@
                     {% endfor %}
                 </table>
             </div>
-            {% include 'activity/welcome-report.html' %}
+            {{ group_names }}
+            {% if 'Team' in group_names %}
+                {% include 'activity/welcome-report.html' %}
+            {% endif %}
         {% endif %}
     </div>
 

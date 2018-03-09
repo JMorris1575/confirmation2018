@@ -80,7 +80,9 @@
                 </a>
             </div>
         </div>
-        {% include 'activity/summary-report.html' %}
+        {% if 'Team' in group_names %}
+            {% include 'activity/summary-report.html' %}
+        {% endif %}
     </div>
 
 {% endblock %}

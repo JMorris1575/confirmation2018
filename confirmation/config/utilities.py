@@ -80,7 +80,6 @@ def get_summary_report(activity):
                 completed = len(Response.objects.filter(activity=activity, user=user))
                 percent = completed / page_count * 100
                 report.append({'name': user_name, 'percent': '{:.1f}'.format(percent) + '% Complete'})
-    print(report)
     return report
 
 
