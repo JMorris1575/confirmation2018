@@ -1,0 +1,22 @@
+{% load static %}
+
+<div class="offset-by-two eight columns shadowed">
+    <h5>Candidate Report:</h5>
+    <ul class="report-list">
+        <li class="row">
+            <div class="four columns report-heading">Name</div>
+            <div class="eight columns report-heading">Response</div>
+        </li>
+        {% for report in reports %}
+            <li class="row">
+                <div class="four columns">{{ report.name }}</div>
+                {% if page_type == 'ES' %}
+                    <div class="seven columns" alt="{{ report.essay }}">{{ report.essay|truncatewords:10 }}</div>
+                    <div class="one column">
+                        <img src="{% static 'images/favicon.ico' %}" title="{{ report.essay }}" />
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>

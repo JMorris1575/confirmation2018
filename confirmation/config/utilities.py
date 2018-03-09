@@ -50,10 +50,9 @@ def get_welcome_report(site_user):
     activities = Activity.objects.filter(publish_date__lte=datetime.date.today(),
                                          closing_date__gt=datetime.date.today(),
                                          visible=True)
-    process = is_supervisor(site_user)      # if the site user is a Supervisor allow display of all users
     report = []
     for user in users:
-        if is_candidate(user) or process == True:
+        if is_candidate(user) or is_supervisor(site_user):
             if user.first_name != 'Unknown':
                 user_name = user.last_name + ', ' + user.first_name
                 activity_list = ''
@@ -76,10 +75,9 @@ def get_summary_report(activity, site_user):
     """
     users = User.objects.all().order_by('last_name', 'first_name')
     page_count = len(Page.objects.filter(activity=activity))
-    process = is_supervisor(site_user)
     report = []
     for user in users:
-        if is_candidate(user) or process == True:
+        if is_candidate(user) or is_supervisor(site_user):
             if user.first_name != 'Unknown':
                 user_name = user.last_name + ', ' + user.first_name
                 completed = len(Response.objects.filter(activity=activity, user=user))
@@ -87,6 +85,26 @@ def get_summary_report(activity, site_user):
                 report.append({'name': user_name, 'percent': '{:.1f}'.format(percent) + '% Complete'})
     return report
 
+def get_essay_report(activity, page, site_user):
+    """
+    Gets the candidate report for the essay pages of the current activity. It contains the names and the essays
+    written by the users.
+    :param activity: the current activity of type Activity
+    :param site_user: the current page of type Page
+    :return: a list of dictionaries with keys of 'name' and 'essay', ordered by last_name, first_name.
+    """
+    users = User.objects.all().order_by('last_name', 'first_name')
+    report = []
+    for user in users:
+        if is_candidate(user) or is_supervisor(site_user):
+            if user.first_name != 'Unknown':
+                user_name = user.last_name + ', ' + user.first_name
+                try:
+                    essay = Response.objects.get(activity=activity, page=page, user=user).essay
+                except:
+                    essay = '-'
+                report.append({'name': user_name, 'essay': essay})
+    return report
 
 
 class PageMixin:

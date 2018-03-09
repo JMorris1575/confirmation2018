@@ -3,7 +3,7 @@ from django.views import View
 from django.contrib.auth.models import Group
 from .models import Activity, Page, Response, Choice
 from config.utilities import get_group_names, get_response_info, is_tester, get_critiques,\
-                            get_welcome_report, get_summary_report
+                            get_welcome_report, get_summary_report, get_essay_report
 
 import datetime
 
@@ -76,20 +76,24 @@ class PageView(View):
         activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)
-        if page.page_type == 'IN':
+        page_type = page.page_type
+        if page_type == 'IN':
             self.template_name = 'activity/instruction.html'
-        elif page.page_type == 'ES':
+        elif page_type == 'ES':
             self.template_name = 'activity/essay.html'
-        elif page.page_type == 'MC':
+            reports = get_essay_report(activity, page, request.user)
+        elif page_type == 'MC':
             self.template_name = 'activity/multi-choice.html'
             choices = Choice.objects.filter(page=page)
             context['choices'] = choices
-        elif page.page_type == 'TF':
+        elif page_type == 'TF':
             self.template_name = 'activity/true-false.html'
-        elif page.page_type == 'DS':
+        elif page_type == 'DS':
             return redirect('discussion', activity_slug, page_index)
         context['critiques'] = get_critiques(request.path_info)
         context['tester'] = is_tester(request.user)
+        context['reports'] = reports
+        context['page_type'] = page.page_type
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):

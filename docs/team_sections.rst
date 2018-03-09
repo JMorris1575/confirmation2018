@@ -1287,6 +1287,16 @@ Candidate Report on the Summary Page
 
 This report will need to compute the percentage of completion of this activity for each candidate.
 
+Candidate Report on Essay Pages
+*******************************
+
+Here I would like to display the candidate's name along with at least the first part of his or her response. The entire
+response should be visible when the user hovers over the abbreviated response. I think django has a way of limiting how
+many words are displayed (``{{ value|truncatewords:10 }}``) and html has a way (``alt="***"``?) to display something
+upon hovering.
+
+The reports context variable could be the users and their essays.
+
 
 Narrative Walkthrough of Challenge Pages
 ----------------------------------------

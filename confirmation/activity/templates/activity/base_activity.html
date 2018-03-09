@@ -25,5 +25,9 @@
             {% block page-content %}
             {% endblock %}
         </div>
+        {% if 'Team' in group_names %}
+            {% include 'activity/page-report.html' %}
+        {% endif %}
+
     </div>
 {% endblock %}
