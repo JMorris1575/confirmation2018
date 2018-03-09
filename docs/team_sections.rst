@@ -1237,8 +1237,8 @@ Here is a table of what needs to be displayed on each of the other page types:
     :header: Page Type, Information to be Available
     :widths: auto
 
-    Welcome, entire list of candidates with list of which numbered activities they have completed
-    Summary, entire list of candidates and percentage of completion
+    Welcome, entire list of candidates with list of which numbered activities they have started
+    Summary, entire list of candidates and percentage of completion for this activity
     Instruction, the date and time when each participating candidate completes it
     Essay,  each participating candidate's response - at least part of it - perhaps a link to see the whole thing
     Multi-Choice, each participating candidate's response and; if applicable; whether it is right or wrong
@@ -1255,7 +1255,37 @@ Candidate Report on the Welcome Page
 ************************************
 
 This report will need an entire list of candidates with a list of activity numbers for the activities each one has
-entered.
+entered. It was not very difficult to write a ``get_welcome_report`` function in ``config/utilities.py`` to supply the
+report::
+
+    def get_welcome_report():
+        """
+        Gets the candidate report for the welcome page as to which activities the user has so far participated in.
+        :return: an ordered list of tuples ordered by last_name, first_name with the user's full name in position 0
+                and a string of the activities in which they have so far participated in position 1.
+        """
+        users = User.objects.all().order_by('last_name', 'first_name')
+        activities = Activity.objects.all()
+        report = []
+        for user in users:
+            if is_candidate(user):
+                if user.first_name != 'Unknown':
+                    user_name = user.last_name + ', ' + user.first_name
+                    activity_list = ''
+                    for activity in activities:
+                        if len(Response.objects.filter(user=user, activity=activity)) != 0:
+                            if len(activity_list) == 0:
+                                activity_list += str(activity.slug)
+                                print('activity_list = ', activity_list)
+                            else:
+                                activity_list += ', ' + str(activity.slug)
+                    report.append((user_name, activity_list))
+        return report
+
+Candidate Report on the Summary Page
+************************************
+
+This report will need to compute the percentage of completion of this activity for each candidate.
 
 
 Narrative Walkthrough of Challenge Pages

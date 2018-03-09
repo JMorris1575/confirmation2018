@@ -1,0 +1,23 @@
+<div class="offset-by-two eight columns shadowed">
+    <table>
+        <caption><h5>Candidate Report:</h5></caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Percent Complete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+                <tr>
+                    <td>
+                        {{ report.name }}
+                    </td>
+                    <td>
+                        {{ report.percent }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

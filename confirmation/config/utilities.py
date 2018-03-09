@@ -2,6 +2,7 @@ from django.contrib.auth.models import Group, User, AnonymousUser
 from activity.models import Activity, Page, Response
 from consultants.models import Critique
 
+import datetime
 
 def get_group_names(user):
     """
@@ -43,7 +44,9 @@ def get_welcome_report():
             and a string of the activities in which they have so far participated in position 1.
     """
     users = User.objects.all().order_by('last_name', 'first_name')
-    activities = Activity.objects.all()
+    activities = Activity.objects.filter(publish_date__lte=datetime.date.today(),
+                                         closing_date__gt=datetime.date.today(),
+                                         visible=True)
     report = []
     for user in users:
         if is_candidate(user):
@@ -54,11 +57,32 @@ def get_welcome_report():
                     if len(Response.objects.filter(user=user, activity=activity)) != 0:
                         if len(activity_list) == 0:
                             activity_list += str(activity.slug)
-                            print('activity_list = ', activity_list)
                         else:
                             activity_list += ', ' + str(activity.slug)
                 report.append((user_name, activity_list))
     return report
+
+def get_summary_report(activity):
+    """
+    Gets the candidate report for the summary page of the current activity. It gives the percentage of this activity
+    that each candidate has completed.
+    :parameter: activity of type Activity
+    :return: an ordered list of dictionaries with keys of 'name' and 'percent'. The list is created in last_name,
+    first_name order.
+    """
+    users = User.objects.all().order_by('last_name', 'first_name')
+    page_count = len(Page.objects.filter(activity=activity))
+    report = []
+    for user in users:
+        if is_candidate(user):
+            if user.first_name != 'Unknown':
+                user_name = user.last_name + ', ' + user.first_name
+                completed = len(Response.objects.filter(activity=activity, user=user))
+                percent = completed / page_count * 100
+                report.append({'name': user_name, 'percent': '{:.1f}'.format(percent) + '% Complete'})
+    print(report)
+    return report
+
 
 
 class PageMixin:
