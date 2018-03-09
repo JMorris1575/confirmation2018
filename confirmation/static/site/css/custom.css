@@ -326,6 +326,17 @@ td.pad-override {
     margin-bottom: 5px;
 }
 
+.report-heading {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.report-list {
+    list-style-type: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .text-field {
     font-family: 'Courier', monospaced;
     color: black;

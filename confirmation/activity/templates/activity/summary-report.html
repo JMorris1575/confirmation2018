@@ -1,23 +1,15 @@
 <div class="offset-by-two eight columns shadowed">
-    <table>
-        <caption><h5>Candidate Report:</h5></caption>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Percent Complete</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for report in reports %}
-                <tr>
-                    <td>
-                        {{ report.name }}
-                    </td>
-                    <td>
-                        {{ report.percent }}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h5>Candidate Report:</h5>
+    <ul class="report-list">
+        <li class="row">
+            <div class="four columns report-heading">Name</div>
+            <div class="eight columns report-heading">Percent Complete</div>
+        </li>
+        {% for report in reports %}
+            <li class="row">
+                <div class="four columns">{{ report.name }}</div>
+                <div class="eight columns">{{ report.percent }}</div>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
