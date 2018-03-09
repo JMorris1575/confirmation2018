@@ -41,7 +41,7 @@ class WelcomeView(View):
                        'group_names': group_names,
                        'critiques': get_critiques(request.path_info),
                        'tester': is_tester(request.user),
-                       'reports': get_welcome_report()})
+                       'reports': get_welcome_report(request.user)})
 
 
 class SummaryView(View):
@@ -67,7 +67,7 @@ class SummaryView(View):
                                                     'group_names': group_names,
                                                     'critiques': get_critiques(request.path_info),
                                                     'tester': is_tester(request.user),
-                                                    'reports': get_summary_report(activity)})
+                                                    'reports': get_summary_report(activity, request.user)})
 
 
 class PageView(View):

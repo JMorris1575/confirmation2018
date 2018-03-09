@@ -26,6 +26,9 @@ def get_response_info(user=None, activity_slug=None, page_index=None):
     context = {'activity':activity, 'page':page, 'response':response, 'group_names':get_group_names(user)}
     return activity, page, responses, context
 
+def is_supervisor(user):
+    return 'Supervisor' in get_group_names(user)
+
 def is_candidate(user):
     groups = get_group_names(user)
     return 'Candidate' in groups
@@ -37,7 +40,7 @@ def is_tester(user):
 def get_critiques(path):
     return Critique.objects.filter(path=path)
 
-def get_welcome_report():
+def get_welcome_report(site_user):
     """
     Gets the candidate report for the welcome page as to which activities the user has so far participated in.
     :return: an ordered list of tuples ordered by last_name, first_name with the user's full name in position 0
@@ -47,9 +50,10 @@ def get_welcome_report():
     activities = Activity.objects.filter(publish_date__lte=datetime.date.today(),
                                          closing_date__gt=datetime.date.today(),
                                          visible=True)
+    process = is_supervisor(site_user)      # if the site user is a Supervisor allow display of all users
     report = []
     for user in users:
-        if is_candidate(user):
+        if is_candidate(user) or process == True:
             if user.first_name != 'Unknown':
                 user_name = user.last_name + ', ' + user.first_name
                 activity_list = ''
@@ -62,7 +66,7 @@ def get_welcome_report():
                 report.append((user_name, activity_list))
     return report
 
-def get_summary_report(activity):
+def get_summary_report(activity, site_user):
     """
     Gets the candidate report for the summary page of the current activity. It gives the percentage of this activity
     that each candidate has completed.
@@ -72,9 +76,10 @@ def get_summary_report(activity):
     """
     users = User.objects.all().order_by('last_name', 'first_name')
     page_count = len(Page.objects.filter(activity=activity))
+    process = is_supervisor(site_user)
     report = []
     for user in users:
-        if is_candidate(user):
+        if is_candidate(user) or process == True:
             if user.first_name != 'Unknown':
                 user_name = user.last_name + ', ' + user.first_name
                 completed = len(Response.objects.filter(activity=activity, user=user))
