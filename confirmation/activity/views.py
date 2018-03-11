@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import Group
 from .models import Activity, Page, Response, Choice
-from config.utilities import get_group_names, get_response_info, is_tester, get_critiques,\
-                            get_welcome_report, get_summary_report, get_essay_report
+from config.utilities import (get_group_names, get_response_info, is_tester, get_critiques, get_welcome_report,
+                              get_summary_report, get_essay_report, get_instruction_report, get_multi_choice_report)
 
 import datetime
 
@@ -77,8 +77,10 @@ class PageView(View):
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)
         page_type = page.page_type
+        reports = []
         if page_type == 'IN':
             self.template_name = 'activity/instruction.html'
+            reports = get_instruction_report(activity, page, request.user)
         elif page_type == 'ES':
             self.template_name = 'activity/essay.html'
             reports = get_essay_report(activity, page, request.user)
@@ -86,6 +88,7 @@ class PageView(View):
             self.template_name = 'activity/multi-choice.html'
             choices = Choice.objects.filter(page=page)
             context['choices'] = choices
+            reports = get_multi_choice_report(activity, page, request.user, choices)
         elif page_type == 'TF':
             self.template_name = 'activity/true-false.html'
         elif page_type == 'DS':
@@ -150,13 +153,17 @@ class PageEditView(View):
         if page.page_type == 'ES':
             self.template_name = 'activity/essay_edit.html'
         elif page.page_type == 'MC':
-            self.template_name = 'activity/multi-choice-edit.html'
-            choices = Choice.objects.filter(page=page)
-            context['choices'] = choices
+            if page.reveal_answer:          # They can't edit it if the answer has been revealed
+                return redirect('page', activity_slug, page_index)
+            else:
+                self.template_name = 'activity/multi-choice-edit.html'
+                choices = Choice.objects.filter(page=page)
+                context['choices'] = choices
         elif page.page_type == 'TF':
-            response = context['response']
-            response.true_false = not response.true_false
-            response.save()
+            if not page.reveal_answer:          # They can't edit it if the answer has been revealed
+                response = context['response']
+                response.true_false = not response.true_false
+                response.save()
             return redirect('page', activity_slug, page_index)
         context['critiques'] = get_critiques(request.path_info),
         context['tester'] = is_tester(request.user)
@@ -171,6 +178,9 @@ class PageEditView(View):
                 response.save()
             elif page.page_type == 'MC':
                 response.multi_choice = request.POST['choice']
+                if not page.opinion:
+                    choice = Choice.objects.get(page=page, index=request.POST['choice'])
+                    response.correct = choice.correct
                 response.save()
 
         return redirect('page', activity_slug, page_index)

@@ -186,7 +186,6 @@ class Choice(models.Model):
         return chr(64 + index) + ') '
 
     def correct_choice(self):
-        print('Choices = ', Choice.objects.filter(page=self.page))
         return Choice.objects.get(page=self.page, correct=True)
 
 

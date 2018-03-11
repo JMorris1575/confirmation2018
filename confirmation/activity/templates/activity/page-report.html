@@ -5,16 +5,29 @@
     <ul class="report-list">
         <li class="row">
             <div class="four columns report-heading">Name</div>
-            <div class="eight columns report-heading">Response</div>
+            {% if page_type == 'IN' %}
+                <div class="eight columns report-heading">When Completed</div>
+            {% elif page_type == 'ES' %}
+                <div class="seven columns report-heading">Response</div>
+                <div class="one column report-heading">See</div>
+            {% elif page_type == 'MC' %}
+                <div class="six columns report-heading">Choice</div>
+                <div class="two columns report-heading">Correct?</div>
+            {% endif %}
         </li>
         {% for report in reports %}
             <li class="row">
                 <div class="four columns">{{ report.name }}</div>
-                {% if page_type == 'ES' %}
-                    <div class="seven columns" alt="{{ report.essay }}">{{ report.essay|truncatewords:10 }}</div>
+                {% if page_type == 'IN' %}
+                    <div class="eight columns">{{ report.finished }}</div>
+                {% elif page_type == 'ES' %}
+                    <div class="seven columns">{{ report.essay|truncatewords:7 }}</div>
                     <div class="one column">
-                        <img src="{% static 'images/favicon.ico' %}" title="{{ report.essay }}" />
+                        <img src="{% static 'images/eye-icon.png' %}" title="{{ report.essay }}" />
                     </div>
+                {% elif page_type == 'MC' %}
+                    <div class="six columns">{{ report.choice }}</div>
+                    <div class="two columns">{{ report.correct }}</div>
                 {% endif %}
             </li>
         {% endfor %}

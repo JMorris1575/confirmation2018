@@ -1287,6 +1287,11 @@ Candidate Report on the Summary Page
 
 This report will need to compute the percentage of completion of this activity for each candidate.
 
+Candidate Report on Instruction Pages
+*************************************
+
+Here about the only thing to display is when they completed the instructions. That shouldn't be too hard to do.
+
 Candidate Report on Essay Pages
 *******************************
 
@@ -1295,8 +1300,25 @@ response should be visible when the user hovers over the abbreviated response. I
 many words are displayed (``{{ value|truncatewords:10 }}``) and html has a way (``alt="***"``?) to display something
 upon hovering.
 
+.. note::
+
+    It turned out that the attribute that displays things when you hover over something is called ``title``, not ``alt``
+    and, as far as I know, only applies to images -- the ``<img>`` tag.
+
 The reports context variable could be the users and their essays.
 
+Candidate Report on Multi-Choice Pages
+**************************************
+
+Some pages have correct answers given, some do not. The display should be different for each one. It might be nice, for
+either kind, to show how many times each choice was chosen and/or the percentage that represents of the total responses
+for that page -- a frequency chart.
+
+Reporting on the user's answers and whether it is correct or not will be relatively easy. To avoid excessive logic on
+the ``page-report.html`` page I can just say 'Yes' or 'No' in the **Correct** column for questions that have correct
+answers given or 'N/A' or ' - ' for those that do not.
+
+The frequency chart will be an exercise for another day.
 
 Narrative Walkthrough of Challenge Pages
 ----------------------------------------
