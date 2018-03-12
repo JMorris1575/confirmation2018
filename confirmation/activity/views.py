@@ -150,7 +150,9 @@ class PageEditView(View):
 
     def get(self, request, activity_slug=None, page_index=None):
         activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
-        if page.page_type == 'ES':
+        if page.page_type == 'IN':
+            return redirect('page', activity_slug, page_index)
+        elif page.page_type == 'ES':
             self.template_name = 'activity/essay_edit.html'
         elif page.page_type == 'MC':
             if page.reveal_answer:          # They can't edit it if the answer has been revealed
@@ -190,12 +192,20 @@ class PageDeleteView(View):
 
     def get(self, request, activity_slug=None, page_index=None):
         activity, page, responses, context = get_response_info(request.user, activity_slug, page_index)
-        if page.page_type == 'ES':
+        if page.page_type == 'IN':
+            return redirect('page', activity_slug, page_index)
+        elif page.page_type == 'ES':
             self.template_name = 'activity/essay_delete.html'
-        if page.page_type == 'MC':
-            self.template_name = 'activity/multi-choice-delete.html'
-        if page.page_type == 'TF':
-            self.template_name = 'activity/true-false-delete.html'
+        elif page.page_type == 'MC':
+            if page.reveal_answer:          # They can't delete if the answer has been revealed
+                return redirect('page', activity_slug, page_index)
+            else:
+                self.template_name = 'activity/multi-choice-delete.html'
+        elif page.page_type == 'TF':
+            if page.reveal_answer:
+                return redirect('page', activity_slug, page_index)
+            else:
+                self.template_name = 'activity/true-false-delete.html'
         return render(request, self.template_name, context)
 
     def post(self, request, activity_slug=None, page_index=None):
