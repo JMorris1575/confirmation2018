@@ -153,12 +153,13 @@ class Response(models.Model):
     def can_delete(self):
         """
         returns True if this response can be deleted, false otherwise
-        A respons can be deleted if it is the user has not completed any pages beyond this one in the current activity
+        A respons can be deleted if it's answer has not been revealed and if the user has not completed any pages
+        beyond this one in the current activity
         :return: boolean
         """
         this_index = self.page.index
         number_completed = len(Response.objects.filter(user=self.user, activity=self.activity))
-        if this_index == number_completed:
+        if (this_index == number_completed) and not self.page.reveal_answer:
             return True
         else:
             return False
