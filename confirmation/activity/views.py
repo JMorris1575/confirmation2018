@@ -195,14 +195,15 @@ class PageDeleteView(View):
         if page.page_type == 'IN':
             return redirect('page', activity_slug, page_index)
         elif page.page_type == 'ES':
-            self.template_name = 'activity/essay_delete.html'
+            if context['response'] and context['response'].can_delete:
+                self.template_name = 'activity/essay_delete.html'
         elif page.page_type == 'MC':
-            if page.reveal_answer:          # They can't delete if the answer has been revealed
+            if context['response'] and context['response'].can_delete:
                 return redirect('page', activity_slug, page_index)
             else:
                 self.template_name = 'activity/multi-choice-delete.html'
         elif page.page_type == 'TF':
-            if page.reveal_answer:
+            if context['response'] and context['response'].can_delete:
                 return redirect('page', activity_slug, page_index)
             else:
                 self.template_name = 'activity/true-false-delete.html'

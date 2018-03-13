@@ -152,8 +152,8 @@ class Response(models.Model):
 
     def can_delete(self):
         """
-        returns True if this response can be deleted, false otherwise
-        A respons can be deleted if it's answer has not been revealed and if the user has not completed any pages
+        Returns True if this response can be deleted, false otherwise
+        A response can be deleted if it's answer has not been revealed and if the user has not completed any pages
         beyond this one in the current activity
         :return: boolean
         """
