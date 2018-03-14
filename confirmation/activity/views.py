@@ -103,12 +103,14 @@ class PageView(View):
         activity = Activity.objects.get(slug=activity_slug)
         page = Page.objects.get(activity=activity.pk, index=page_index)
         if page.page_type == 'IN':
-            response = Response(user=request.user, activity=activity, page=page, completed=True)
-            response.save()
+            if page.can_respond(request.user):
+                response = Response(user=request.user, activity=activity, page=page, completed=True)
+                response.save()
         elif page.page_type == 'ES':
-            response = Response(user=request.user, activity=activity, page=page,
-                                essay=request.POST['essay'].strip(), completed=True)
-            response.save()
+            if page.can_respond(request.user):
+                response = Response(user=request.user, activity=activity, page=page,
+                                    essay=request.POST['essay'].strip(), completed=True)
+                response.save()
         elif page.page_type == 'MC':
             choices = Choice.objects.filter(page=page)
             try:
@@ -119,12 +121,13 @@ class PageView(View):
                 context['error_message'] = 'You must choose one of the responses below.'
                 return render(request, self.template_name, context)
             choice = choices.get(index=choice_index)
-            response = Response(user=request.user, activity=activity,
-                                page=page, multi_choice=str(choice_index),
-                                completed=True)
-            if not page.opinion:
-                response.correct = choice.correct
-            response.save()
+            if page.can_respond(request.user):
+                response = Response(user=request.user, activity=activity,
+                                    page=page, multi_choice=str(choice_index),
+                                    completed=True)
+                if not page.opinion:
+                    response.correct = choice.correct
+                response.save()
         elif page.page_type == 'TF':
             try:
                 user_response_string = request.POST['choice']
@@ -134,12 +137,13 @@ class PageView(View):
                 context['error_message'] = 'You must select either True or False.'
                 return render(request, self.template_name, context)
             user_response = (user_response_string == 'True')
-            response = Response(user=request.user, activity=activity,
-                                page=page, true_false=user_response,
-                                completed=True)
-            if not page.opinion:
-                response.correct = (user_response == page.tf_answer)
-            response.save()
+            if page.can_respond(request.user):
+                response = Response(user=request.user, activity=activity,
+                                    page=page, true_false=user_response,
+                                    completed=True)
+                if not page.opinion:
+                    response.correct = (user_response == page.tf_answer)
+                response.save()
         elif page.page_type == 'DS':
             return redirect('discussion', activity_slug, page_index)
 

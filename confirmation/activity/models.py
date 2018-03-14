@@ -123,6 +123,21 @@ class Page(models.Model):
             msg += "the internet is completely anonymous."
         return msg
 
+    def can_respond(self, user):
+        """
+        Determines whether an entry has already been made for this activity and page by this user. If so it returns
+        False (a new response cannot be made) otherwise it returns True (a new response can be made -- the first).
+        :param user: usually request.user from the view
+        :return: boolean
+        """
+        print('activity/models.py len(Response.objects.filter) = ', len(Response.objects.filter(user=user, activity=self.activity, page=self)))
+        if len(Response.objects.filter(user=user, activity=self.activity, page=self)) > 0:
+            print('activity/models.py can_respond: ', False)
+            return False
+        else:
+            print('activity/models.py can_respond: ', True)
+            return True
+
 
 class Response(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
