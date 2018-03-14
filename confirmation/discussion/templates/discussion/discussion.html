@@ -4,6 +4,16 @@
     {{ block.super }}Discussion
 {% endblock %}
 
+{% block head %}
+    <script>
+        $(document).ready(function() {
+            $('#submit').click(function() {
+                this.disabled = true;
+            }); // end click
+        }); // end ready
+    </script>
+{% endblock %}
+
 {% block page-content %}
     <form class="separator" action="{% url 'discussion' activity.slug page.index %}" method="post">
         {% csrf_token %}
@@ -16,7 +26,7 @@
         </p>
         <div class="row">
             <textarea class="u-full-width text-field" name="entry"></textarea>
-            <input class="offset-by-four four columns button-primary" value="Submit" type="submit"/>
+            <input class="offset-by-four four columns button-primary" value="Submit" type="submit" id="submit"/>
         </div>
         <div class="fine-print">
             *Inappropriate comments will be deleted. Threatening comments will be reported.
