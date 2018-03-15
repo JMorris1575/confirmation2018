@@ -211,6 +211,7 @@ td.pad-override {
 
 .page-image {
     float: right;
+    max-width: 100%;
 }
 
 .inactive-link {

@@ -4,6 +4,16 @@
     {{ block.super }}Login
 {% endblock %}
 
+{% block head %}
+    <script>
+        $(document).ready(function() {
+            $('#login').click(function() {
+                this.disabled = true;
+            }); // end click
+        }); // end ready
+    </script>
+{% endblock %}
+
 {% block content %}
     {{ block.super }}
     <div class="container">
@@ -23,7 +33,7 @@
                     <label for="id_password">Password:</label>
                     <input class="u-full-width" type="password"
                            name="password" required id="id_password" />
-                    <input class="button-primary u-full-width" value="Login" type="submit" />
+                    <input class="button-primary u-full-width" value="Login" type="submit" id="login"/>
                 </p>
                 {% csrf_token %}
             </form>

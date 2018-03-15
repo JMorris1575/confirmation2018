@@ -5,7 +5,7 @@
     <div class="container">
         <div class="offset-by-one ten columns activity-text shadowed">
             <div class="row separator">
-                <div class="u-pull-left">
+                <div class="u-pull-left eight columns">
                     <p class="heading">
                         {{ activity }}
                     </p>
@@ -13,8 +13,8 @@
                         {{ page.title }}
                     </p>
                 </div>
-                <div class="page-image">
-                    <img src="{% static 'images/illustrations/' %}{{ activity.image }}" width="150" />
+                <div class="four columns">
+                    <img class="page-image" src="{% static 'images/illustrations/' %}{{ activity.image }}" />
                 </div>
             </div>
             <div class="page-text row">
