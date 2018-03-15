@@ -13,35 +13,33 @@
                 be helpful, informative, and not incredibly boring. Let us know how we do on all three counts.</p>
         </div>
         {% if data %}
-            <div class="offset-by-two eight columns activity-text row shadowed">
+            <div class="offset-by-one ten columns activity-text shadowed">
                 <div class="heading twelve columns">
                     Activities:
                 </div>
-                <table class="u-full-width">
+                <ul class="u-full-width">
                     {% for activity, msg in data %}
-                        <tr>
-                            <td>
-                                <p class="table-list">
-                                    {{ forloop.counter }}. {{ activity }}
-                                </p>
-                            </td>
-                            <td class="progress">
+                        <li class="row table-list separator">
+                            <div class="five columns">
+                                {{ forloop.counter }}. {{ activity }}
+                            </div>
+                            <div class="four columns">
                                 {{ msg }}
-                            </td>
-                            <td>
+                            </div>
+                            <div class="three columns">
                                 <a class="button u-full-width" href="/activity/{{ activity.slug }}/summary/">
                                     {% if msg == '0.0% Complete' %}
-                                        Begin
+                                        Start
                                     {% elif msg == 'Finished!' %}
-                                        Finished!
+                                        Done!
                                     {% else %}
-                                        Continue
+                                        Go On
                                      {% endif %}
                                 </a>
-                            </td>
-                        </tr>
+                            </div>
+                        </li>
                     {% endfor %}
-                </table>
+                </ul>
             </div>
             {% if 'Team' in group_names %}
                 {% include 'activity/welcome-report.html' %}

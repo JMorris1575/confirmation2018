@@ -7,7 +7,7 @@
 
 {% block content %}
         <div class="container">
-        <div class="offset-by-two eight columns activity-text shadowed">
+        <div class="offset-by-one ten columns activity-text shadowed">
             <div class="row">
                 <div class="twelve columns heading">
                     {{ activity }}
@@ -26,36 +26,27 @@
                     <div class="heading twelve columns">
                         Things to Do:
                     </div>
-                    <table class="u-full-width">
+                    <ul class="u-full-width">
                         {% for page, progress in data %}
-                        <tr>
+                        <li class="row table-list separator">
                             {% if progress == 'Pending' %}
-                                <td>
-                                    <p class="table-list">
-                                        {{ page.index }}. {{ page.title }}
-                                    </p>
-                                </td>
-                                <td>
-                                    <p class="table-list">
-                                        Pending
-                                    </p>
-                                </td>
-                                <td>
-                                    <p>
-                                    </p>
-                                </td>
+                                <div class="six columns">
+                                    {{ page.index }}. {{ page.title }}
+                                </div>
+                                <div class="three columns">
+                                    Pending
+                                </div>
+                                <div class="three columns">
+                                    <p class="center-element"></p>
+                                </div>
                             {% else %}
-                                <td>
-                                    <p class="table-list">
-                                        {{ page.index }}. {{ page.title }}
-                                    </p>
-                                </td>
-                                <td>
-                                    <p class="table-list">
-                                        {{ progress }}
-                                    </p>
-                                </td>
-                                <td>    <!-- Third Column -->
+                                <div class="six columns">
+                                    {{ page.index }}. {{ page.title }}
+                                </div>
+                                <div class="three columns">
+                                    {{ progress }}
+                                </div>
+                                <div class="three columns">    <!-- Third Column -->
                                     {% if progress == 'Pending' %}
                                         ''
                                     {% elif progress == 'Up next...' %}
@@ -66,14 +57,14 @@
                                     {% else %}
                                         <a class="button button u-full-width"
                                            href="/activity/{{ activity.slug }}/{{ page.index }}/">
-                                            Review it...
+                                            See it...
                                         </a>
                                     {% endif %}
-                                </td>
+                                </div>
                             {% endif %}
-                        </tr>
+                        </li>
                         {% endfor %}
-                    </table>
+                    </ul>
                 {% endif %}
                 <a class="button offset-by-three six columns" href="/activity/welcome/">
                     Return to Welcome Page
