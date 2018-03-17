@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'mail.apps.MailConfig',
     'development.apps.DevelopmentConfig',
     'consultants.apps.ConsultantsConfig',
+    'webfaction_wellknown.apps.WebfactionWellknownConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

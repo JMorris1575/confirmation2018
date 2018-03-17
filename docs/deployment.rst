@@ -152,17 +152,57 @@ A Plan for Installing a SSL Certificate
 
 #.  ``pip install django_letsencrypt`` in PyCharm's Terminal
 
-#.  Find out where the app ``letsencrypt`` goes and add it to INSTALLED_APPS
+    *   It turns out it was already installed in my ``conf`` environment
+    *   Is that true for all my machines considering the different ways the ``conf`` env might have been created?
 
-#.  Add ``url(r'^\.well-known/', include('letsencrypt.urls'))`` to config/urls.py
+#.  Find out where the app ``letsencrypt`` goes and add it to INSTALLED_APPS
+    *   in ``config/base.py`` I entered ``'letsencrypt.app.LetsEncryptConfig',`` to the existing list
+
+#.  Add ``path('\.well-known/', include('letsencrypt.urls')),`` to config/urls.py
+
+    *   I converted the url() on the pypi website to a path() and had to remove the r and the ^
+    *   Done
 
 #.  Run ``python manage.py migrate`` on the local machine.
 
+    *   Done -- this is what warned me about the '^' character
+
 #.  Research ACME Challenge objects and try to create some in the admin.
+
+    *   The letsencrypt app added a Let's Encrypt section to the admin
+    *   It includes an ACME Challenges section with no challenges
+    *   Each challenge consists of
+        *   Challenge -- an identifier for this challenge
+        *   Response -- the response expected for this challenge
+        *   There is also a Metadata section with ID and Link
+    *   I created a challenge named ``Jim`` with response: ``James Alfred Thomas Morris``
 
 #.  Test some ACME Challenge objects by visiting them at ``[website]/.well-known/acme-challenge/challenge_text``
 
 #.  Figure out how to move all this to webfaction.
+
+I don't think this will work as is. It requires me to put challenges into the model but ``letsencrypt_webfaction`` does
+that, not me. I may, however, be able to design my own app, based on this one to deliver whatever text in whatever file
+``letsencrypt_webfaction`` places into the .well-known directory.
+
+Yet, there may be a better solution buried someplace on the websites listed above. I should look there first.
+
+I did, but no solution as simple as making my own app jumped out at me. So, here goes:
+
+Making an App to Handle .well-known Tests
++++++++++++++++++++++++++++++++++++++++++
+
+I think what I have to do is:
+
+#.  Create a webfaction_wellknown app with ``startapp``. Add it to INSTALLED_APPS
+#.  Create a path in ``config/urls.py`` to include ``webfaction_wellknown.urls``
+#.  Create ``webfaction_wellknown.urls`` to point ``.well-known/<str:challenge_file>/`` to the proper view
+#.  Create the corresponding view in ``webfaction_wellknown.views`` to return the text from the file
+#.  Test it with some silly files.
+#.  Try it out on webfaction
+
+My app works on the local machine, now to try it out on webfaction. I will do a commit and write down the names of the
+files and directories that need to be transferred, transfer them, and then try to run ``letsencrypt_webfaction`` again.
 
 
 

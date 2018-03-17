@@ -30,6 +30,7 @@ urlpatterns = [
     path('email/', include('mail.urls')),
     path('develop/', include('development.urls')),
     path('suggestions/', include('consultants.urls')),
+    path('.well-known/', include('webfaction_wellknown.urls')),
 ]
 
 admin.site.site_header = 'St. Basil Confirmation 2018 Admin'
