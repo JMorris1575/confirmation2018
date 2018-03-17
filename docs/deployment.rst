@@ -116,6 +116,9 @@ I will summarize the instructions on the first website below:
 
 #.  Redirect the original http:// site to the new https:// site as explained on the bcc website
 
+Possible Solutions
+++++++++++++++++++
+
 Getting a free certificate for the domain hasn't worked very well yet. The problem has to do with the ACME Challenge not
 being served by my Django application. There are numerous instructions online as to how to go about doing this but I'm
 not up to following them right now.
@@ -135,6 +138,31 @@ https://stackoverflow.com/questions/38443572/using-lets-encrypt-without-control-
 It seems that the ``.well-known`` directory's location is set by the ``letsencrypt_webfaction`` --public parameter. If I
 change that to something accessible, and perhaps adjust my site's urlconfig accordingly, it may solve the problem. But,
 again, that's a problem for another day.
+
+By following a link on the last page listed above I came to this possibility:
+
+https://pypi.python.org/pypi/django-letsencrypt
+
+Since I don't know what the docs are talking about when it come to creating and testing my ACME challenge objects I'm
+hoping that's what letsencrypt_webfaction takes care of on its own -- once it has a way to create and access a
+``/.well-known/`` folder.
+
+A Plan for Installing a SSL Certificate
++++++++++++++++++++++++++++++++++++++++
+
+#.  ``pip install django_letsencrypt`` in PyCharm's Terminal
+
+#.  Find out where the app ``letsencrypt`` goes and add it to INSTALLED_APPS
+
+#.  Add ``url(r'^\.well-known/', include('letsencrypt.urls'))`` to config/urls.py
+
+#.  Run ``python manage.py migrate`` on the local machine.
+
+#.  Research ACME Challenge objects and try to create some in the admin.
+
+#.  Test some ACME Challenge objects by visiting them at ``[website]/.well-known/acme-challenge/challenge_text``
+
+#.  Figure out how to move all this to webfaction.
 
 
 
