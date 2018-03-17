@@ -94,7 +94,49 @@ I will summarize the instructions on the first website below:
     *   run: ``EDITOR=nano crontab -e``
     *   add: ``* * * * * echo "cron is running" >> $HOME/logs/user/cron.log 2>&1`` to the file that appears(?)
     *   check ``~/logs/user/cron.log`` after a few minutes to see that it is echoing "cron is running"
-    *   [continue with creation of config.yml]
+    *   run the following commands or complete the indicated steps:
+
+        *   ``mkdir le_certs``
+        *   ``touch le_certs/config.yml``
+        *   edit config.yml in notepad++ to include the following:
+
+            *   letsencrypt_account_email: 'FrJamesMorris@gmail.com'
+            *   api_url: 'https://api.webfaction.com/'
+            *   username: 'jmorris'
+            *   password: 'dylan-selfie'
+
+        *   edit crontab
+
+            *   erase the existing test line
+            *   add the following all on one line (see the bcc website above)
+            *   0 4 15 \*/2 * PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems
+            *   RUBYLIB=$GEM_HOME/lib /usr/local/bin/ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction
+            *   --domains confirmation.jmorris.webfactional.com --public /home/jmorris/webapps/conf18/
+            *   --config /home/jmorris/le_certs/config.yml >> $HOME/logs/user/cron.log 2>&1
+
+#.  Redirect the original http:// site to the new https:// site as explained on the bcc website
+
+Getting a free certificate for the domain hasn't worked very well yet. The problem has to do with the ACME Challenge not
+being served by my Django application. There are numerous instructions online as to how to go about doing this but I'm
+not up to following them right now.
+
+Here are some places to check:
+
+https://github.com/will-in-wi/letsencrypt-webfaction    the third bullet point of the Usage/Options section
+
+https://github.com/will-in-wi/letsencrypt-webfaction/issues/24  the website linked to from the one above
+
+https://github.com/will-in-wi/letsencrypt-webfaction/wiki/Django    the Django wiki page referred to in the link above
+
+https://github.com/will-in-wi/letsencrypt-webfaction/issues/85  the alternative method referred to in the link above
+
+https://stackoverflow.com/questions/38443572/using-lets-encrypt-without-control-over-the-root-directory from link above
+
+It seems that the ``.well-known`` directory's location is set by the ``letsencrypt_webfaction`` --public parameter. If I
+change that to something accessible, and perhaps adjust my site's urlconfig accordingly, it may solve the problem. But,
+again, that's a problem for another day.
+
+
 
 Setting My bash_profile for SSH
 *******************************
@@ -102,4 +144,15 @@ Setting My bash_profile for SSH
 While reading the instructions to create the above summary I discovered something I've been wanting to know: how to get
 the prompt the way I like it when I ssh into my webfaction site. I created a .bash_profile file with  the PS1="\\w\\$: "
 command in it and it gets done! :-) :-) :-)
+
+Later, when trying to follow the directions to get a certificate, I discovered that I was saving .bash_profile in dos
+format and it needs to be in unix format -- line endings are different. Using:
+
+``dos2unix .bash_profile``
+
+did the trick. Then using:
+
+``source $HOME/.bash_profile``
+
+read it in... I think.
 
