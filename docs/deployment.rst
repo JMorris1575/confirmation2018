@@ -204,6 +204,12 @@ I think what I have to do is:
 My app works on the local machine, now to try it out on webfaction. I will do a commit and write down the names of the
 files and directories that need to be transferred, transfer them, and then try to run ``letsencrypt_webfaction`` again.
 
+So far no luck. But I'm getting closer. The oddball files are being saved in
+``webfaction_wellknown/.well-known/acme-challenge/``, I just haven't been able to deliver them yet.
+
+I realized, a little later, that I hadn't restarted the apache2 server. That may have been the reason I got the 404
+error. I will try again now, and if that doesn't work, after restarting...
+
 
 
 Setting My bash_profile for SSH
