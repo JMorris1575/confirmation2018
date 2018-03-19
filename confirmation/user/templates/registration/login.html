@@ -9,6 +9,7 @@
         $(document).ready(function() {
             $('#login').click(function() {
                 this.disabled = true;
+                this.form.submit();
             }); // end click
         }); // end ready
     </script>
@@ -19,8 +20,8 @@
     <div class="container">
         <div class="offset-by-three six columns shadowed">
             <p>
-                Enter the Username and Password you were given then click the "Login" button. Both the Username and the Password
-                are case sensitive.
+                Enter the Username and Password you were given then click the "Login" button. Both the Username and
+                the Password are case sensitive.
             </p>
             <form class="offset-by-two eight columns" method="post" action="{% url 'login' %}">
                 <p class="row">
@@ -33,7 +34,7 @@
                     <label for="id_password">Password:</label>
                     <input class="u-full-width" type="password"
                            name="password" required id="id_password" />
-                    <input class="button-primary u-full-width" value="Login" type="submit" id="login"/>
+                    <input class="button-primary u-full-width" value="Login" type="submit" id="login" />
                 </p>
                 {% csrf_token %}
             </form>

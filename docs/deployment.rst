@@ -81,7 +81,7 @@ I will summarize the instructions on the first website below:
     *   use ssh to get into web506.webfaction.com
     *   run: ``GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib gem2.2 install letsencrypt_webfaction``
     *   Edit ~/.bash_profile to include: ``function letsencrypt_webfaction {PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME/.letsencrypt_webfaction/gems RUBYLIB=$GEM_HOME/lib ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction $*}``
-    *   run: letsencrypt_webfaction --letsencrypt_account_email FrJamesMorris@gmail.com --domains confirmation.jmorris.webfactional.com --public /home/jmorris/webapps/conf18/ --username jmorris --password dylan-selfie
+    *   run: ``letsencrypt_webfaction --letsencrypt_account_email FrJamesMorris@gmail.com --domains confirmation.jmorris.webfactional.com --public /home/jmorris/webapps/conf18/confirmation/webfaction_wellknown/ --username jmorris --password dylan-selfie``
     *   that should put a certificate in the SSL certificates tab in the WebFaction Control Panel
     *   go to the Websites tab, select the secure version of the website and choose the new certificate
 
@@ -210,8 +210,6 @@ So far no luck. But I'm getting closer. The oddball files are being saved in
 I realized, a little later, that I hadn't restarted the apache2 server. That may have been the reason I got the 404
 error. I will try again now, and if that doesn't work, after restarting...
 
-
-
 Setting My bash_profile for SSH
 *******************************
 
@@ -229,4 +227,73 @@ did the trick. Then using:
 ``source $HOME/.bash_profile``
 
 read it in... I think.
+
+Making the Website Secure
+*************************
+
+When I finally got ``letsencrypt_webfaction`` to work it gave me the following message:
+
+``Your new certificate is now created and installed.
+You will need to change your application to use the confirmation_jmorris_webfactional_com certificate.
+Add the `--quiet` parameter in your cron task to remove this message.``
+
+I notice that it doesn't say HOW to change my application but I hope it just means to add it to the application with
+webfaction's control panel.
+
+I don't yet know where my cron task is but I think that is one of the later steps I am going to follow.
+
+Once I managed to create a certificate, I went to the original Website record on webfaction (Domains/Websites ->
+Websites), deleted the Conf18-Secure website, since it didn't seem to be doing anything and was getting in the way of
+adding the certificate to the original website, and added the new certificate to the ``Confirmation18`` website.
+
+Writing a cron Task
++++++++++++++++++++
+
+I pretty much had to use one of linux's editors for this -- yechhh!
+
+The easiest to use was nano which I used to edit crontab as follows:
+
+``EDITOR=nano crontab -e``
+
+After adding the new line I wanted to add I pressed ctrl-O to save and ctrl-X to exit. The test cron job worked alright.
+
+To create the config.yml file in a new le_certs directory I did the following:
+
+``mkdir le_certs``
+``touch le_certs/config.yml``
+``nano le_certs/config.yml``
+
+then I added the following lines to the file thus created and entered for editing::
+
+    letsencrypt_account_email: 'FrJamesMorris@gmail.com'
+    api_url: 'https://api.webfaction.com/'
+    username: 'jmorris'
+    password: 'dylan selfie'
+
+Finally, I edited crontab as follows:
+
+EDITOR=nano crontab -e
+
+and added the following all on one line::
+
+    0 4 15 */2 * PATH=$PATH:$GEM_HOME/bin GEM_HOME=$HOME=$HOME/.letsencrypt_webfaction/gems
+    RUBYLIB=$GEM_HOME/lib /usr/local/bin/ruby2.2 $HOME/.letsencrypt_webfaction/gems/bin/letsencrypt_webfaction
+    --domains confirmation.jmorris.webfactional.com
+    --public /home/jmorris/webapps/conf18/confirmation/webfaction_wellknown/
+    --config /home/jmorris/le_certs/config.yml >> $HOME/logs/user/cron.log 2>&1
+
+I put a reminder in my palm organizer for May 15 to check to see if this gets done. It should show some kind of report
+in ``jmorris/logs/user/cron.log``
+
+Redirecting Traffic to the Secure Website
++++++++++++++++++++++++++++++++++++++++++
+
+So far, though I can get into the website in Firefox, the static content does not serve well -- including the css so the
+site looks awful!
+
+Following the instructions at:
+
+https://docs.webfaction.com/software/static.html#static-redirecting-from-http-to-https
+
+I will try to alleviate that problem.
 
