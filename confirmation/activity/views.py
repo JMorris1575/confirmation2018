@@ -3,7 +3,8 @@ from django.views import View
 from django.contrib.auth.models import Group
 from .models import Activity, Page, Response, Choice
 from config.utilities import (get_group_names, get_response_info, is_tester, get_critiques, get_welcome_report,
-                              get_summary_report, get_essay_report, get_instruction_report, get_multi_choice_report)
+                              get_summary_report, get_essay_report, get_instruction_report, get_multi_choice_report,
+                              get_true_false_report)
 
 import datetime
 
@@ -91,6 +92,7 @@ class PageView(View):
             reports = get_multi_choice_report(activity, page, request.user, choices)
         elif page_type == 'TF':
             self.template_name = 'activity/true-false.html'
+            reports = get_true_false_report(activity, page, request.user)
         elif page_type == 'DS':
             return redirect('discussion', activity_slug, page_index)
         context['critiques'] = get_critiques(request.path_info)

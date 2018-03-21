@@ -52,7 +52,7 @@ def get_welcome_report(site_user):
                                          visible=True)
     report = []
     for user in users:
-        if is_candidate(user) or is_supervisor(site_user):
+        if is_candidate(user) or is_supervisor(site_user):      # list only candidates unless site_user is supervisor
             if user.first_name != 'Unknown':
                 user_name = user.last_name + ', ' + user.first_name
                 activity_list = ''
@@ -77,7 +77,7 @@ def get_summary_report(activity, site_user):
     page_count = len(Page.objects.filter(activity=activity))
     report = []
     for user in users:
-        if is_candidate(user) or is_supervisor(site_user):
+        if is_candidate(user) or is_supervisor(site_user):      # list only candidates unless site_user is supervisor
             if user.first_name != 'Unknown':
                 user_name = user.last_name + ', ' + user.first_name
                 completed = len(Response.objects.filter(activity=activity, user=user))
@@ -97,7 +97,7 @@ def get_instruction_report(activity, page, site_user):
     users = User.objects.all().order_by('last_name', 'first_name')
     report = []
     for user in users:
-        if is_candidate(user) or is_supervisor(site_user):
+        if is_candidate(user) or is_supervisor(site_user):      # list only candidates unless site_user is supervisor
             if user.first_name != 'Unknown':
                 user_name = user.last_name + ', ' + user.first_name
                 try:
@@ -119,7 +119,7 @@ def get_essay_report(activity, page, site_user):
     users = User.objects.all().order_by('last_name', 'first_name')
     report = []
     for user in users:
-        if is_candidate(user) or is_supervisor(site_user):
+        if is_candidate(user) or is_supervisor(site_user):      # list only candidates unless site_user is supervisor
             if user.first_name != 'Unknown':
                 user_name = user.last_name + ', ' + user.first_name
                 try:
@@ -143,7 +143,7 @@ def get_multi_choice_report(activity, page, site_user, choices):
     users = User.objects.all().order_by('last_name', 'first_name')
     report = []
     for user in users:
-        if is_candidate(user) or is_supervisor(site_user):
+        if is_candidate(user) or is_supervisor(site_user):      # list only candidates unless site_user is supervisor
             if user.first_name != 'Unknown':
                 user_name = user.last_name + ', ' + user.first_name
                 try:
@@ -152,12 +152,48 @@ def get_multi_choice_report(activity, page, site_user, choices):
                     if response.correct == None:
                         correct = ' - '
                     else:
-                        correct = response.correct
+                        if response.correct:
+                            correct = 'Yes'
+                        else:
+                            correct = 'No'
                 except Response.DoesNotExist:
                     choice = ''
                     correct = ' - '
                 report.append({'name': user_name, 'choice': choice, 'correct': correct})
     return report
+
+def get_true_false_report(activity, page, site_user):
+    """
+    Returns the Candidate Report for the true/false pages of the current activity. It contains the names and the
+    response each user made along with an indication as to whether their choice was correct or ' - ' for opinion
+    questions.
+    :param activity: the current activity (tpe: Activity)
+    :param page: the current page (type: Page)
+    :param site_user: the user viewing the website (type: auth.User)
+    :return: a list of dictionaries with keys of 'name', 'response' and 'correct', ordered by last_name, first_name
+    """
+    users = User.objects.all().order_by('last_name', 'first_name')
+    report = []
+    for user in users:
+        if is_candidate(user) or is_supervisor(site_user):      # list only candidates unless site_user is supervisor
+            if user.first_name != 'Unknown':                    # don't list Unknown User
+                user_name = user.last_name + ', ' + user.first_name
+                try:
+                    response = Response.objects.get(activity=activity, page=page, user=user)
+                    answer = response.true_false
+                    if response.correct == None:
+                        correct = ' - '
+                    else:
+                        if response.correct:
+                            correct = 'Yes'
+                        else:
+                            correct = 'No'
+                except Response.DoesNotExist:
+                    answer = ''
+                    correct = ' - '
+                report.append({'name': user_name, 'answer': answer, 'correct': correct})
+    return report
+
 
 class PageMixin:
 

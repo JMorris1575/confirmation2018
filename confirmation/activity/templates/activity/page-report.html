@@ -10,7 +10,7 @@
             {% elif page_type == 'ES' %}
                 <div class="seven columns report-heading">Response</div>
                 <div class="one column report-heading">See</div>
-            {% elif page_type == 'MC' %}
+            {% elif page_type == 'MC' or page_type == 'TF' %}
                 <div class="six columns report-heading">Choice</div>
                 <div class="two columns report-heading">Correct?</div>
             {% endif %}
@@ -27,6 +27,9 @@
                     </div>
                 {% elif page_type == 'MC' %}
                     <div class="six columns">{{ report.choice }}</div>
+                    <div class="two columns">{{ report.correct }}</div>
+                {% elif page_type == 'TF' %}
+                    <div class="six columns">{{ report.answer }}</div>
                     <div class="two columns">{{ report.correct }}</div>
                 {% endif %}
             </li>
