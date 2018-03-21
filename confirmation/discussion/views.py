@@ -15,7 +15,7 @@ class DiscussionView(View):
         if not page.allowed(request.user, activity_slug, page_index):
             return redirect('summary', activity_slug)
         context['responses'] = Response.objects.filter(activity=activity, page=page)    # get all the page's responses
-        context['critiques'] = get_critiques(request.path_info),
+        context['critiques'] = get_critiques(request.path_info)
         context['tester'] = is_tester(request.user)
         return render(request, self.template_name, context)
 
