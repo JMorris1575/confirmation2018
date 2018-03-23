@@ -17,43 +17,43 @@
             <div>
                 {% if user.is_authenticated %}
                         Welcome {{ user.first_name }}!
-                        <a class="link" href="{% url 'logout' %}?next={{ request.path_info }}">Logout</a>
+                        <a href="{% url 'logout' %}?next={{ request.path_info }}"> [Logout]</a>
                 {% else %}
-                        <a class="link" href="{% url 'login' %}?next={{ request.path_info }}">Login</a>
+                        <a href="{% url 'login' %}?next={{ request.path_info }}"> [Login]</a>
                 {% endif %}
             </div>
         </div>
         <div class="menu">
-            <div class="dropdown">
-                <div class="help-menu">Help</div>
+            <div class="help-menu dropdown">
+                <div>Help</div>
                 <div class="dropdown-content">
-                    <a class="help-scripture" href="/help/scripture/">Finding Scriptures</a>
+                    <a class="help-scripture link" href="/help/scripture/">Finding Scriptures</a>
                     {% if 'Team' in group_names %}
-                        <a class="help-team" href="/help/team/">Team Pages</a>
+                        <a class="help-team link" href="/help/team/">Team Pages</a>
                     {% endif %}
-                    <a class="help-using" href="/help/index/">Using the Website</a>
+                    <a class="help-using link" href="/help/index/">Using the Website</a>
                 </div>
             </div>
             {% if 'Supervisor' in group_names %}
-                <div>
+                <div class="email-menu">
                     <a href="{% url 'send_email' %}">E-mail</a>
                 </div>
             {% endif %}
             {% if 'Team' in group_names %}
-                <div>
+                <div class="team-menu dropdown">
                     <div>Team Pages</div>
-                    <div>
-                        <a href="{% url 'dev_activity_list' %}">Build Activities</a>
-                        <a href="{% url 'reports' %}">Candidate Reports</a>
+                    <div class="dropdown-content">
+                        <a class="team-activities" href="{% url 'dev_activity_list' %}">Build Activities</a>
+                        <a class="team-reports" href="{% url 'reports' %}">Candidate Reports</a>
                     </div>
                 </div>
             {% endif %}
             {% if tester %}
-                <div>
-                    <a href="{% url 'toggle_critiques' %}?next={{ request.path_info }}">
+                <!--<div class="toggle-menu">-->
+                    <a class="toggle-menu" href="{% url 'toggle_critiques' %}?next={{ request.path_info }}">
                         Toggle Critiques
                     </a>
-                </div>
+                <!--</div>-->
             {% endif %}
         </div>
     </header>
