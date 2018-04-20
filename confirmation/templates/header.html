@@ -2,17 +2,12 @@
 
 {% block header %}
 
-    <header class="container row">
-        <div class="two columns">
-            <div class="half-line"></div>
+    <header>
+        <div class="container">
             <a href="{% url 'welcome' %}">
-                <img class="u-max-full-width" src="{% static 'images/HolySpiritLogo.png' %}" title="Home">
+                <img class="u-max-full-width logo" src="{% static 'images/HolySpiritLogo.png' %}" title="Home">
             </a>
-        </div>
-        <div class="ten columns">
-            <div class="banner">
-                <h2>St. Basil Confirmation Activities</h2>
-            </div>
+            <h1 class="banner">St. Basil Confirmation Activities</h1>
             <div class="u-pull-left welcome">
                 <div class="welcome">
                     {% if user.is_authenticated %}
@@ -56,7 +51,7 @@
                     </div>
                 {% endif %}
             </div>
-        </div>
+        </div> <!-- end .container -->
     </header>
 
 {% endblock %}

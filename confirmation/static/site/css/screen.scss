@@ -1,0 +1,50 @@
+$main-font: Arial, Helvetica, sans-serif;
+
+$header-font: 'Gloria Hallelujah', cursive;
+
+$footer-font: 'Times New Roman', serif;
+
+$conf-red: #d40000;
+
+$conf-yellow: #ffdd55;
+
+$conf-green: #2eb873;
+
+html {
+    background-color: $conf-red;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    color: $conf-yellow;
+
+    h1 {
+        font-family: $header-font;
+        font-size: 250%;
+        display: inline;
+    }
+
+    .logo {
+        float: left;
+    }
+}
+
+footer {
+    font-family: $footer-font;
+    color: $conf-yellow;
+}
+
+main, .critiques {
+    background-color: #fff;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+
+}
