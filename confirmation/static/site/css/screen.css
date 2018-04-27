@@ -55,6 +55,11 @@ main, .critiques {
   box-sizing: border-box;
 }
 
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+}
 header .container {
   padding: 0;
 }
@@ -88,7 +93,7 @@ header .container {
 .menu li {
   list-style: none;
   float: right;
-  margin-left: 5px;
+  width: 25%;
 }
 
 .menu a {
@@ -99,9 +104,9 @@ header .container {
   text-align: center;
   padding-top: 10px;
   padding-bottom: 10px;
-  width: 120px;
   border: 2px solid #ffdd55;
   border-radius: 10px;
+  margin-left: 5px;
 }
 
 .menu a:hover {
@@ -109,6 +114,21 @@ header .container {
   color: #d40000;
 }
 
+@media screen and (max-width: 912px) {
+  .menu li {
+    width: 50%;
+  }
+
+  .menu a {
+    padding: 15px 0;
+    margin-bottom: 5px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .menu li {
+    width: 75%;
+  }
+}
 /* End Header Navigation Bar */
 /* ------------------------------------
    clearfix
