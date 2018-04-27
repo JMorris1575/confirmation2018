@@ -1,4 +1,4 @@
-$main-font: Arial, Helvetica, sans-serif;
+$main-font: Helvetica, Arial, sans-serif;
 
 $header-font: 'Gloria Hallelujah', cursive;
 
@@ -15,21 +15,42 @@ html {
 }
 
 body {
+    font-family: $main-font;
+    font-size: medium;
     margin: 0;
     padding: 0;
 }
 
 header {
     color: $conf-yellow;
+    padding-top: 10px;
+    /*padding-bottom: 10px;*/
+    box-sizing: border-box;
 
     h1 {
         font-family: $header-font;
-        font-size: 250%;
-        display: inline;
+        font-size: 260%;
+        text-align: center;
+        margin: 0 auto;
     }
 
     .logo {
         float: left;
+        width: 20%;
+    }
+
+    .banner {
+        width: 80%;
+        float: left;
+        box-sizing: border-box;
+    }
+
+    @media screen and (max-width: 912px) {
+
+        h1 {
+            font-size: 160%;
+        }
+
     }
 }
 
@@ -39,6 +60,9 @@ footer {
 }
 
 main, .critiques {
+    max-width: 960px;
+    margin: 0 auto;
+    box-sizing: border-box;
     background-color: #fff;
 }
 
@@ -46,5 +70,71 @@ main, .critiques {
     max-width: 960px;
     margin: 0 auto;
     padding: 0 20px;
+    box-sizing: border-box;
+}
 
+header .container {
+    padding: 0;
+}
+
+.sub-heading {
+    font-family: $main-font;
+}
+
+.welcome {
+    font-size: 1.2em;
+    float: left;
+    padding-top: 10px;
+    padding-left: 20px;
+}
+
+/* Header Navigation Bar */
+
+.menu {
+    float: right;
+}
+
+.menu ul {
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    list-style: none;
+    float: right;
+    margin-left: 5px;
+}
+
+.menu a {
+    display: block;                 /* Web Design for Beginners Lecture 33, 4:40 */
+    color: $conf-yellow;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 2px solid  $conf-yellow;
+    border-radius: 10px;
+}
+
+.menu a:hover {
+    background-color: $conf-yellow;
+    color: $conf-red;
+}
+
+/* End Header Navigation Bar */
+
+/* ------------------------------------
+   clearfix
+   ------------------------------------ */
+
+.group:before,
+.group:after {
+    content: "";
+    display: table;
+}
+
+.group:after {
+    clear: both;
+}
+
+.group {
+    zoom: 1;
 }

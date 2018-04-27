@@ -3,20 +3,37 @@ html {
 }
 
 body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: medium;
   margin: 0;
   padding: 0;
 }
 
 header {
   color: #ffdd55;
+  padding-top: 10px;
+  /*padding-bottom: 10px;*/
+  box-sizing: border-box;
 }
 header h1 {
   font-family: "Gloria Hallelujah", cursive;
-  font-size: 250%;
-  display: inline;
+  font-size: 260%;
+  text-align: center;
+  margin: 0 auto;
 }
 header .logo {
   float: left;
+  width: 20%;
+}
+header .banner {
+  width: 80%;
+  float: left;
+  box-sizing: border-box;
+}
+@media screen and (max-width: 912px) {
+  header h1 {
+    font-size: 160%;
+  }
 }
 
 footer {
@@ -25,6 +42,9 @@ footer {
 }
 
 main, .critiques {
+  max-width: 960px;
+  margin: 0 auto;
+  box-sizing: border-box;
   background-color: #fff;
 }
 
@@ -32,4 +52,69 @@ main, .critiques {
   max-width: 960px;
   margin: 0 auto;
   padding: 0 20px;
+  box-sizing: border-box;
+}
+
+header .container {
+  padding: 0;
+}
+
+.sub-heading {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.welcome {
+  font-size: 1.2em;
+  float: left;
+  padding-top: 10px;
+  padding-left: 20px;
+}
+
+/* Header Navigation Bar */
+.menu {
+  float: right;
+}
+
+.menu ul {
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  list-style: none;
+  float: right;
+  margin-left: 5px;
+}
+
+.menu a {
+  display: block;
+  /* Web Design for Beginners Lecture 33, 4:40 */
+  color: #ffdd55;
+  text-decoration: none;
+  padding: 10px 20px;
+  border: 2px solid #ffdd55;
+  border-radius: 10px;
+}
+
+.menu a:hover {
+  background-color: #ffdd55;
+  color: #d40000;
+}
+
+/* End Header Navigation Bar */
+/* ------------------------------------
+   clearfix
+   ------------------------------------ */
+.group:before,
+.group:after {
+  content: "";
+  display: table;
+}
+
+.group:after {
+  clear: both;
+}
+
+.group {
+  zoom: 1;
 }
