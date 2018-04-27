@@ -82,16 +82,21 @@ header .container {
 }
 
 .welcome {
-    font-size: 1.2em;
+    width: 30%;
+    font-size: 115%;
+    text-align: center;
     float: left;
     padding-top: 10px;
     padding-left: 20px;
+    box-sizing: border-box;
 }
 
 /* Header Navigation Bar */
 
 .menu {
+    width: 70%;
     float: right;
+    box-sizing: border-box;
 }
 
 .menu ul {
@@ -109,7 +114,10 @@ header .container {
     display: block;                 /* Web Design for Beginners Lecture 33, 4:40 */
     color: $conf-yellow;
     text-decoration: none;
-    padding: 10px 20px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 120px;
     border: 2px solid  $conf-yellow;
     border-radius: 10px;
 }
