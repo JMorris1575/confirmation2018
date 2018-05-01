@@ -2,55 +2,61 @@
 
 {% block header %}
 
-    <header>
+    <header class="group">
         <div class="container">
             <a href="{% url 'welcome' %}">
-                <img class="u-max-full-width logo" src="{% static 'images/HolySpiritLogo.png' %}" title="Home">
+                <img class="logo" src="{% static 'images/HolySpiritLogo.png' %}" title="Home">
             </a>
-            <h1 class="banner">St. Basil Confirmation Activities</h1>
-            <div class="u-pull-left welcome">
-                <div class="welcome">
-                    {% if user.is_authenticated %}
-                            Welcome {{ user.first_name }}!
-                            <a class="link" href="{% url 'logout' %}?next={{ request.path_info }}">Logout</a>
-                    {% else %}
-                            <a class="link" href="{% url 'login' %}?next={{ request.path_info }}">Login</a>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="menu u-pull-right">
-                <div class="dropdown u-pull-right">
-                    <div class="menu-button">Help</div>
-                    <div class="dropdown-content">
-                        <a href="/help/scripture/">Finding Scriptures</a>
-                        {% if 'Team' in group_names %}
-                            <a href="/help/team/">Team Pages</a>
+            <div class="banner group">
+                <h1>St. Basil Confirmation Activities</h1>
+                <div class="sub-heading group">
+                    <div class="welcome">
+                        {% if user.is_authenticated %}
+                                Welcome {{ user.first_name }}!
+                                <a class="link" href="{% url 'logout' %}?next={{ request.path_info }}">Logout</a>
+                        {% else %}
+                                <a class="link" href="{% url 'login' %}?next={{ request.path_info }}">Login</a>
                         {% endif %}
-                        <a href="/help/index/">Using the Website</a>
                     </div>
-                </div>
-                {% if 'Supervisor' in group_names %}
-                    <div class="dropdown u-pull=right">
-                        <a class="menu-button" href="{% url 'send_email' %}">E-mail</a>
-                    </div>
-                {% endif %}
-                {% if 'Team' in group_names %}
-                    <div class="dropdown u-pull-right">
-                        <div class="menu-button">Team Pages</div>
-                        <div class="dropdown-content">
-                            <a href="{% url 'dev_activity_list' %}">Build Activities</a>
-                            <a href="{% url 'reports' %}">Candidate Reports</a>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if tester %}
-                    <div class="dropdown u-pull-right">
-                        <a class="menu-button" href="{% url 'toggle_critiques' %}?next={{ request.path_info }}">
-                            Toggle Critiques
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
+                    <nav class="menu">
+                        <ul>
+                            <!--<div class="dropdown">-->
+                                <li class="menu-button"><a href="#">Help</a></li>
+                                <!--<div class="dropdown-content">-->
+                                    <!--<a href="/help/scripture/">Finding Scriptures</a>-->
+                                    <!--{% if 'Team' in group_names %}-->
+                                        <!--<a href="/help/team/">Team Pages</a>-->
+                                    <!--{% endif %}-->
+                                    <!--<a href="/help/index/">Using the Website</a>-->
+                                <!--</div>-->
+                            <!--</div> &lt;!&ndash; end .dropdown for Help &ndash;&gt;-->
+                            {% if 'Supervisor' in group_names %}
+                                <li class="menu-button">
+                                    <a href="{% url 'send_email' %}">E-mail</a>
+                                </li>
+                            {% endif %}
+                            {% if 'Team' in group_names %}
+                                <!--<div class="dropdown">-->
+                                    <li class="menu-button">
+                                        <a href="#">Team Pages</a>
+                                        <!--<div class="dropdown-content">-->
+                                            <!--<a href="{% url 'dev_activity_list' %}">Build Activities</a>-->
+                                            <!--<a href="{% url 'reports' %}">Candidate Reports</a>-->
+                                        <!--</div>-->
+                                    </li>
+                                <!--</div> &lt;!&ndash; end .dropdown for Team Pages &ndash;&gt;-->
+                            {% endif %}
+                            {% if tester %}
+                                <li class="menu-button">
+                                    <a href="{% url 'toggle_critiques' %}?next={{ request.path_info }}">
+                                        Toggle Critiques
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div> <!-- end .group -->
+            </div> <!-- end .banner -->
         </div> <!-- end .container -->
     </header>
 

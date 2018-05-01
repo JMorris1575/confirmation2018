@@ -1,4 +1,4 @@
-$main-font: Arial, Helvetica, sans-serif;
+$main-font: Helvetica, Arial, sans-serif;
 
 $header-font: 'Gloria Hallelujah', cursive;
 
@@ -15,21 +15,42 @@ html {
 }
 
 body {
+    font-family: $main-font;
+    font-size: medium;
     margin: 0;
     padding: 0;
 }
 
 header {
     color: $conf-yellow;
+    padding-top: 10px;
+    /*padding-bottom: 10px;*/
+    box-sizing: border-box;
 
     h1 {
         font-family: $header-font;
-        font-size: 250%;
-        display: inline;
+        font-size: 260%;
+        text-align: center;
+        margin: 0 auto;
     }
 
     .logo {
         float: left;
+        width: 20%;
+    }
+
+    .banner {
+        width: 80%;
+        float: left;
+        box-sizing: border-box;
+    }
+
+    @media screen and (max-width: 912px) {
+
+        h1 {
+            font-size: 160%;
+        }
+
     }
 }
 
@@ -39,6 +60,9 @@ footer {
 }
 
 main, .critiques {
+    max-width: 960px;
+    margin: 0 auto;
+    box-sizing: border-box;
     background-color: #fff;
 }
 
@@ -46,5 +70,105 @@ main, .critiques {
     max-width: 960px;
     margin: 0 auto;
     padding: 0 20px;
+    box-sizing: border-box;
+}
 
+@media screen and (max-width:480px) {
+
+    .container {
+        padding: 0 10px;
+    }
+}
+
+header .container {
+    padding: 0;
+}
+
+.sub-heading {
+    font-family: $main-font;
+}
+
+.welcome {
+    width: 30%;
+    font-size: 115%;
+    text-align: center;
+    float: left;
+    padding-top: 10px;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+/* Header Navigation Bar */
+
+.menu {
+    width: 70%;
+    float: right;
+    box-sizing: border-box;
+}
+
+.menu ul {
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    list-style: none;
+    float: right;
+    width: 25%;
+}
+
+.menu a {
+    display: block;                 /* Web Design for Beginners Lecture 33, 4:40 */
+    color: $conf-yellow;
+    text-decoration: none;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 2px solid  $conf-yellow;
+    border-radius: 10px;
+    margin-left: 5px;
+}
+
+.menu a:hover {
+    background-color: $conf-yellow;
+    color: $conf-red;
+}
+
+@media screen and (max-width: 912px) {
+
+    .menu li {
+        width: 50%;
+    }
+
+    .menu a {
+        padding: 15px 0;
+        margin-bottom: 5px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+    .menu li {
+        width: 75%;
+    }
+}
+
+/* End Header Navigation Bar */
+
+/* ------------------------------------
+   clearfix
+   ------------------------------------ */
+
+.group:before,
+.group:after {
+    content: "";
+    display: table;
+}
+
+.group:after {
+    clear: both;
+}
+
+.group {
+    zoom: 1;
 }
