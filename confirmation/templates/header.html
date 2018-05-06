@@ -12,12 +12,13 @@
                 <div class="sub-heading group">
                     <div class="welcome">
                         {% if user.is_authenticated %}
-                                Welcome {{ user.first_name }}!
-                                <a class="link" href="{% url 'logout' %}?next={{ request.path_info }}">Logout</a>
+                            <span class="username">Welcome {{ user.first_name }}!</span>
+                            <a class="link" href="{% url 'logout' %}?next={{ request.path_info }}">Logout</a>
                         {% else %}
-                                <a class="link" href="{% url 'login' %}?next={{ request.path_info }}">Login</a>
+                            <a class="link" href="{% url 'login' %}?next={{ request.path_info }}">Login</a>
                         {% endif %}
                     </div>
+                    <span data-toggle-target=".menu" class="toggle-btn">MENU</span>
                     <nav class="menu">
                         <ul>
                             <!--<div class="dropdown">-->

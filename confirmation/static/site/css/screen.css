@@ -32,7 +32,15 @@ header .banner {
 }
 @media screen and (max-width: 912px) {
   header h1 {
-    font-size: 160%;
+    font-size: 130%;
+  }
+}
+@media screen and (max-width: 480px) {
+  header h1 {
+    font-size: 90%;
+  }
+  header .welcome .username {
+    display: none;
   }
 }
 
@@ -94,6 +102,7 @@ header .container {
   list-style: none;
   float: right;
   width: 25%;
+  box-sizing: border-box;
 }
 
 .menu a {
@@ -117,6 +126,7 @@ header .container {
 @media screen and (max-width: 912px) {
   .menu li {
     width: 50%;
+    padding-right: 20px;
   }
 
   .menu a {
@@ -130,6 +140,24 @@ header .container {
   }
 }
 /* End Header Navigation Bar */
+/* Reveal and Hide Section */
+.toggle-btn {
+  display: none;
+}
+
+.toggle-btn-visible {
+  display: block;
+}
+
+.toggle-btn-hidden {
+  display: none;
+}
+
+.toggle-btn-expanded {
+  display: block;
+}
+
+/* End Reveal and Hide Section */
 /* ------------------------------------
    clearfix
    ------------------------------------ */
